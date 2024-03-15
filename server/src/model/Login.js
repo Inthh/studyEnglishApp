@@ -1,0 +1,24 @@
+import { DataTypes } from 'sequelize';
+
+const Login = (db) => db.define('login', {
+    userId: {
+        type: DataTypes.INTEGER,
+        primaryKey: true
+    },
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    publicKey: {
+        type: DataTypes.TEXT
+    }
+}, {
+    tableName: 'login',
+    timestamps: false
+});
+
+export default Login;
