@@ -7,7 +7,7 @@ import Vocabulary from './Vocabulary.js';
 const sequelize = new Sequelize(
     'estudy',
     'root',
-    '20222022@Tm@',
+    'my-secret-pw',
     {
         host: 'localhost',
         dialect: 'mysql'
@@ -22,11 +22,11 @@ const vocabulary = Vocabulary(sequelize);
 user.hasOne(login, { foreignKey: 'userId' });
 login.belongsTo(user, { foreignKey: 'userId' });
 
-user.hasMany(flashCard, { foreignKey: 'userId' });
-flashCard.belongsTo(user, { foreignKey: 'userId' });
+// user.hasMany(flashCard, { foreignKey: 'userId' });
+// flashCard.belongsTo(user, { foreignKey: 'userId' });
 
-flashCard.hasMany(vocabulary, { foreignKey: 'flashCardId' });
-vocabulary.belongsTo(flashCard, { foreignKey: 'flashCardId' });
+// flashCard.hasMany(vocabulary, { foreignKey: 'flashCardId' });
+// vocabulary.belongsTo(flashCard, { foreignKey: 'flashCardId' });
 
 const db = {
     sequelize: sequelize,
