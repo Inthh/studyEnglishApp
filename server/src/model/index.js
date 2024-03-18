@@ -7,7 +7,7 @@ import Vocabulary from './Vocabulary.js';
 const sequelize = new Sequelize(
     'estudy',
     'root',
-    'my-secret-pw',
+    '20222022@Tm@',
     {
         host: 'localhost',
         dialect: 'mysql'

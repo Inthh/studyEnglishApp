@@ -4,6 +4,9 @@ import AuthProvider from "../contexts/AuthProvider";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Learn from "../pages/Learn";
+import { topicsLoader } from "../utils/topicsUtils";
+import { vocabularyListLoader, vocabularySetsLoader } from "../utils/vocabularyUtils";
+import VocabularyList from "../components/learn/VocabularyList";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () => <AuthProvider><Outlet/></AuthProvider>
@@ -23,11 +26,20 @@ export default createBrowserRouter([
                 children: [
                     {
                         path: '/',
-                        element: <Home />
+                        element: <Home />,
+                        loader: vocabularySetsLoader
                     },
                     {
                         path: '/learn/vocabulary/:setId',
-                        element: <Learn />
+                        element: <Learn />,
+                        loader: topicsLoader,
+                        children: [
+                            {
+                                path: 'topics/:topicId',
+                                element: <VocabularyList />,
+                                loader: vocabularyListLoader
+                            }
+                        ]
                     }
                 ]
             }
