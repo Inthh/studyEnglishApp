@@ -1,10 +1,10 @@
 import express from 'express';
 
-import { flashCardController } from '../controllers/index.js';
+import { topicController } from '../controllers/index.js';
 import authentication from '../middlewares/authentication.js';
 
 const router = express.Router();
 
-router.get('/', authentication, flashCardController.getAllFlashCard);
+router.get('/', authentication, topicController.getAllTopic);
 
 export default router;

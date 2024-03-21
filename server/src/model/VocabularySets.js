@@ -1,21 +1,20 @@
 import { DataTypes } from 'sequelize';
 
-const FlashCard = (db) => db.define('flashCard', {
+const VocabularySets = (db) => db.define('VocabularySets', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false
-    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    description: {
+        type: DataTypes.TEXT
     }
 }, {
-    tableName: 'flashCard',
+    tableName: 'VocabularySets',
     timestamps: false
 });
 
-export default FlashCard;
+export default VocabularySets;

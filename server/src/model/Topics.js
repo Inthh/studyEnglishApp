@@ -1,31 +1,25 @@
 import { DataTypes } from 'sequelize';
 
-const Vocabulary = (db) => db.define('vocabulary', {
+const Topics = (db) => db.define('topics', {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
-    flashCardId: {
+    setId: {
         type: DataTypes.INTEGER,
         allowNull: false
     },
-    word: {
+    name: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    translation: {
+    vietnameseName: {
         type: DataTypes.STRING,
         allowNull: false
-    },
-    partsOfSpeech: {
-        type: DataTypes.STRING
-    },
-    type: {
-        type: DataTypes.STRING
     }
 }, {
-    tableName: 'vocabulary',
+    tableName: 'topics',
     timestamps: false
 });
 
-export default Vocabulary;
+export default Topics;

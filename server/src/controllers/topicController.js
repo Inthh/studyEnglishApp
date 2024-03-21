@@ -1,7 +1,7 @@
 import db from "../model/index.js";
 
-const flashCardController = {
-    getAllFlashCard: async (req, res) => {
+const topicController = {
+    getAllTopic: async (req, res) => {
         try {
             let { userId } = req.query;
 
@@ -21,4 +21,4 @@ const flashCardController = {
     }
 };
 
-export default flashCardController;
+export default topicController;
