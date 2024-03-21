@@ -1,5 +1,5 @@
 import { ChevronRightIcon, ChevronLeftIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Vocabulary } from "../../types/api";
 import { useLoaderData } from "react-router-dom";
 
@@ -11,6 +11,14 @@ function VocabularyList() {
     const [isMemoriedDone, setIsMemoriedDone] = useState<boolean>(false)
     const [vocabularyId, setVocabularyId] = useState<number>(0)
 
+
+    useEffect(() => {
+        // Reset all state to default state when loading new vocabularies
+        setVocabularyId(0)
+        setIsMemoriedDone(false)
+        setCountMemorized(0)
+        setActiveMemoriedBtn(false)
+    }, [vocabularies])
 
     function handleMemoriedBtn(vocabularyId: number) {
         vocabularies[vocabularyId].isMemoried = true;
@@ -26,6 +34,7 @@ function VocabularyList() {
             return handleChevronRight(vocabularies.length - 1);
         }
 
+        // Skip memoried vocabulary and go to the next vocabulary
         if (vocabularies[vocabularyId].isMemoried) {
             return handleChevronRight(vocabularyId - 1);
         }
@@ -81,6 +90,9 @@ function VocabularyList() {
                             <div className="grid grid-cols-2 justify-items-center items-center">
                                 <ChevronLeftIcon onClick={() => handleChevronLeft(vocabularyId - 1)} className="w-11 h-11 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronLeftIcon>
                                 <ChevronRightIcon onClick={() => handleChevronRight(vocabularyId + 1)} className="w-11 h-11 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronRightIcon>
+                            </div>
+                            <div className="grid text-green-700 text-2xl font-extrabold items-center justify-items-end">
+                                <p className="">{countMemorized}/{vocabularies.length} Memoried</p>
                             </div>
                         </div>
                     </>

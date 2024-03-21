@@ -1,7 +1,7 @@
 export function vocabularyListLoader({ params }: any) {
     const { topicId } = params
 
-    if (topicId === 2)
+    if (parseInt(topicId) === 2)
         return {
             vocabularies: [
                 {

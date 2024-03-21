@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 type Topic = {
     id: number,
@@ -7,7 +7,8 @@ type Topic = {
 }
 
 function Topics({ topics }: { topics: Topic[] }) {
-    const [activeTopicId, setActiveTopicId] = useState(1)
+    const { topicId } = useParams();
+    const [activeTopicId, setActiveTopicId] = useState(parseInt(topicId as string));
 
     return (
         <div className="col-span-1 grid grid-rows-6 w-[80%]">
