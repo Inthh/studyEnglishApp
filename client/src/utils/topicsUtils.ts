@@ -1,30 +1,19 @@
-export function topicsLoader() {
-    return {
-        topics: [
-            {
-                id: 1,
-                name: "Contracts"
-            },
-            {
-                id: 2,
-                name: "Marketing"
-            },
-            {
-                id: 3,
-                name: "Warranties"
-            },
-            {
-                id: 4,
-                name: "Business Planning"
-            },
-            {
-                id: 5,
-                name: "Conferences"
-            },
-            {
-                id: 6,
-                name: "Computer and Internet"
+import { BASE_URL } from "./constants"
+
+export async function topicsLoader({ params }: any) {
+    try {
+        const { setId } = params
+        const reponse = await fetch(BASE_URL + `/topics?setId=${setId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
-        ]
+        })
+    
+        const { topics } = await reponse.json()
+        return { topics }
+    } catch (err) {
+        console.log("Error while fetching topics", err)
+        return []
     }
 }

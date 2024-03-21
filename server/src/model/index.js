@@ -9,7 +9,7 @@ import VocabularySets from './VocabularySets.js';
 const sequelize = new Sequelize(
     'estudy',
     'root',
-    '20222022@Tm@',
+    'my-secret-pw',
     {
         host: 'localhost',
         dialect: 'mysql'
@@ -44,6 +44,7 @@ const db = {
     Login: login,
     Topics: topics,
     Vocabularies: vocabularies,
+    VocabularySets: vocabularySets,
     UserVocabulary: userVocabulary,
 }
 

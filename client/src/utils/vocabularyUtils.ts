@@ -1,12 +1,14 @@
+import { BASE_URL } from "./constants"
+
 export function vocabularyListLoader({ params }: any) {
     const { topicId } = params
 
-    if (parseInt(topicId) === 2)
+    if (parseInt(topicId as string) === 2)
         return {
             vocabularies: [
                 {
                     id: 1,
-                    vocabulary: "apple",
+                    vocabulary: "Checking",
                     pos: "noun",
                     vietnamese: "quả táo",
                     example: "I ate an apple this morning.",
@@ -14,7 +16,7 @@ export function vocabularyListLoader({ params }: any) {
                 },
                 {
                     id: 2,
-                    vocabulary: "book",
+                    vocabulary: "Checking 2",
                     pos: "noun",
                     vietnamese: "sách",
                     example: "She loves reading books.",
@@ -68,34 +70,19 @@ export function vocabularyListLoader({ params }: any) {
     }
 }
 
-export function vocabularySetsLoader() {
-    return {
-        vocabularySets: [
-            {
-                id: 1,
-                name: "Từ vựng dành cho kì thi TOEIC",
-                description: "Chuẩn bị cho kỳ thi TOEIC với các bài tập và phần mềm hỗ trợ."
-            },
-            {
-                id: 2,
-                name: "Từ vựng dành cho kì thi IELTS",
-                description: "Học và luyện thi kỳ thi IELTS với các tài liệu và bài tập thực hành."
-            },
-            {
-                id: 3,
-                name: "Từ vựng dành cho kì thi TOEFL",
-                description: "Chuẩn bị cho kỳ thi TOEFL với các tài liệu và bài tập luyện thi."
-            },
-            {
-                id: 4,
-                name: "Từ vựng dành cho kì thi SAT",
-                description: "Ôn tập và luyện thi kỳ thi SAT với các tài liệu và bài tập."
-            },
-            {
-                id: 5,
-                name: "Từ vựng dành cho kì thi Trinh do nang cao",
-                description: "Nâng cao trình độ tiếng Anh với các tài liệu và bài tập luyện thi chuyên sâu."
-            }
-        ]
+export async function vocabularySetsLoader() {
+    try {
+        const reponse = await fetch(BASE_URL + `/vocabulary-sets`, {
+            method: 'GET'
+        })
+    
+        const { vocabularySets } = await reponse.json()
+        console.log(vocabularySets)
+        return {
+            vocabularySets
+        }
+    } catch (err) {
+        console.log("Error while fetching vocabulary sets", err)
+        return []
     }
 }

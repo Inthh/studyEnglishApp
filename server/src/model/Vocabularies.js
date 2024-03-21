@@ -26,7 +26,6 @@ const Vocabularies = (db) => db.define('vocabularies', {
     example: {
         type: DataTypes.TEXT
     }
-
 }, {
     tableName: 'vocabularies',
     timestamps: false

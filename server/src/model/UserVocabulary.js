@@ -8,6 +8,9 @@ const UserVocabulary = (db) => db.define('userVocabulary', {
     vocabularyId: {
         type: DataTypes.INTEGER,
         primaryKey: true
+    },
+    memoried: {
+        type: DataTypes.BOOLEAN
     }
 }, {
     tableName: 'userVocabulary',
