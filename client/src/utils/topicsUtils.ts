@@ -9,7 +9,7 @@ export async function topicsLoader({ params }: any) {
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             }
         })
-    
+
         const { topics } = await reponse.json()
         return { topics }
     } catch (err) {

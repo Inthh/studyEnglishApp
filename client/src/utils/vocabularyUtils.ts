@@ -75,9 +75,8 @@ export async function vocabularySetsLoader() {
         const reponse = await fetch(BASE_URL + `/vocabulary-sets`, {
             method: 'GET'
         })
-    
+
         const { vocabularySets } = await reponse.json()
-        console.log(vocabularySets)
         return {
             vocabularySets
         }
