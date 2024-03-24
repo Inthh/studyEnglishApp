@@ -1,0 +1,1 @@
+export const TOPICS_PAGE_SIZE = 6;

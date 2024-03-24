@@ -4,12 +4,12 @@ import Topics from "../components/learn/Topics";
 import { Topic } from "../types/api";
 
 function Learn() {
-    const { topics } = useLoaderData() as { topics: Topic[] };
+    const { topics, totalTopics } = useLoaderData() as { topics: Topic[], totalTopics: number };
     return (
         <div className="bg-slate-50">
             <Header />
             <div className="grid grid-cols-3 justify-items-center">
-                <Topics topics={topics} />
+                <Topics topics={topics} totalTopics={totalTopics} />
                 <Outlet />
             </div>
         </div>
