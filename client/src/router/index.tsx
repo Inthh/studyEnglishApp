@@ -30,7 +30,7 @@ export default createBrowserRouter([
                         loader: vocabularySetsLoader
                     },
                     {
-                        path: '/learn/vocabulary/:setId',
+                        path: '/learn/:setId',
                         element: <Learn />,
                         loader: topicsLoader,
                         children: [

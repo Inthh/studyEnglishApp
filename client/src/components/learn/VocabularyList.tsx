@@ -57,7 +57,7 @@ function VocabularyList() {
     }
 
     return (
-        <div className="col-span-2 grid grid-rows-6 w-[90%]">
+        <div className="grid grid-rows-6">
             <p className="row-span-1 text-2xl font-bold ml-5 my-auto">Vocabulary</p>
             <div className="grid grid-rows-8 row-span-5 border-2 border-dashed border-slate-200 rounded-2xl mx-5 justify-items-center items-center max-h-[500px]">
                 {

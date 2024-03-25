@@ -2,20 +2,20 @@ import { useState } from "react";
 
 const TOTAL_PAGES_SELECTED = 4;
 
-function Pagination({ totalPage, onCallback }: { totalPage: number, onCallback: (value: number) => void }) {
-    const [activePage, setActivePage] = useState(1);
-    const [hideDots, setHideDots] = useState(false);
-    const [firstPage, setFirstPage] = useState(1);
-    const [secondPage, setSecondPage] = useState(2);
+function Pagination({ totalPage, currentPage, onCallback }: { totalPage: number, currentPage: number, onCallback: (value: number) => void }) {
+    const [activePage, setActivePage] = useState(currentPage);
+    const [hideDots, setHideDots] = useState(currentPage === totalPage - 2);
+    const [firstPage, setFirstPage] = useState(currentPage > 2 && currentPage < totalPage - 1 ? currentPage - 1 : 1);
+    const [secondPage, setSecondPage] = useState(currentPage > 2 && currentPage < totalPage - 1 ? currentPage : 2);
 
     async function handleActivePage(pageNum: number, greaterThan4Pages: boolean = false) {
         if (greaterThan4Pages) {
-            if (pageNum === secondPage && pageNum < totalPage - 2) {
+            if (pageNum >= secondPage && pageNum < totalPage - 2) {
                 setFirstPage(secondPage);
                 setSecondPage(secondPage + 1);
-            } else if (pageNum === firstPage && pageNum > 1) {
-                setFirstPage(firstPage - 1);
-                setSecondPage(firstPage);
+            } else if (pageNum <= firstPage && pageNum > 1) {
+                setFirstPage(pageNum - 1);
+                setSecondPage(pageNum);
                 setHideDots(false);
             } else if (pageNum === totalPage - 2) {
                 setHideDots(true);

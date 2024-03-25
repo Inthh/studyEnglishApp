@@ -1,4 +1,4 @@
-import { BASE_URL } from "./constants"
+import { BASE_URL, TOPICS_PAGE_SIZE } from "./constants"
 
 export async function getTopicsOfSetByPageNum(setId: number, pageNum: number) {
     try {
@@ -18,6 +18,8 @@ export async function getTopicsOfSetByPageNum(setId: number, pageNum: number) {
 }
 
 export async function topicsLoader({ params }: any) {
-    const { setId } = params
-    return await getTopicsOfSetByPageNum(setId, 1);
+    const { setId, topicId } = params
+
+    const pageNumber = Math.floor(parseInt(topicId)/TOPICS_PAGE_SIZE) + 1
+    return await getTopicsOfSetByPageNum(setId, pageNumber);
 }
