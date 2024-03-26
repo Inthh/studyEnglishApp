@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 
 const TOTAL_PAGES_SELECTED = 4;
 
-function Pagination({ totalPage, currentPage, onCallback }: { totalPage: number, currentPage: number, onCallback: (value: number) => void }) {
+function Pagination({ totalPage, onCallback }: { totalPage: number, onCallback: (value: number) => void }) {
+    const { pageNum } = useParams()
+    const currentPage = pageNum ? parseInt(pageNum) : 1
     const [activePage, setActivePage] = useState(currentPage);
     const [hideDots, setHideDots] = useState(currentPage === totalPage - 2);
     const [firstPage, setFirstPage] = useState(currentPage > 2 && currentPage < totalPage - 1 ? currentPage - 1 : 1);

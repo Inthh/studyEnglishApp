@@ -21,6 +21,7 @@ function VocabularyList() {
     }, [vocabularies])
 
     function handleMemoriedBtn(vocabularyId: number) {
+        // if (!vocabularies[vocabularyId].isMemoried) {}
         vocabularies[vocabularyId].isMemoried = true;
         setActiveMemoriedBtn(true);
         setCountMemorized(countMemorized + 1);
@@ -59,19 +60,17 @@ function VocabularyList() {
     return (
         <div className="grid grid-rows-6">
             <p className="row-span-1 text-2xl font-bold ml-5 my-auto">Vocabulary</p>
-            <div className="grid grid-rows-8 row-span-5 border-2 border-dashed border-slate-200 rounded-2xl mx-5 justify-items-center items-center max-h-[500px]">
+            <div className="row-span-5 grid grid-rows-8 border-2 border-dashed border-slate-200 rounded-2xl mx-5 justify-items-center items-center max-h-[500px]">
                 {
                     isMemoriedDone ?
+                    <div className="rounded-2xl row-span-8 bg-white w-[92%] h-[92%] grid justify-items-center items-center border border-green-700">
+                        <p className="text-green-700 text-3xl font-bold">
+                            All is remembered.
+                        </p>
+                    </div> :
                     <>
-                        <div className="rounded-2xl row-span-8 bg-white w-[92%] h-[92%] grid justify-items-center items-center border border-green-700">
-                            <p className="text-green-700 text-3xl font-bold">
-                                All is remembered.
-                            </p>
-                        </div>
-                    </> :
-                    <>
-                        <div className="rounded-2xl row-span-7 bg-blue-400 w-[92%] h-[88%] grid justify-items-center items-center">
-                            <div className="text-center row-span-6">
+                        <div className="rounded-2xl row-span-7 bg-blue-400 w-[92%] h-[92%] grid justify-items-center items-center">
+                            <div className="text-center">
                                 <p className={`uppercase text-5xl font-semibold ${activeMemoriedBtn ? "line-through" : ""}`}>{vocabularies[vocabularyId].vocabulary}</p>
                                 <p className="italic ">abide by</p>
                                 <p className="mt-10">({vocabularies[vocabularyId].pos}) {vocabularies[vocabularyId].vietnamese}</p>

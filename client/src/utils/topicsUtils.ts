@@ -19,7 +19,6 @@ export async function getTopicsOfSetByPageNum(setId: number, pageNum: number) {
 
 export async function topicsLoader({ params }: any) {
     const { setId, topicId } = params
-
     const pageNumber = Math.floor(parseInt(topicId)/TOPICS_PAGE_SIZE) + 1
     return await getTopicsOfSetByPageNum(setId, pageNumber);
 }
