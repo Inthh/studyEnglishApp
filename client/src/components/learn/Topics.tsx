@@ -17,8 +17,8 @@ function Topics() {
     }, [topics])
 
     return (
-        <div className="grid grid-cols-3 justify-items-center">
-            <div className="col-span-1 w-[80%]">
+        <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center items-center">
+            <div className="lg:col-span-1 w-[80%] lg:order-1 sm:order-last order-last">
                 <div className="grid grid-rows-6">
                     <p className="row-span-1 text-2xl font-bold ml-5 my-auto">Topics</p>
                     <div className="row-span-5 border-2 border-dashed border-slate-200 rounded-2xl mx-5">
@@ -38,7 +38,7 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="col-span-2 w-[90%]">
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] ml-5 grid justify-items-center">
                 <Outlet />
             </div>
         </div>
