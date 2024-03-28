@@ -3,7 +3,8 @@ import { DataTypes } from 'sequelize';
 const Vocabularies = (db) => db.define('vocabularies', {
     id: {
         type: DataTypes.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
     },
     topicId: {
         type: DataTypes.INTEGER,
@@ -21,6 +22,9 @@ const Vocabularies = (db) => db.define('vocabularies', {
         type: DataTypes.STRING
     },
     pronunciation: {
+        type: DataTypes.STRING
+    },
+    audioUrl: {
         type: DataTypes.STRING
     },
     example: {
