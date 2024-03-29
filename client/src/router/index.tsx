@@ -4,8 +4,8 @@ import AuthProvider from "../contexts/AuthProvider";
 import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Learn from "../pages/Learn";
-import { topicsLoader } from "../utils/topicsUtils";
-import { vocabularyListLoader, vocabularySetsLoader } from "../utils/vocabularyUtils";
+import { learnLoader, topicsLoader } from "../utils/topicsUtils";
+import { updateMemoried, vocabularyListLoader, vocabularySetsLoader } from "../utils/vocabularyUtils";
 import VocabularyList from "../components/learn/VocabularyList";
 import Topics from "../components/learn/Topics";
 
@@ -33,6 +33,7 @@ export default createBrowserRouter([
                     {
                         path: '/learn/:setId',
                         element: <Learn />,
+                        loader: learnLoader,
                         children: [
                             {
                                 path: 'page/:pageNum',
@@ -42,7 +43,8 @@ export default createBrowserRouter([
                                     {
                                         path: 'topics/:topicId',
                                         element: <VocabularyList />,
-                                        loader: vocabularyListLoader
+                                        loader: vocabularyListLoader,
+                                        action: updateMemoried
                                     }
                                 ]
                             }

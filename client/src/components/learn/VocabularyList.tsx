@@ -1,70 +1,77 @@
 import { ChevronRightIcon, ChevronLeftIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Vocabulary } from "../../types/api";
-import { useLoaderData } from "react-router-dom";
+import { useActionData, useLoaderData, useSubmit } from "react-router-dom";
 
 function VocabularyList() {
-    const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] };
+    const submit = useSubmit()
+    let actionData = useActionData() as { vocabularyId: number, isMemoried: boolean };
+    const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] }
+    const totalMemoried = vocabularies.reduce((totalMemoried, currentVoca) => {
+        return currentVoca.isMemoried ? totalMemoried + 1 : totalMemoried
+    }, 0);
 
-    const [activeMemoriedBtn, setActiveMemoriedBtn] = useState<boolean>(false)
-    const [countMemorized, setCountMemorized] = useState<number>(0)
-    const [isMemoriedDone, setIsMemoriedDone] = useState<boolean>(false)
-    const [vocabularyId, setVocabularyId] = useState<number>(0)
+    const [countMemorized, setCountMemorized] = useState<number>(totalMemoried)
+    const [isMemoriedDone, setIsMemoriedDone] = useState<boolean>(
+        totalMemoried === vocabularies.length)
+    const [vocabularyIndex, setVocabularyIndex] = useState<number>(() => {
+        if (actionData) {
+            return vocabularies.findIndex(voca=> voca.id === actionData.vocabularyId)
+        }
+        const index = vocabularies.findIndex(voca=> !voca.isMemoried)
+        if (index === -1) {
+            return 0
+        }
+        return index
+    })
+    const [activeMemoriedBtn, setActiveMemoriedBtn] = useState<boolean>(
+        actionData ? actionData.isMemoried : vocabularies[vocabularyIndex].isMemoried)
 
-
-    useEffect(() => {
-        // Reset all state to default state when loading new vocabularies
-        const totalMemoried = vocabularies.reduce((totalMemoried, currentVoca) => {
-            return currentVoca.isMemoried ? totalMemoried + 1 : totalMemoried
-        }, 0)
-
-        setIsMemoriedDone(totalMemoried === vocabularies.length)
-        setVocabularyId(0)
-        setCountMemorized(totalMemoried)
-        setActiveMemoriedBtn(false)
-    }, [vocabularies])
-
-    function handleMemoriedBtn(vocabularyId: number) {
-        if (!vocabularies[vocabularyId].isMemoried) {
-            vocabularies[vocabularyId].isMemoried = true;
+    function handleMemoriedBtn(vocabularyIndex: number) {
+        if (!vocabularies[vocabularyIndex].isMemoried) {
+            vocabularies[vocabularyIndex].isMemoried = true;
             setActiveMemoriedBtn(true);
             setCountMemorized(countMemorized + 1);
             if (countMemorized + 1 === vocabularies.length) {
                 setIsMemoriedDone(true);
             }
         } else {
-            vocabularies[vocabularyId].isMemoried = false;
+            vocabularies[vocabularyIndex].isMemoried = false;
             setActiveMemoriedBtn(false);
             setCountMemorized(countMemorized - 1);
         }
+        submit({
+            vocabularyId: vocabularies[vocabularyIndex].id,
+            isMemoried: vocabularies[vocabularyIndex].isMemoried
+        }, {
+            method: 'patch'
+        })
     }
 
-    function handleChevronLeft(vocabularyId: number) {
-        console.log("vocabularyId left: ", vocabularyId)
-        if (vocabularyId === -1) {
+    function handleChevronLeft(vocabularyIndex: number) {
+        if (vocabularyIndex === -1) {
             return handleChevronLeft(vocabularies.length - 1);
         }
 
         // Skip memoried vocabulary and go to the next vocabulary
-        if (vocabularies[vocabularyId].isMemoried) {
-            return handleChevronLeft(vocabularyId - 1);
+        if (vocabularies[vocabularyIndex].isMemoried) {
+            return handleChevronLeft(vocabularyIndex - 1);
         }
 
-        setVocabularyId(vocabularyId);
+        setVocabularyIndex(vocabularyIndex);
         setActiveMemoriedBtn(false);
     }
 
-    function handleChevronRight(vocabularyId: number) {
-        console.log("vocabularyId right: ", vocabularyId)
-        if (vocabularyId === vocabularies.length) {
+    function handleChevronRight(vocabularyIndex: number) {
+        if (vocabularyIndex === vocabularies.length) {
             return handleChevronRight(0);
         }
 
-        if (vocabularies[vocabularyId].isMemoried) {
-            return handleChevronRight(vocabularyId + 1);
+        if (vocabularies[vocabularyIndex].isMemoried) {
+            return handleChevronRight(vocabularyIndex + 1);
         }
 
-        setVocabularyId(vocabularyId);
+        setVocabularyIndex(vocabularyIndex);
         setActiveMemoriedBtn(false);
     }
 
@@ -82,15 +89,15 @@ function VocabularyList() {
                     <>
                         <div className="rounded-2xl row-span-7 bg-blue-400 w-[92%] h-[92%] grid justify-items-center items-center">
                             <div className="text-center">
-                                <p className={`uppercase text-5xl font-semibold ${activeMemoriedBtn ? "line-through" : ""}`}>{vocabularies[vocabularyId].vocabulary}</p>
-                                <p className="italic ">abide by</p>
-                                <p className="mt-10">({vocabularies[vocabularyId].pos}) {vocabularies[vocabularyId].vietnamese}</p>
-                                <p className="italic">{vocabularies[vocabularyId].example}</p>
+                                <p className={`uppercase lg:text-5xl sm:text-3xl text-3xl font-semibold ${activeMemoriedBtn ? "line-through" : ""}`}>{vocabularies[vocabularyIndex].word}</p>
+                                <p className="italic lg:text-base sm:text-sm text-sm">{vocabularies[vocabularyIndex].pronunciation}</p>
+                                <p className="mt-10 lg:text-base sm:text-sm text-sm">({vocabularies[vocabularyIndex].partsOfSpeech}) {vocabularies[vocabularyIndex].vietnamese}</p>
+                                <p className="italic lg:text-base sm:text-sm text-sm">{vocabularies[vocabularyIndex].example}</p>
                             </div>
                             <div className="grid">
                                 <div
                                     className={`${activeMemoriedBtn ? "text-green-700 bg-blue-400" : "bg-green-700 text-white"} grid justify-items-center items-center border-2 border-green-700 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
-                                    onClick={() => handleMemoriedBtn(vocabularyId)}>Memorized
+                                    onClick={() => handleMemoriedBtn(vocabularyIndex)}>Memorized
                                 </div>
                             </div>
                         </div>
@@ -99,8 +106,8 @@ function VocabularyList() {
                                 <SpeakerWaveIcon className="lg:w-7 lg:h-7 sm:w-5 sm:h-5 w-5 h-5"></SpeakerWaveIcon>
                             </div>
                             <div className="grid grid-cols-2 justify-items-center items-center">
-                                <ChevronLeftIcon onClick={() => handleChevronLeft(vocabularyId - 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronLeftIcon>
-                                <ChevronRightIcon onClick={() => handleChevronRight(vocabularyId + 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronRightIcon>
+                                <ChevronLeftIcon onClick={() => handleChevronLeft(vocabularyIndex - 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronLeftIcon>
+                                <ChevronRightIcon onClick={() => handleChevronRight(vocabularyIndex + 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronRightIcon>
                             </div>
                             <div className="grid text-green-700 lg:text-2xl sm:text-base text-base lg:font-extrabold sm:font-bold font-bold items-center justify-items-end">
                                 <p className="">{countMemorized}/{vocabularies.length} Memoried</p>

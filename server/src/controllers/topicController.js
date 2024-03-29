@@ -25,6 +25,22 @@ const topicController = {
             console.log('Error while getting all topics: ', err.message);
             res.status(500).json({ message: 'Internal server error' });
         }
+    },
+
+    getTotalTopics: async (req, res) => {
+        try {
+            let { setId } = req.query;
+
+            const totalTopics = await db.Topics.count({
+                where: { setId }
+            })
+
+            console.log('Getting total topics successfully ', setId);
+            res.json({ totalTopics });
+        } catch (err) {
+            console.log('Error while getting total topics: ', err.message);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 };
 

@@ -30,6 +30,7 @@ const authentication = async (req, res, next) => {
                         }
                         return;
                     }
+                    req.userId = decoded.userId;
                     next();
                 });
 

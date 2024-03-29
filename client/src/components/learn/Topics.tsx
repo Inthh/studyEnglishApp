@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLoaderData, useParams } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useNavigation, useParams } from "react-router-dom";
 import { TOPICS_PAGE_SIZE } from "../../utils/constants";
 
 type Topic = {
@@ -8,12 +8,14 @@ type Topic = {
 }
 
 function Topics() {
+    const navigation = useNavigation()
     const { topicId } = useParams()
     const { topics } = useLoaderData() as { topics: Topic[], totalTopics: number };
-    const [activeTopicId, setActiveTopicId] = useState(topicId ? parseInt(topicId) : topics[0].id);
+    const topicIdNum = topicId ? parseInt(topicId) : topics[0].id;
+    const [activeTopicId, setActiveTopicId] = useState(topicIdNum);
 
     useEffect(() => {
-        setActiveTopicId(topics[0].id);
+        setActiveTopicId(topicIdNum);
     }, [topics])
 
     return (
@@ -38,8 +40,9 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] ml-5 grid justify-items-center">
-                <Outlet />
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] ml-5 grid justify-items-center">
+                {navigation.state !== "loading" && <Outlet />}
+
             </div>
         </div>
     );

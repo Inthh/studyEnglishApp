@@ -16,9 +16,14 @@ function Pagination({ totalPage, onCallback }: { totalPage: number, onCallback: 
             if (pageNum >= secondPage && pageNum < totalPage - 2) {
                 setFirstPage(secondPage);
                 setSecondPage(secondPage + 1);
-            } else if (pageNum <= firstPage && pageNum > 1) {
-                setFirstPage(pageNum - 1);
-                setSecondPage(pageNum);
+            } else if (pageNum <= firstPage) {
+                if (pageNum > 1) {
+                    setFirstPage(pageNum - 1);
+                    setSecondPage(pageNum);
+                } else if (pageNum === 1) {
+                    setFirstPage(pageNum);
+                    setSecondPage(pageNum + 1);
+                }
                 setHideDots(false);
             } else if (pageNum === totalPage - 2) {
                 setHideDots(true);

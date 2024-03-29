@@ -1,4 +1,5 @@
 export type User = {
+    id: number,
     firstName: string,
     lastName: string
 }
@@ -11,8 +12,9 @@ export type VocabularySet = {
 
 export type Vocabulary = {
     id: number;
-    vocabulary: string,
-    pos: string,
+    word: string,
+    partsOfSpeech: string,
+    pronunciation: string,
     vietnamese: string,
     example: string,
     isMemoried: boolean
