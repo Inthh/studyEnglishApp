@@ -1,8 +1,8 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { AuthContext } from "../contexts/AuthProvider";
-import { User } from "../types/api";
+import { AuthContext } from "../../contexts/AuthProvider";
+import { User } from "../../types/api";
 
 function Header() {
     const { user } = useContext(AuthContext) as { user: User | null };

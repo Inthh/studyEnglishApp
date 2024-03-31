@@ -3,7 +3,7 @@ import Header from "../components/common/Header";
 import { TOPICS_PAGE_SIZE } from "../utils/constants";
 import Pagination from "../components/common/Pagination";
 
-function Learn() {
+function Practice() {
     const { totalTopics } = useLoaderData() as { totalTopics: number };
     const navigate = useNavigate();
 
@@ -26,4 +26,4 @@ function Learn() {
     );
 }
 
-export default Learn;
+export default Practice;

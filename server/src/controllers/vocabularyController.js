@@ -34,13 +34,31 @@ const vocaController = {
 
     updateMemoried: async (req, res) => {
         const userId = req.userId;
-        const { vocabularyId, isMemoried } = req.body;
+        const { vocabularyId, isMemoried, allUnmemoried, topicId } = req.body;
         try {
+            if (allUnmemoried) {
+                const vocaIds = await db.Vocabularies.findAll({
+                    attributes: ["id"],
+                    where: { topicId },
+                    raw: true
+                })
+                await db.UserVocabulary.update(
+                    { memoried: false },
+                    { 
+                        where: { 
+                            userId, 
+                            vocabularyId: {
+                                [Op.in]: vocaIds.map(vocaId => vocaId.id)
+                            }
+                        } 
+                    })
+                console.log(`Update unmemoried for all vocabularies of topicId=${topicId} and userId=${userId} successful`)
+                return res.json({ vocabularyId: vocaIds[0].id, isMemoried: false });
+            }
 
             const userVoca = await db.UserVocabulary.findOne({
                 where: { userId, vocabularyId },
             });
-
             if (userVoca) {
                 await db.UserVocabulary.update(
                     { memoried: isMemoried },
@@ -53,11 +71,11 @@ const vocaController = {
             }
 
             console.log(userVoca ?
-                `Update memoried to value=${userVoca.memoried} for vocabularyId=${vocabularyId} and userId=${userId} successfully` :
+                `Update memoried for vocabularyId=${vocabularyId} and userId=${userId} successfully` :
                 `Create vocabularyId=${vocabularyId} and userId=${userId} successfully`);
             res.json({ vocabularyId, isMemoried });
         } catch (err) {
-            console.log(`Error while updating memoried for vocabularyId=${vocabularyId} and userId=${userId} reason=${err.message}`);
+            console.log(`Error while updating memoried for userId=${userId} params=${vocabularyId, isMemoried, allUnmemoried, topicId} reason=${err.message}`);
             res.status(500).json({ message: 'Internal server error' });
         }
     }

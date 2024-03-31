@@ -1,7 +1,7 @@
 import { ReactNode, createContext, useEffect, useState } from "react";
 import { extractPayloadFromToken } from "../utils/token";
 import { useNavigate } from 'react-router-dom';
-import Loading from "../components/Loading";
+import Loading from "../components/common/Loading";
 import { User } from "../types/api";
 
 export const AuthContext = createContext({});

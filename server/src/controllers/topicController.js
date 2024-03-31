@@ -35,7 +35,7 @@ const topicController = {
                 where: { setId }
             })
 
-            console.log('Getting total topics successfully ', setId);
+            console.log(`Getting total topics successfully totalTopics=${totalTopics} setId=${setId}`);
             res.json({ totalTopics });
         } catch (err) {
             console.log('Error while getting total topics: ', err.message);

@@ -43,24 +43,33 @@ type UpdateMemoriedData = {
     vocabularyId: number,
     userId: number,
     isMemoried: boolean
-}
+} | { allUnmemoried: boolean, topicId: number }
 export async function updateMemoried({ params, request }) {
     let result = null;
     const userVoca = await request.formData();
-    let dataSubmit: UpdateMemoriedData = {
-        vocabularyId: 0,
-        userId: 0,
-        isMemoried: true
-    };
-    userVoca.forEach((value: FormDataEntryValue, key: keyof UpdateMemoriedData) => {
-        if (key in dataSubmit) {
-            if (key === 'isMemoried') {
-                dataSubmit[key] = value === 'true';
-            } else {
-                dataSubmit[key] = parseInt(value as string, 10);
-            }
+    const allUnmemoried = userVoca.get("allUnmemoried")
+    const topicId = userVoca.get("topicId")
+
+    let dataSubmit: UpdateMemoriedData;
+
+    if (allUnmemoried && topicId) {
+        dataSubmit = { allUnmemoried: allUnmemoried === 'true', topicId: parseInt(topicId) }
+    } else {
+        dataSubmit = {
+            vocabularyId: 0,
+            userId: 0,
+            isMemoried: false,
         }
-    })
+        userVoca.forEach((value: FormDataEntryValue, key: keyof UpdateMemoriedData) => {
+            if (key in dataSubmit) {
+                if (key === 'isMemoried') {
+                    dataSubmit[key] = value === 'true';
+                } else {
+                    dataSubmit[key] = parseInt(value as string, 10);
+                }
+            }
+        })
+    }
 
     try {
         result = await (await fetch(BASE_URL + `/vocabularies`, {

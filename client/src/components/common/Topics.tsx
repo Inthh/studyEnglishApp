@@ -40,9 +40,8 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] ml-5 grid justify-items-center">
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] lg:ml-0 sm:ml-5 ml-5 grid justify-items-center">
                 {navigation.state !== "loading" && <Outlet />}
-
             </div>
         </div>
     );

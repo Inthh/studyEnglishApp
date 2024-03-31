@@ -7,7 +7,8 @@ import Learn from "../pages/Learn";
 import { learnLoader, topicsLoader } from "../utils/topicsUtils";
 import { updateMemoried, vocabularyListLoader, vocabularySetsLoader } from "../utils/vocabularyUtils";
 import VocabularyList from "../components/learn/VocabularyList";
-import Topics from "../components/learn/Topics";
+import Topics from "../components/common/Topics";
+import WordChecker from "../components/practice/WordChecker";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () => <AuthProvider><Outlet/></AuthProvider>
@@ -49,7 +50,26 @@ export default createBrowserRouter([
                                 ]
                             }
                         ]
-                    }
+                    },
+                    {
+                        path: '/practice/:setId',
+                        element: <Learn />,
+                        loader: learnLoader,
+                        children: [
+                            {
+                                path: 'page/:pageNum',
+                                element: <Topics />,
+                                loader: topicsLoader,
+                                children: [
+                                    {
+                                        path: 'topics/:topicId',
+                                        element: <WordChecker />,
+                                        loader: vocabularyListLoader
+                                    }
+                                ]
+                            }
+                        ]
+                    },
                 ]
             }
         ]
