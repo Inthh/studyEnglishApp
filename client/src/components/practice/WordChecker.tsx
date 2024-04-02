@@ -1,5 +1,5 @@
 import { CursorArrowRaysIcon } from "@heroicons/react/16/solid";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import { Vocabulary } from "../../types/api";
 
@@ -10,14 +10,16 @@ function initAnswer(wordSplit: string[]) {
 function WordChecker() {
     const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] };
     const [vocabularyIdx, setVocabularyIdx] = useState<number>(0);
-    const wordSplit = vocabularies[vocabularyIdx].word.split('');
+    const wordSplit = useMemo(
+        () => vocabularies[vocabularyIdx].word.split(''), 
+        [vocabularies, vocabularyIdx])
     const inputRefs = useRef([]);
     const [answer, setAnswer] = useState<string[]>(initAnswer(wordSplit));
     const [isWrong, setIsWrong] = useState<boolean>(false);
 
     useEffect(() => {
         (inputRefs.current[0] as HTMLInputElement).focus();
-    }, []);
+    }, [vocabularyIdx]);
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>, idx: number) {
         const newAnswer = [...answer];
@@ -58,12 +60,16 @@ function WordChecker() {
                 }
             }
         }
-    };
+    }
 
     function handleSubmitAnswer() {
         if (answer.join('').toLowerCase() === vocabularies[vocabularyIdx].word) {
-            setVocabularyIdx(vocabularyIdx + 1);
-            setAnswer(initAnswer(wordSplit));
+            if (vocabularyIdx + 1 < vocabularies.length) {
+                setVocabularyIdx(vocabularyIdx + 1);
+                setAnswer(initAnswer(vocabularies[vocabularyIdx + 1].word.split('')));
+            } else {
+                //TODO:
+            }
         } else {
             setIsWrong(true);
             setTimeout(() => {

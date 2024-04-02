@@ -1,5 +1,5 @@
 import { ChevronRightIcon, ChevronLeftIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Vocabulary } from "../../types/api";
 import { useActionData, useLoaderData, useParams, useSubmit } from "react-router-dom";
 
@@ -8,9 +8,10 @@ function VocabularyList() {
     const submit = useSubmit()
     const actionData = useActionData() as { vocabularyId: number, isMemoried: boolean };
     const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] }
-    const totalMemoried = vocabularies.reduce((totalMemoried, currentVoca) => {
-        return currentVoca.isMemoried ? totalMemoried + 1 : totalMemoried
-    }, 0);
+    const totalMemoried = useMemo(() => 
+        vocabularies.reduce((totalMemoried, currentVoca) => {
+            return currentVoca.isMemoried ? totalMemoried + 1 : totalMemoried}, 0),
+    [vocabularies]);
 
     const [countMemorized, setCountMemorized] = useState<number>(totalMemoried)
     const [isMemoriedDone, setIsMemoriedDone] = useState<boolean>(
