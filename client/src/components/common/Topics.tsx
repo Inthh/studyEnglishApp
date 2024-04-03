@@ -16,6 +16,7 @@ function Topics() {
 
     useEffect(() => {
         setActiveTopicId(topicIdNum);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [topics, topicId])
 
     return (
@@ -40,7 +41,7 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] lg:ml-0 sm:ml-5 ml-5 lg:mb-0 sm:mb-10 mb-10 grid justify-items-center">
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] lg:ml-0 sm:ml-5 ml-5 lg:mb-0 sm:mb-10 mb-10 grid justify-items-center row-span-2">
                 {navigation.state !== "loading" && <Outlet />}
             </div>
         </div>

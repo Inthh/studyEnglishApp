@@ -16,6 +16,7 @@ function WordChecker() {
     // Create a list of index of words
     const vocabularyIdxList = useRef(vocabularies.map((_, index) => index));
     const passedVocIdxList = useRef([] as number[]);
+    const skipVocIdxList = useRef([] as number[]);
     // Get random vocabularyIdx from list of index of words
     const [vocabularyIdx, setVocabularyIdx] = useState<number>(
         vocabularyIdxList.current[Math.floor(Math.random() * vocabularyIdxList.current.length)]);
@@ -38,6 +39,7 @@ function WordChecker() {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [answer, vocabularies])
 
     useEffect(() => {
@@ -91,24 +93,46 @@ function WordChecker() {
             const index = vocabularyIdxList.current.findIndex((vocIdx) => vocIdx === vocabularyIdx)
             passedVocIdxList.current.push(vocabularyIdx)
             vocabularyIdxList.current.splice(index, 1);
-            if (vocabularyIdxList.current.length !== 0) {
-                // Get random index of the word from index list
-                const randomIdx = Math.floor(Math.random() * vocabularyIdxList.current.length);
-                const indexOfWord = vocabularyIdxList.current[randomIdx]
-                setVocabularyIdx(indexOfWord);
-                setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
-            } else {
-                const nextTopicId =
-                    parseInt(topicId as string) + 1 > totalTopics ? 1 : parseInt(topicId as string) + 1;
-                let nextPageNum = Math.ceil(nextTopicId/TOPICS_PAGE_SIZE);
-                navigate(`/practice/${setId}/page/${nextPageNum}/topics/${nextTopicId}`);
-            }
+            if (vocabularyIdxList.current.length === 0) {
+                // If skipped vocabulary list is empty , skip to next topic
+                if (skipVocIdxList.current.length === 0) {
+                    const nextTopicId =
+                        parseInt(topicId as string) + 1 > totalTopics ? 1 : parseInt(topicId as string) + 1;
+                    const nextPageNum = Math.ceil(nextTopicId/TOPICS_PAGE_SIZE);
+                    navigate(`/practice/${setId}/page/${nextPageNum}/topics/${nextTopicId}`);
+                    return;
+                } else {
+                    // Reset unfinshed vocabulary list from skipped vocabulary list
+                    vocabularyIdxList.current = [...skipVocIdxList.current];
+                    skipVocIdxList.current = [];
+                }
+            } 
+            // Get random index of the word from index list
+            const randomIdx = Math.floor(Math.random() * vocabularyIdxList.current.length);
+            const indexOfWord = vocabularyIdxList.current[randomIdx]
+            setVocabularyIdx(indexOfWord);
+            setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
         } else {
             setIsWrong(true);
             setTimeout(() => {
                 setIsWrong(false);
             }, 800)
         }
+    }
+
+    function handleSkip() {
+        const index = vocabularyIdxList.current.findIndex((vocIdx) => vocIdx === vocabularyIdx)
+        skipVocIdxList.current.push(vocabularyIdx)
+        vocabularyIdxList.current.splice(index, 1);
+        if (vocabularyIdxList.current.length === 0) {
+            // Deliver skipped vocabulary list to unfinished vocabulary list
+            vocabularyIdxList.current = [...skipVocIdxList.current];
+            skipVocIdxList.current = [];
+        }
+        const randomIdx = Math.floor(Math.random() * vocabularyIdxList.current.length);
+        const indexOfWord = vocabularyIdxList.current[randomIdx]
+        setVocabularyIdx(indexOfWord);
+        setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
     }
 
     return (
@@ -123,7 +147,7 @@ function WordChecker() {
                         <div className="md:mt-[2px] sm:mt-[4px] mt-[4px]">
                             Skip
                         </div>
-                        <ForwardIcon className="h-8 w-8 text-slate-700 hover:cursor-pointer hover:text-slate-500" />
+                        <ForwardIcon onClick={handleSkip} className="h-8 w-8 text-slate-700 hover:cursor-pointer hover:text-slate-500" />
                     </div>
                 </div>
                 <div className={`grid md:grid-cols-8 sm:grid-cols-5 grid-cols-5 gap-2 mx-3 mb-3 items-center justify-items-center`}>
@@ -164,15 +188,15 @@ function WordChecker() {
                 </div>
             </div>
             <div className="grid grid-rows-[80px_1fr] mt-10 rounded-2xl bg-white drop-shadow-xl">
-                <div className="grid grid-rows mt-7 ml-7">
-                    <div>Total: {vocabularies.length}</div>
-                    <div>Hoàn thành: {passedVocIdxList.current.length}</div>
+                <div className="grid grid-rows mt-7 ml-7 text-sm font-medium">
+                    <div className="text-blue-900">Total: {vocabularies.length}</div>
+                    <div className="text-green-700">Hoàn thành: {passedVocIdxList.current.length}</div>
                 </div>
                 <div className={`mt-4 mx-7 overflow-x-auto ${passedVocIdxList.current.length > 0 && "mb-7"}`}>
                     <div className="inline-flex">
                         {
                             passedVocIdxList.current.map((passedVocIdx, idx) => (
-                                <span className={`mx-2 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 py-2 px-5 rounded-xl text-white flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
+                                <span key={idx} className={`mx-1 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 py-2 px-3 rounded-xl text-white text-sm flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
                             ))
                         }
                     </div>
