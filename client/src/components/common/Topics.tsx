@@ -8,15 +8,15 @@ type Topic = {
 }
 
 function Topics() {
-    const navigation = useNavigation()
-    const { topicId } = useParams()
+    const navigation = useNavigation();
+    const { topicId } = useParams();
     const { topics } = useLoaderData() as { topics: Topic[], totalTopics: number };
     const topicIdNum = topicId ? parseInt(topicId) : topics[0].id;
     const [activeTopicId, setActiveTopicId] = useState(topicIdNum);
 
     useEffect(() => {
         setActiveTopicId(topicIdNum);
-    }, [topics])
+    }, [topics, topicId])
 
     return (
         <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center items-center">
@@ -40,7 +40,7 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] lg:ml-0 sm:ml-5 ml-5 grid justify-items-center">
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] lg:ml-0 sm:ml-5 ml-5 lg:mb-0 sm:mb-10 mb-10 grid justify-items-center">
                 {navigation.state !== "loading" && <Outlet />}
             </div>
         </div>

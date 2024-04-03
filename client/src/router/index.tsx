@@ -54,6 +54,7 @@ export default createBrowserRouter([
                     {
                         path: '/practice/:setId',
                         element: <Learn />,
+                        id: 'practice',
                         loader: learnLoader,
                         children: [
                             {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const TOTAL_PAGES_SELECTED = 4;
@@ -10,6 +10,12 @@ function Pagination({ totalPage, onCallback }: { totalPage: number, onCallback: 
     const [hideDots, setHideDots] = useState(currentPage === totalPage - 2);
     const [firstPage, setFirstPage] = useState(currentPage > 2 && currentPage < totalPage - 1 ? currentPage - 1 : 1);
     const [secondPage, setSecondPage] = useState(currentPage > 2 && currentPage < totalPage - 1 ? currentPage : 2);
+
+    useEffect(() => {
+        setActivePage(currentPage)
+        setFirstPage(currentPage > 2 && currentPage < totalPage - 1 ? currentPage - 1 : 1)
+        setSecondPage(currentPage > 2 && currentPage < totalPage - 1 ? currentPage : 2)
+    }, [pageNum])
 
     async function handleActivePage(pageNum: number, greaterThan4Pages: boolean = false) {
         if (greaterThan4Pages) {

@@ -1,7 +1,8 @@
-import { CursorArrowRaysIcon } from "@heroicons/react/16/solid";
+import { CursorArrowRaysIcon, ForwardIcon } from "@heroicons/react/16/solid";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams, useRouteLoaderData } from "react-router-dom";
 import { Vocabulary } from "../../types/api";
+import { TOPICS_PAGE_SIZE } from "../../utils/constants";
 
 function initAnswer(wordSplit: string[]) {
     return wordSplit.map(char => char === ' ' ? ' ' : '')
@@ -9,13 +10,35 @@ function initAnswer(wordSplit: string[]) {
 
 function WordChecker() {
     const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] };
-    const [vocabularyIdx, setVocabularyIdx] = useState<number>(0);
+    const { setId, topicId } = useParams() as { setId: string, topicId: string };
+    const { totalTopics } = useRouteLoaderData('practice') as  { totalTopics: number };
+    const navigate = useNavigate();
+    // Create a list of index of words
+    const vocabularyIdxList = useRef(vocabularies.map((_, index) => index));
+    const passedVocIdxList = useRef([] as number[]);
+    // Get random vocabularyIdx from list of index of words
+    const [vocabularyIdx, setVocabularyIdx] = useState<number>(
+        vocabularyIdxList.current[Math.floor(Math.random() * vocabularyIdxList.current.length)]);
     const wordSplit = useMemo(
-        () => vocabularies[vocabularyIdx].word.split(''), 
+        () => vocabularies[vocabularyIdx].word.split(''),
         [vocabularies, vocabularyIdx])
     const inputRefs = useRef([]);
+
     const [answer, setAnswer] = useState<string[]>(initAnswer(wordSplit));
     const [isWrong, setIsWrong] = useState<boolean>(false);
+
+    useEffect(() => {
+        function handleKeyDown(e: KeyboardEvent) {
+            if (e.key === 'Enter') {
+                handleSubmitAnswer()
+            }
+        }
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [answer, vocabularies])
 
     useEffect(() => {
         (inputRefs.current[0] as HTMLInputElement).focus();
@@ -64,11 +87,21 @@ function WordChecker() {
 
     function handleSubmitAnswer() {
         if (answer.join('').toLowerCase() === vocabularies[vocabularyIdx].word) {
-            if (vocabularyIdx + 1 < vocabularies.length) {
-                setVocabularyIdx(vocabularyIdx + 1);
-                setAnswer(initAnswer(vocabularies[vocabularyIdx + 1].word.split('')));
+            // Find and Remove the current index of the index of the word
+            const index = vocabularyIdxList.current.findIndex((vocIdx) => vocIdx === vocabularyIdx)
+            passedVocIdxList.current.push(vocabularyIdx)
+            vocabularyIdxList.current.splice(index, 1);
+            if (vocabularyIdxList.current.length !== 0) {
+                // Get random index of the word from index list
+                const randomIdx = Math.floor(Math.random() * vocabularyIdxList.current.length);
+                const indexOfWord = vocabularyIdxList.current[randomIdx]
+                setVocabularyIdx(indexOfWord);
+                setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
             } else {
-                //TODO:
+                const nextTopicId =
+                    parseInt(topicId as string) + 1 > totalTopics ? 1 : parseInt(topicId as string) + 1;
+                let nextPageNum = Math.ceil(nextTopicId/TOPICS_PAGE_SIZE);
+                navigate(`/practice/${setId}/page/${nextPageNum}/topics/${nextTopicId}`);
             }
         } else {
             setIsWrong(true);
@@ -79,11 +112,19 @@ function WordChecker() {
     }
 
     return (
-        <div className="grid grid-rows-[50px_380px] w-[100%]">
+        <div className="grid grid-rows-[50px_380px_1fr] w-[100%]">
             <p className="text-2xl font-bold my-auto">Practice</p>
             <div className="grid grid-rows-[70px_minmax(170px, 1fr)_100px] mt-10 rounded-2xl bg-white drop-shadow-xl">
-                <div className="my-7 ml-7">
-                    ({vocabularies[vocabularyIdx].partsOfSpeech}) {vocabularies[vocabularyIdx].vietnamese}
+                <div className="my-7 ml-7 grid grid-cols-2 md:text-base sm:text-sm text-sm">
+                    <div>
+                        <p className="border-l-4 pl-2 border-slate-500">({vocabularies[vocabularyIdx].partsOfSpeech}) {vocabularies[vocabularyIdx].vietnamese}</p>
+                    </div>
+                    <div className="grid grid-cols-[1fr_40px] justify-items-end mr-7">
+                        <div className="md:mt-[2px] sm:mt-[4px] mt-[4px]">
+                            Skip
+                        </div>
+                        <ForwardIcon className="h-8 w-8 text-slate-700 hover:cursor-pointer hover:text-slate-500" />
+                    </div>
                 </div>
                 <div className={`grid md:grid-cols-8 sm:grid-cols-5 grid-cols-5 gap-2 mx-3 mb-3 items-center justify-items-center`}>
                     {
@@ -119,6 +160,21 @@ function WordChecker() {
                         <div className="grid items-center justify-items-end mr-5">
                             <CursorArrowRaysIcon className="h-6 w-6 text-white" />
                         </div>
+                    </div>
+                </div>
+            </div>
+            <div className="grid grid-rows-[80px_1fr] mt-10 rounded-2xl bg-white drop-shadow-xl">
+                <div className="grid grid-rows mt-7 ml-7">
+                    <div>Total: {vocabularies.length}</div>
+                    <div>Hoàn thành: {passedVocIdxList.current.length}</div>
+                </div>
+                <div className={`mt-4 mx-7 overflow-x-auto ${passedVocIdxList.current.length > 0 && "mb-7"}`}>
+                    <div className="inline-flex">
+                        {
+                            passedVocIdxList.current.map((passedVocIdx, idx) => (
+                                <span className={`mx-2 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 py-2 px-5 rounded-xl text-white flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
+                            ))
+                        }
                     </div>
                 </div>
             </div>

@@ -7,7 +7,8 @@ const Topics = (db) => db.define('topics', {
     },
     setId: {
         type: DataTypes.INTEGER,
-        allowNull: false
+        allowNull: false,
+        primaryKey: true
     },
     name: {
         type: DataTypes.STRING,
