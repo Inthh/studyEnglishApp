@@ -11,3 +11,42 @@
 #root {
   width: 100%;
 }
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgb(203 213 225);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color: rgb(100 116 139);
+}
+
+#scrollbar-passed-list::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgb(203 213 225);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+#scrollbar-passed-list::-webkit-scrollbar
+{
+	width: 12px;
+  height: 10px;
+	background-color: #F5F5F5;
+}
+
+#scrollbar-passed-list::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color: rgb(100 116 139);
+}
