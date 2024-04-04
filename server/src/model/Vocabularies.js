@@ -27,6 +27,9 @@ const Vocabularies = (db) => db.define('vocabularies', {
     audioUrl: {
         type: DataTypes.STRING
     },
+    explaination: {
+        type: DataTypes.TEXT
+    },
     example: {
         type: DataTypes.TEXT
     }
