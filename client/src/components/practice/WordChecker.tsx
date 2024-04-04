@@ -1,4 +1,4 @@
-import { CursorArrowRaysIcon, ForwardIcon } from "@heroicons/react/16/solid";
+import { CursorArrowRaysIcon, ForwardIcon, XMarkIcon } from "@heroicons/react/16/solid";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLoaderData, useNavigate, useParams, useRouteLoaderData } from "react-router-dom";
 import { Vocabulary } from "../../types/api";
@@ -27,6 +27,7 @@ function WordChecker() {
 
     const [answer, setAnswer] = useState<string[]>(initAnswer(wordSplit));
     const [isWrong, setIsWrong] = useState<boolean>(false);
+    const [isSuggestion, setIsSuggestion] = useState<boolean>(false);
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -106,7 +107,7 @@ function WordChecker() {
                     vocabularyIdxList.current = [...skipVocIdxList.current];
                     skipVocIdxList.current = [];
                 }
-            } 
+            }
             // Get random index of the word from index list
             const randomIdx = Math.floor(Math.random() * vocabularyIdxList.current.length);
             const indexOfWord = vocabularyIdxList.current[randomIdx]
@@ -135,74 +136,106 @@ function WordChecker() {
         setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
     }
 
+    function handleToggleSuggestion(isPopup: boolean) {
+        setIsSuggestion(isPopup);
+    }
+
     return (
-        <div className="grid grid-rows-[50px_380px_1fr] w-[100%]">
-            <p className="text-2xl font-bold my-auto">Practice</p>
-            <div className="grid grid-rows-[70px_minmax(170px, 1fr)_100px] mt-10 rounded-2xl bg-white drop-shadow-xl">
-                <div className="my-7 ml-7 grid grid-cols-2 md:text-base sm:text-sm text-sm">
-                    <div>
-                        <p className="border-l-4 pl-2 border-slate-500">({vocabularies[vocabularyIdx].partsOfSpeech}) {vocabularies[vocabularyIdx].vietnamese}</p>
-                    </div>
-                    <div className="grid grid-cols-[1fr_40px] justify-items-end mr-7">
-                        <div className="md:mt-[2px] sm:mt-[4px] mt-[4px]">
-                            Skip
+        <>
+            {
+                isSuggestion &&
+                <div className="fixed top-0 left-0 w-full h-full grid justify-center items-center bg-gray-500 bg-opacity-50 z-50">
+                    <div className="bg-white rounded-lg p-2 md:w-[450px] md:h-[180px] sm:w-[300px] sm:h-[150px] w-[300px] h-[150px] grid grid-rows-[25px_1fr]">
+                        <div className="grid justify-end">
+                            <XMarkIcon onClick={() => handleToggleSuggestion(false)} className="md:h8 md:w-8 sm:h-6 sm:w-6 h-6 w-6 text-slate-700 hover:cursor-pointer hover:text-slate-500"></XMarkIcon>
                         </div>
-                        <ForwardIcon onClick={handleSkip} className="h-8 w-8 text-slate-700 hover:cursor-pointer hover:text-slate-500" />
-                    </div>
-                </div>
-                <div className={`grid md:grid-cols-8 sm:grid-cols-5 grid-cols-5 gap-2 mx-3 mb-3 items-center justify-items-center`}>
-                    {
-                        wordSplit.map((char, idx) => {
-                            const isSpace = char === ' ';
-                            return (
-                                <div key={idx} className={`${isSpace ? "bg-white" : isWrong ? "bg-red-300 border-2 border-red-500" : "bg-sky-300"} md:w-[70px] md:h-[70px] sm:w-[50px] sm:h-[50px] w-[50px] h-[50px] rounded grid justify-items-center items-center`}>
-                                    <input
-                                        ref={(el) => ((inputRefs.current[idx] as any) = el)}
-                                        type="text"
-                                        value={answer[idx]}
-                                        onChange={(event) => handleInputChange(event, idx)}
-                                        onKeyDown={(event) => handleKeyDown(event, idx)}
-                                        maxLength={isSpace ? 0 : 1}
-                                        readOnly={isSpace}
-                                        className={`${isSpace ? "bg-white hover:cursor-default" : isWrong ? "bg-red-300" : "bg-sky-300"} text-center text-4xl font-semibold text-blue-900 md:w-[50px] md:h-[50px] sm:w-[30px] sm:h-[30px] w-[30px] h-[30px] focus:outline-none`} />
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-                <div className="grid justify-items-center items-center mb-7 md:text-base sm:text-sm text-sm">
-                    <div className="grid grid-cols-2">
-                        <div className="grid justify-items-end font-bold">Answer:</div>
-                        <div className="ml-2">{answer.join('')}</div>
-                    </div>
-                    <div
-                        onClick={handleSubmitAnswer}
-                        className="bg-blue-800 md:w-[120px] md:h-[50px] sm:w-[110px] sm:h-[40px] w-[110px] h-[40px] grid rounded-2xl grid-cols-3 hover:cursor-pointer hover:opacity-80">
-                        <div className="font-medium text-white col-span-2 grid items-center ml-5">
-                            Submit
-                        </div>
-                        <div className="grid items-center justify-items-end mr-5">
-                            <CursorArrowRaysIcon className="h-6 w-6 text-white" />
+                        <div className="border-2 m-2 rounded-md border-slate-300 overflow-y-auto md:text-base sm:text-sm text-sm">
+                            <p className="md:m-2 sm:m-1 m-1">
+                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
+                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
+                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
+                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
+                            </p>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="grid grid-rows-[80px_1fr] mt-10 rounded-2xl bg-white drop-shadow-xl">
-                <div className="grid grid-rows mt-7 ml-7 text-sm font-medium">
-                    <div className="text-blue-900">Total: {vocabularies.length}</div>
-                    <div className="text-green-700">Hoàn thành: {passedVocIdxList.current.length}</div>
-                </div>
-                <div className={`mt-4 mx-7 overflow-x-auto ${passedVocIdxList.current.length > 0 && "mb-7"}`}>
-                    <div className="inline-flex">
+            }
+
+            <div className="grid grid-rows-[50px_380px_1fr] w-[100%]">
+                <p className="text-2xl font-bold my-auto">Practice</p>
+                <div className="grid grid-rows-[70px_minmax(170px, 1fr)_140px] mt-10 rounded-2xl bg-white drop-shadow-xl">
+                    <div className="my-7 ml-7 grid grid-cols-3 md:text-base sm:text-sm text-sm">
+                        <div className="inline-flex col-span-2">
+                            <p className="border-l-4 pl-2 border-slate-500">({vocabularies[vocabularyIdx].partsOfSpeech}) {vocabularies[vocabularyIdx].vietnamese}</p>
+                            <div
+                                onClick={() => handleToggleSuggestion(true)}
+                                className="md:text-sm sm:text-xs text-xs text-white ml-[6px] md:w-[100px] sm:w-[120px] w-[120px] h-[30px] bg-green-700 grid justify-center items-center rounded-xl hover:cursor-pointer hover:bg-green-500">
+                                <p>Suggestion</p>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-[1fr_40px] justify-items-end mr-7 col-span-1">
+                            <div className="md:mt-[2px] sm:mt-[4px] mt-[4px]">
+                                Skip
+                            </div>
+                            <ForwardIcon onClick={handleSkip} className="h-8 w-8 text-slate-700 hover:cursor-pointer hover:text-slate-500" />
+                        </div>
+                    </div>
+                    <div className={`grid md:grid-cols-8 sm:grid-cols-5 grid-cols-5 gap-2 mx-3 mb-3 items-center justify-items-center`}>
                         {
-                            passedVocIdxList.current.map((passedVocIdx, idx) => (
-                                <span key={idx} className={`mx-1 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 py-2 px-3 rounded-xl text-white text-sm flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
-                            ))
+                            wordSplit.map((char, idx) => {
+                                const isSpace = char === ' ';
+                                return (
+                                    <div key={idx} className={`${isSpace ? "bg-white" : isWrong ? "bg-red-300 border-2 border-red-500" : "bg-sky-300"} md:w-[70px] md:h-[70px] sm:w-[50px] sm:h-[50px] w-[50px] h-[50px] rounded grid justify-items-center items-center`}>
+                                        <input
+                                            ref={(el) => ((inputRefs.current[idx] as any) = el)}
+                                            type="text"
+                                            value={answer[idx]}
+                                            onChange={(event) => handleInputChange(event, idx)}
+                                            onKeyDown={(event) => handleKeyDown(event, idx)}
+                                            maxLength={isSpace ? 0 : 1}
+                                            readOnly={isSpace}
+                                            className={`${isSpace ? "bg-white hover:cursor-default" : isWrong ? "bg-red-300" : "bg-sky-300"} text-center text-4xl font-semibold text-blue-900 md:w-[50px] md:h-[50px] sm:w-[30px] sm:h-[30px] w-[30px] h-[30px] focus:outline-none`} />
+                                    </div>
+                                )
+                            })
                         }
                     </div>
+                    <div className="grid justify-items-center items-center mb-7 md:text-base sm:text-sm text-sm">
+                        <div className="grid grid-cols-2">
+                            <div className="grid justify-items-end font-bold">Answer:</div>
+                            <div className="ml-2">{answer.join('')}</div>
+                        </div>
+                        <div
+                            onClick={handleSubmitAnswer}
+                            className="bg-blue-800 md:w-[120px] md:h-[50px] sm:w-[110px] sm:h-[40px] w-[110px] h-[40px] grid rounded-2xl grid-cols-3 hover:cursor-pointer hover:opacity-80">
+                            <div className="font-medium text-white col-span-2 grid items-center ml-5">
+                                Submit
+                            </div>
+                            <div className="grid items-center justify-items-end mr-5">
+                                <CursorArrowRaysIcon className="h-6 w-6 text-white" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="grid grid-rows-[80px_1fr] mt-10 rounded-2xl bg-white drop-shadow-xl">
+                    <div className="grid grid-rows mt-7 ml-7 text-sm font-medium">
+                        <div className="text-blue-900">Total: {vocabularies.length}</div>
+                        <div className="text-green-700">Completed: {passedVocIdxList.current.length}</div>
+                    </div>
+                    <div
+                        id="scrollbar-passed-list"
+                        className={`mt-4 mx-7 overflow-x-auto ${passedVocIdxList.current.length > 0 && "mb-5"}`}>
+                        <div className="inline-flex">
+                            {
+                                passedVocIdxList.current.map((passedVocIdx, idx) => (
+                                    <span key={idx} className={`mx-1 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 mb-2 py-2 px-3 rounded-xl text-white text-sm flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
+                                ))
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 
