@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLoaderData, useNavigation, useParams } from "react-router-dom";
+import { Link, Outlet, useLoaderData, useParams } from "react-router-dom";
 import { TOPICS_PAGE_SIZE } from "../../utils/constants";
 
 type Topic = {
@@ -8,7 +8,6 @@ type Topic = {
 }
 
 function Topics() {
-    const navigation = useNavigation();
     const { topicId } = useParams();
     const { topics } = useLoaderData() as { topics: Topic[], totalTopics: number };
     const topicIdNum = topicId ? parseInt(topicId) : topics[0].id;
@@ -20,17 +19,17 @@ function Topics() {
     }, [topics, topicId])
 
     return (
-        <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center items-center">
+        <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center">
             <div className="lg:col-span-1 w-[80%] lg:order-1 sm:order-last order-last">
-                <div className="grid grid-rows-6">
-                    <p className="row-span-1 text-2xl font-bold ml-5 my-auto">Topics</p>
-                    <div className="row-span-5 border-2 border-dashed border-slate-200 rounded-2xl mx-5">
-                        <div className={`grid grid-rows-${TOPICS_PAGE_SIZE} row-span-${TOPICS_PAGE_SIZE}`}>
+                <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
+                    <p className="row-span-1 text-2xl font-bold">Topics</p>
+                    <div className="border-2 border-slate-200 w-[330px] rounded-2xl p-2">
+                        <div className={`grid grid-rows-${TOPICS_PAGE_SIZE} justify-center items-center gap-y-1`}>
                             {
                                 topics.map((topic: Topic) => {
                                     return (
-                                        <Link to={`topics/${topic.id}`} className={`rounded-2xl mx-8 my-5 drop-shadow-xl p-4 font-semibold hover:cursor-pointer text-sm whitespace-nowrap truncate
-                                            ${activeTopicId === topic.id ? "bg-blue-900 text-white" : "bg-white text-blue-900"}`} key={topic.id}
+                                        <Link to={`topics/${topic.id}`} className={`w-[300px] rounded-xl drop-shadow-xl px-3 py-5 font-semibold hover:cursor-pointer text-sm whitespace-nowrap truncate
+                                            ${activeTopicId === topic.id ? "bg-sky-900/75 text-white border-4" : "bg-white text-blue-900"}`} key={topic.id}
                                             onClick={() => setActiveTopicId(topic.id)}>
                                             {topic.id}. {topic.name}
                                         </Link>
@@ -41,8 +40,8 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[90%] h-[90%] lg:ml-0 sm:ml-5 ml-5 lg:mb-0 sm:mb-10 mb-10 grid justify-items-center row-span-2">
-                {navigation.state !== "loading" && <Outlet />}
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[80%]">
+                <Outlet />
             </div>
         </div>
     );
