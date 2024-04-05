@@ -13,8 +13,8 @@ function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
                                 <div className="text-lg font-semibold row-span-1">{set.name}</div>
                                 <div className="text-sm row-span-3">{set.description}</div>
                                 <div className="grid grid-cols-2 justify-items-stretch gap-x-10 sm:lg:grid-cols-2 row-span-1 pt-0.5">
-                                    <Link to={`/practice/${set.id}/page/1/topics/1`} className="grid rounded-2xl bg-red-400 hover:bg-red-500 cursor-pointer py-2 place-items-center text-slate-50">Practice</Link>
-                                    <Link to={`/learn/${set.id}/page/1/topics/1`} className="grid rounded-2xl bg-emerald-400 hover:bg-emerald-500 cursor-pointer py-2 place-items-center text-slate-50">Learn now</Link>
+                                    <Link to={`/practice/${set.id}/page/1/topics/1`} className="grid rounded-2xl bg-rose-500 hover:scale-105 duration-300 cursor-pointer py-2 place-items-center text-slate-50">Practice</Link>
+                                    <Link to={`/learn/${set.id}/page/1/topics/1`} className="grid rounded-2xl bg-emerald-400 hover:scale-105 duration-300 cursor-pointer py-2 place-items-center text-slate-50">Learn now</Link>
                                 </div>
                             </div>
                         </div>

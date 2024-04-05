@@ -1,5 +1,5 @@
 import { ChevronRightIcon, ChevronLeftIcon, SpeakerWaveIcon } from "@heroicons/react/16/solid";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Vocabulary } from "../../types/api";
 import { useActionData, useLoaderData, useParams, useSubmit } from "react-router-dom";
 
@@ -8,15 +8,29 @@ function VocabularyList() {
     const submit = useSubmit()
     const actionData = useActionData() as { vocabularyId: number, isMemoried: boolean };
     const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] }
-    const totalMemoried = useMemo(() => 
+    const totalMemoried = useMemo(() =>
         vocabularies.reduce((totalMemoried, currentVoca) => {
             return currentVoca.isMemoried ? totalMemoried + 1 : totalMemoried}, 0),
     [vocabularies]);
-
     const [countMemorized, setCountMemorized] = useState<number>(totalMemoried)
     const [isMemoriedDone, setIsMemoriedDone] = useState<boolean>(
         totalMemoried === vocabularies.length)
-    const [vocabularyIndex, setVocabularyIndex] = useState<number>(() => {
+    const [vocabularyIndex, setVocabularyIndex] = useState<number>(getFirstUnmemoriedVoca())
+    const [activeMemoriedBtn, setActiveMemoriedBtn] = useState<boolean>(
+        actionData ? actionData.isMemoried : vocabularies[vocabularyIndex].isMemoried)
+
+    useEffect(() => {
+        setCountMemorized(totalMemoried);
+        if (totalMemoried === vocabularies.length) {
+            setIsMemoriedDone(true);
+            return;
+        }
+        setIsMemoriedDone(false);
+        setVocabularyIndex(getFirstUnmemoriedVoca());
+        setActiveMemoriedBtn(actionData && actionData.isMemoried || false);
+    }, [vocabularies])
+
+    function getFirstUnmemoriedVoca() {
         if (actionData) {
             return vocabularies.findIndex(voca=> voca.id === actionData.vocabularyId)
         }
@@ -25,9 +39,7 @@ function VocabularyList() {
             return 0
         }
         return index
-    })
-    const [activeMemoriedBtn, setActiveMemoriedBtn] = useState<boolean>(
-        actionData ? actionData.isMemoried : vocabularies[vocabularyIndex].isMemoried)
+    }
 
     function handleMemoriedBtn(vocabularyIndex: number) {
         if (!vocabularies[vocabularyIndex].isMemoried) {
@@ -87,23 +99,25 @@ function VocabularyList() {
     }
 
     return (
-        <div className="grid grid-rows-6 w-[92%] h-[92%]">
-            <p className="row-span-1 text-2xl font-bold my-auto">Vocabulary</p>
-            <div className="row-span-5 grid lg:grid-rows-8 border-2 border-dashed border-slate-200 rounded-2xl mr-5 justify-items-center items-center max-h-[500px] sm:grid-rows-[400px] grid-rows-[400px]">
+        <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
+            <p className="text-2xl font-bold">Vocabulary</p>
+            <div className="grid grid-rows-8 border-2 w-[100%] border-slate-200 rounded-2xl justify-items-center items-center max-w-[830px] max-h-[480px] h-[480px]">
                 {
                     isMemoriedDone ?
-                    <div className="rounded-2xl row-span-8 bg-white w-[92%] h-[92%] grid justify-items-center items-center border border-green-700">
-                        <p className="row-span-7 text-green-700 text-3xl font-bold">
-                            All is remembered.
-                        </p>
-                        <div
-                            className={`bg-blue-900 text-white grid justify-items-center items-center border-2 border-blue-900 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
-                            onClick={handleStudyAgain}>Study again
-                        </div>
-                    </div> :
                     <>
-                        <div className="rounded-2xl row-span-7 bg-blue-400 w-[92%] h-[92%] grid justify-items-center items-center">
-                            <div className="text-center">
+                        <div className="rounded-2xl row-span-8 bg-white w-[92%] h-[92%] grid justify-items-center items-center border border-green-700">
+                            <p className="row-span-7 text-green-700 text-3xl font-bold">
+                                All is remembered.
+                            </p>
+                            <div
+                                className={`bg-blue-900 text-white grid justify-items-center items-center border-2 border-blue-900 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
+                                onClick={handleStudyAgain}>Study again
+                            </div>
+                        </div>
+                    </> :
+                    <>
+                        <div className="rounded-2xl row-span-7 bg-blue-300 w-[92%] h-[92%] grid justify-items-center items-center">
+                            <div className="text-center mx-3">
                                 <p className={`uppercase lg:text-5xl sm:text-3xl text-3xl font-semibold ${activeMemoriedBtn ? "line-through" : ""}`}>{vocabularies[vocabularyIndex].word}</p>
                                 <p className="italic lg:text-base sm:text-sm text-sm">{vocabularies[vocabularyIndex].pronunciation}</p>
                                 <p className="mt-10 lg:text-base sm:text-sm text-sm">({vocabularies[vocabularyIndex].partsOfSpeech}) {vocabularies[vocabularyIndex].vietnamese}</p>
@@ -111,12 +125,12 @@ function VocabularyList() {
                             </div>
                             <div className="grid">
                                 <div
-                                    className={`${activeMemoriedBtn ? "text-green-700 bg-blue-400" : "bg-green-700 text-white"} grid justify-items-center items-center border-2 border-green-700 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
+                                    className={`${activeMemoriedBtn ? "text-green-700 bg-blue-300" : "bg-green-700 text-white"} grid justify-items-center items-center border-2 border-green-700 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
                                     onClick={() => handleMemoriedBtn(vocabularyIndex)}>Memorized
                                 </div>
                             </div>
                         </div>
-                        <div className="row-span-1 grid grid-cols-3 w-[92%] lg:mb-5 sm:mb-14 mb-14">
+                        <div className="row-span-1 grid grid-cols-3 w-[92%] lg:mb-5 sm:mb-5 mb-5">
                             <div className="text-center rounded-full lg:w-14 lg:h-14 sm:w-11 sm:h-11 w-11 h-11 grid justify-items-center items-center drop-shadow-xl bg-white hover:cursor-pointer">
                                 <SpeakerWaveIcon className="lg:w-7 lg:h-7 sm:w-5 sm:h-5 w-5 h-5"></SpeakerWaveIcon>
                             </div>
