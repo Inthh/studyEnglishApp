@@ -22,14 +22,14 @@ function Topics() {
         <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center">
             <div className="lg:col-span-1 w-[80%] lg:order-1 sm:order-last order-last">
                 <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
-                    <p className="row-span-1 text-2xl font-bold">Topics</p>
-                    <div className="border-2 border-slate-200 w-[330px] rounded-2xl p-2">
+                    <p className="row-span-1 text-2xl font-bold text-slate-700">Topics</p>
+                    <div className="w-[330px] rounded-2xl px-2 py-4 bg-slate-300">
                         <div className={`grid grid-rows-${TOPICS_PAGE_SIZE} justify-center items-center gap-y-1`}>
                             {
                                 topics.map((topic: Topic) => {
                                     return (
                                         <Link to={`topics/${topic.id}`} className={`w-[300px] rounded-xl drop-shadow-xl px-3 py-5 font-semibold hover:cursor-pointer text-sm whitespace-nowrap truncate
-                                            ${activeTopicId === topic.id ? "bg-sky-900/75 text-white border-4" : "bg-white text-blue-900"}`} key={topic.id}
+                                            ${activeTopicId === topic.id ? "bg-sky-900/75 text-white border-4 border-white" : "bg-white text-slate-700"}`} key={topic.id}
                                             onClick={() => setActiveTopicId(topic.id)}>
                                             {topic.id}. {topic.name}
                                         </Link>

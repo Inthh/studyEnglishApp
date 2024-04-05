@@ -100,23 +100,23 @@ function VocabularyList() {
 
     return (
         <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
-            <p className="text-2xl font-bold">Vocabulary</p>
-            <div className="grid grid-rows-8 border-2 w-[100%] border-slate-200 rounded-2xl justify-items-center items-center max-w-[830px] max-h-[480px] h-[480px]">
+            <p className="text-2xl font-bold text-slate-700">Vocabulary</p>
+            <div className="grid grid-rows-8 w-[100%] py-2 bg-slate-300 rounded-2xl justify-items-center items-center max-w-[830px] max-h-[480px] h-[480px]">
                 {
                     isMemoriedDone ?
                     <>
-                        <div className="rounded-2xl row-span-8 bg-white w-[92%] h-[92%] grid justify-items-center items-center border border-green-700">
+                        <div className="rounded-2xl row-span-8 bg-white w-[92%] h-[92%] grid justify-items-center items-center">
                             <p className="row-span-7 text-green-700 text-3xl font-bold">
                                 All is remembered.
                             </p>
                             <div
-                                className={`bg-blue-900 text-white grid justify-items-center items-center border-2 border-blue-900 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
+                                className={`bg-sky-900/75 text-white grid justify-items-center items-center font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
                                 onClick={handleStudyAgain}>Study again
                             </div>
                         </div>
                     </> :
                     <>
-                        <div className="rounded-2xl row-span-7 bg-blue-300 w-[92%] h-[92%] grid justify-items-center items-center">
+                        <div className="rounded-2xl row-span-7 bg-white text-slate-700 w-[92%] h-[92%] grid justify-items-center items-center">
                             <div className="text-center mx-3">
                                 <p className={`uppercase lg:text-5xl sm:text-3xl text-3xl font-semibold ${activeMemoriedBtn ? "line-through" : ""}`}>{vocabularies[vocabularyIndex].word}</p>
                                 <p className="italic lg:text-base sm:text-sm text-sm">{vocabularies[vocabularyIndex].pronunciation}</p>
@@ -125,20 +125,20 @@ function VocabularyList() {
                             </div>
                             <div className="grid">
                                 <div
-                                    className={`${activeMemoriedBtn ? "text-green-700 bg-blue-300" : "bg-green-700 text-white"} grid justify-items-center items-center border-2 border-green-700 font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
+                                    className={`${activeMemoriedBtn ? "text-sky-900/75 bg-white border-2 border-sky-900/75" : "bg-sky-900/75 text-white border-2 border-white"} grid justify-items-center items-center font-medium rounded-3xl px-9 py-3.5 hover:cursor-pointer`}
                                     onClick={() => handleMemoriedBtn(vocabularyIndex)}>Memorized
                                 </div>
                             </div>
                         </div>
-                        <div className="row-span-1 grid grid-cols-3 w-[92%] lg:mb-5 sm:mb-5 mb-5">
-                            <div className="text-center rounded-full lg:w-14 lg:h-14 sm:w-11 sm:h-11 w-11 h-11 grid justify-items-center items-center drop-shadow-xl bg-white hover:cursor-pointer">
-                                <SpeakerWaveIcon className="lg:w-7 lg:h-7 sm:w-5 sm:h-5 w-5 h-5"></SpeakerWaveIcon>
+                        <div className="row-span-1 grid grid-cols-3 w-[92%] mb-2">
+                            <div className="text-center rounded-full lg:w-14 lg:h-14 sm:w-11 sm:h-11 w-11 h-11 grid justify-items-center items-center drop-shadow-xl bg-white hover:cursor-pointer hover:scale-110 duration-300">
+                                <SpeakerWaveIcon className="lg:w-7 lg:h-7 sm:w-5 sm:h-5 w-5 h-5 text-slate-700"></SpeakerWaveIcon>
                             </div>
                             <div className="grid grid-cols-2 justify-items-center items-center">
-                                <ChevronLeftIcon onClick={() => handleChevronLeft(vocabularyIndex - 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronLeftIcon>
-                                <ChevronRightIcon onClick={() => handleChevronRight(vocabularyIndex + 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-blue-900 rounded-full text-blue-900 hover:cursor-pointer hover:text-white hover:bg-blue-900"></ChevronRightIcon>
+                                <ChevronLeftIcon onClick={() => handleChevronLeft(vocabularyIndex - 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-sky-900/75 rounded-full text-sky-900/75 hover:cursor-pointer hover:text-white hover:bg-sky-900/75"></ChevronLeftIcon>
+                                <ChevronRightIcon onClick={() => handleChevronRight(vocabularyIndex + 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-sky-900/75 rounded-full text-sky-900/75 hover:cursor-pointer hover:text-white hover:bg-sky-900/75"></ChevronRightIcon>
                             </div>
-                            <div className="grid text-green-700 lg:text-2xl md:text-lg sm:text-sm text-sm lg:font-extrabold sm:font-bold font-bold items-center justify-items-end">
+                            <div className="grid text-slate-700 lg:text-2xl md:text-lg sm:text-sm text-sm lg:font-extrabold sm:font-bold font-bold items-center justify-items-end">
                                 <p className="">{countMemorized}/{vocabularies.length} Memoried</p>
                             </div>
                         </div>

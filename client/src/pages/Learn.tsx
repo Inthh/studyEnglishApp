@@ -15,11 +15,11 @@ function Learn() {
     return (
         <>
             <Header />
-            <div className="bg-gradient-to-r from-cyan-400 to-blue-400">
+            <div className="bg-gradient-to-r from-slate-100/40 to-gray-100">
                 <div className="grid grid-rows-[1fr_84px]">
                     <Outlet />
                     <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1">
-                        <div className="lg:col-span-1 grid justify-items-center">
+                        <div className="lg:col-span-1 grid justify-items-center lg:mt-0 sm:mt-6 mt-6">
                             <Pagination totalPage={Math.ceil(totalTopics/TOPICS_PAGE_SIZE)} onCallback={handlePageChange}></Pagination>
                         </div>
                     </div>
