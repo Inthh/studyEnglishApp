@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
 const signToken = (payload, privateKey, options) => {
     return jwt.sign(payload, privateKey, options);
@@ -22,7 +23,27 @@ const extractPayloadFromToken = (token) => {
     }
 }
 
+const generateTokensAndPublicKey = ({ userId, options }) => {
+    const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+        modulusLength: 4096,
+        publicKeyEncoding: {
+            type: 'spki',
+            format: 'pem'
+        },
+        privateKeyEncoding: {
+            type: 'pkcs8',
+            format: 'pem'
+        }
+    });
+
+    const accessToken = signToken({ userId }, privateKey, options);
+    options.expiresIn = '15 days';
+    const refreshToken = signToken({ userId }, privateKey, options);
+
+    return { tokens: { accessToken, refreshToken }, publicKey };
+}
+
 export {
-    signToken,
+    generateTokensAndPublicKey,
     extractPayloadFromToken
 }

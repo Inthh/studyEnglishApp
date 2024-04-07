@@ -24,13 +24,13 @@ export default createBrowserRouter([
                 path: '/login'
             },
             {
+                element: <Home />,
+                path: '/',
+                loader: vocabularySetsLoader
+            },
+            {
                 element: <ProtectedRoute />,
                 children: [
-                    {
-                        path: '/',
-                        element: <Home />,
-                        loader: vocabularySetsLoader
-                    },
                     {
                         path: '/learn/:setId',
                         element: <Learn />,

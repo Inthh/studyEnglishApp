@@ -2,14 +2,37 @@ import { ReactNode, createContext, useEffect, useState } from "react";
 import { extractPayloadFromToken } from "../utils/token";
 import { useNavigate } from 'react-router-dom';
 import Loading from "../components/common/Loading";
-import { User } from "../types/api";
-
+import { OAuthUser, User } from "../types/api";
+import { getAuth } from "firebase/auth";
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | OAuthUser | null>(null);
+    const auth = getAuth();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const unsubscribe = auth.onIdTokenChanged((user) => {
+            if (user && user.uid) {
+                setUser({
+                    uid: user.uid,
+                    displayName: user.displayName ?? "",
+                    auth: user.auth
+                });
+                localStorage.setItem('accessToken', user.accessToken);
+                setIsLoading(false);
+                return;
+            }
+
+            // Reset user information
+            setUser(null);
+            localStorage.removeItem('accessToken');
+            navigate('/login');
+        })
+
+        return () => unsubscribe();
+    }, [auth]);
 
     useEffect(() => {
         const accessToken = localStorage.getItem('accessToken');

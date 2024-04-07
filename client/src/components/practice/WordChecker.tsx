@@ -27,6 +27,7 @@ function WordChecker() {
 
     const [answer, setAnswer] = useState<string[]>(initAnswer(wordSplit));
     const [isWrong, setIsWrong] = useState<boolean>(false);
+    const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [isSuggestion, setIsSuggestion] = useState<boolean>(false);
 
     useEffect(() => {
@@ -110,14 +111,18 @@ function WordChecker() {
             }
             // Get random index of the word from index list
             const randomIdx = Math.floor(Math.random() * vocabularyIdxList.current.length);
-            const indexOfWord = vocabularyIdxList.current[randomIdx]
-            setVocabularyIdx(indexOfWord);
-            setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
+            const indexOfWord = vocabularyIdxList.current[randomIdx];
+            setIsCorrect(true);
+            setTimeout(() => { 
+                setVocabularyIdx(indexOfWord);
+                setAnswer(initAnswer(vocabularies[indexOfWord].word.split('')));
+                setIsCorrect(false);
+            }, 600);
         } else {
             setIsWrong(true);
             setTimeout(() => {
                 setIsWrong(false);
-            }, 800)
+            }, 600)
         }
     }
 
@@ -151,10 +156,7 @@ function WordChecker() {
                         </div>
                         <div className="border-2 m-2 rounded-md border-slate-300 overflow-y-auto md:text-base sm:text-sm text-sm">
                             <p className="md:m-2 sm:m-1 m-1">
-                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
-                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
-                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
-                            to accept and act ato accept and act to accept and act ccording to a law, an agreement, etc.  to accept and act according to a law, an agreement, etc. to accept and act according to a law, an agreement, etc.
+                            {vocabularies[vocabularyIdx].explaination}
                             </p>
                         </div>
                     </div>
@@ -187,7 +189,7 @@ function WordChecker() {
                             wordSplit.map((char, idx) => {
                                 const isSpace = char === ' ';
                                 return (
-                                    <div key={idx} className={`${isSpace ? "bg-white" : isWrong ? "bg-red-300 border-2 border-red-500" : "bg-slate-300"} md:w-[70px] md:h-[70px] sm:w-[50px] sm:h-[50px] w-[50px] h-[50px] rounded grid justify-items-center items-center`}>
+                                    <div key={idx} className={`${isSpace ? "bg-white" : isWrong ? "bg-red-300 border-2 border-red-500" : isCorrect ? "bg-green-300 border-2 border-green-500" : "bg-slate-300"} md:w-[70px] md:h-[70px] sm:w-[50px] sm:h-[50px] w-[50px] h-[50px] rounded grid justify-items-center items-center`}>
                                         <input
                                             ref={(el) => ((inputRefs.current[idx] as any) = el)}
                                             type="text"
@@ -196,7 +198,7 @@ function WordChecker() {
                                             onKeyDown={(event) => handleKeyDown(event, idx)}
                                             maxLength={isSpace ? 0 : 1}
                                             readOnly={isSpace}
-                                            className={`${isSpace ? "bg-white hover:cursor-default" : isWrong ? "bg-red-300" : "bg-slate-300"} text-center text-4xl font-semibold text-sky-900/75 md:w-[50px] md:h-[50px] sm:w-[30px] sm:h-[30px] w-[30px] h-[30px] focus:outline-none`} />
+                                            className={`${isSpace ? "bg-white hover:cursor-default" : isWrong ? "bg-red-300" : isCorrect ? "bg-green-300" : "bg-slate-300"} text-center text-4xl font-semibold text-sky-900/75 md:w-[50px] md:h-[50px] sm:w-[30px] sm:h-[30px] w-[30px] h-[30px] focus:outline-none`} />
                                     </div>
                                 )
                             })

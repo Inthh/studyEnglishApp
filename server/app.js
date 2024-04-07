@@ -3,6 +3,7 @@ import cors from 'cors';
 
 import route from './src/route/index.js';
 import db from './src/model/index.js';
+import './src/firebase/config.js'
 
 const app = express();
 

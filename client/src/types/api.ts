@@ -1,7 +1,12 @@
 export type User = {
     id: number,
     firstName: string,
-    lastName: string
+    lastName: string,
+}
+
+export type OAuthUser = {
+    uid: string,
+    displayName: string
 }
 
 export type VocabularySet = {
@@ -17,7 +22,8 @@ export type Vocabulary = {
     pronunciation: string,
     vietnamese: string,
     example: string,
-    isMemoried: boolean
+    isMemoried: boolean,
+    explaination: string
 }
 
 export type Topic = {

@@ -1,8 +1,7 @@
-import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 import db from "../model/index.js";
-import { signToken, extractPayloadFromToken } from '../utils/tokenHandler.js';
+import { extractPayloadFromToken, generateTokensAndPublicKey } from '../utils/tokenHandler.js';
 
 const authController = {
     login: async (req, res) => {
@@ -18,25 +17,11 @@ const authController = {
                 return;
             }
 
-            const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
-                modulusLength: 4096,
-                publicKeyEncoding: {
-                    type: 'spki',
-                    format: 'pem'
-                },
-                privateKeyEncoding: {
-                    type: 'pkcs8',
-                    format: 'pem'
-                }
-            });
-
             const jwtOptions = {
                 algorithm: 'RS512', expiresIn:  '30d'
             };
-            const accessToken = signToken({ userId: login.userId }, privateKey, jwtOptions);
-            jwtOptions.expiresIn = '15 days';
-            const refreshToken = signToken({ userId: login.userId }, privateKey, jwtOptions);
-
+            const { tokens, publicKey } = generateTokensAndPublicKey({ userId: login.userId, options: jwtOptions });
+            const { accessToken, refreshToken } = tokens;
             if (!accessToken || !refreshToken) {
                 res.status(500).json({ message: 'Internal server error' });
             } else {
@@ -91,6 +76,57 @@ const authController = {
 
             res.status(400).json({ message: 'Bad Request' });
         });
+    },
+
+    async register (req, res) {
+        const { username, password, uid, displayName, type } = req.body;
+
+        try {
+            switch (type) {
+                case 'default': {
+                    if (!username || !password) {
+                        return res.status(400).json({ message: 'Bad Request' });
+                    }
+                    const result = await db.Login.create({   
+                        username,
+                        password,
+                        type
+                    });
+                    const { tokens, publicKey } = generateTokensAndPublicKey(result.userId)
+    
+                    await db.Login.update({ publicKey }, {
+                        where: { userId: result.userId }
+                    });
+                    console.log("Register account with username password successful")
+                    return res.status(200).json({ tokens });
+                }
+
+                case 'google': {
+                    if (!uid || !displayName) {
+                        return res.status(400).json({ message: 'Bad Request' });
+                    }
+    
+                    const [user, created] = await db.User.findOrCreate({
+                        where: { uid }, 
+                        defaults: {
+                            uid,
+                            displayName,
+                            type
+                        }
+                    });
+                    console.log("Register account with google successful")
+    
+                    return res.status(200).json({ uid: user.uid, displayName: user.displayName });
+                }
+                
+                default:
+                    console.error('Register type is invalid: ', req.body.type);
+                    return res.status(400).json({ message: 'Bad Request' });
+            }
+        } catch (err) {
+            console.log(`Register with type ${type} failed reason: ${err.message}`);
+            return res.status(500).json({ message: 'Internal server error' });
+        }        
     }
 };
 

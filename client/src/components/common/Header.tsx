@@ -2,13 +2,17 @@ import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AuthContext } from "../../contexts/AuthProvider";
-import { User } from "../../types/api";
+import { OAuthUser, User } from "../../types/api";
 
 function Header() {
-    const { user } = useContext(AuthContext) as { user: User | null };
+    const { user } = useContext(AuthContext) as { user: User | OAuthUser | null };
 
     const navigate = useNavigate();
     async function handleLogout() {
+        if (user && (user as OAuthUser).uid) {
+            localStorage.removeItem('accessToken');
+            return user.auth.signOut();
+        }
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) return;
 
@@ -24,6 +28,10 @@ function Header() {
         navigate('/login');
     }
 
+    function handleLogin() {
+        navigate('/login');
+    }
+    
     return (
         <header className="bg-white">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
@@ -35,10 +43,21 @@ function Header() {
                     </div>
 
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-                        { user && (<p className="text-base font-semibold text-blue-700 pr-4">Hello, {user.firstName} {user.lastName}</p>) }
-                        <button className="text-base font-semibold leading-6 text-gray-900" onClick={handleLogout}>
-                            Log out <span aria-hidden="true">&rarr;</span>
-                        </button>
+                        { user ? (
+                            <>
+                                <p className="text-base font-semibold text-blue-700 pr-4">Hello, {(user as OAuthUser).displayName || `${(user as User).firstName} ${(user as User).lastName}`}</p>
+                                <button className="text-base font-semibold leading-6 text-gray-900" onClick={handleLogout}>
+                                    Log out <span aria-hidden="true">&rarr;</span>
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                <button className="text-base font-semibold leading-6 text-gray-900" onClick={handleLogin}>
+                                    Log in <span aria-hidden="true">&rarr;</span>
+                                </button>
+                            </>
+                        )}
+
                     </div>
                 </nav>
         </header>

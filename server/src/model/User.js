@@ -7,11 +7,20 @@ const User = (db) => db.define('user', {
         autoIncrement: true
     },
     firstName: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: DataTypes.STRING
     },
     lastName: {
         type: DataTypes.STRING
+    },
+    uid: {
+        type: DataTypes.STRING
+    },
+    displayName: {
+        type: DataTypes.STRING
+    },
+    type: {
+        type: DataTypes.STRING,
+        defaultValue: 'default'
     }
 }, {
     tableName: 'user',

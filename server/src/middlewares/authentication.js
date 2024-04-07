@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { getAuth } from 'firebase-admin/auth'
 
 import db from '../model/index.js';
 import { extractPayloadFromToken } from '../utils/tokenHandler.js';
@@ -12,6 +13,24 @@ const authentication = async (req, res, next) => {
             if (authorizationSplit.length > 1) {
                 token = authorizationSplit[1]
                 const payload = extractPayloadFromToken(token);
+
+                if (payload && payload?.firebase?.sign_in_provider === 'google.com') {
+                    const res = await getAuth().verifyIdToken(token);
+
+                    if (!res || !res.user_id) {
+                        console.log('Google access token invalid');
+                        return res.status(401).json({ message: 'google access token invalid' });
+                    }
+                    const { id } = await db.User.findOne({
+                        attributes: ['id'],
+                        where: {
+                            uid: res.user_id
+                        }
+                    });
+                    req.userId = id;
+                    next(); 
+                    return;
+                }
 
                 const { publicKey } = await db.Login.findOne({
                     attributes: ['publicKey'],
@@ -38,7 +57,7 @@ const authentication = async (req, res, next) => {
             }
         } catch (err) {
             console.log('Error while authenticate user: ', err.message);
-            res.status(400).json({ message: 'Bad Request' });
+            return res.status(400).json({ message: 'Bad Request' });
         }
     }
 

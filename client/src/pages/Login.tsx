@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
+import { useContext, useLayoutEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthProvider';
 
 type Tokens = {
     accessToken: string;
@@ -7,7 +9,12 @@ type Tokens = {
 }
 
 function login() {
+    const auth = getAuth();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const navigate = useNavigate();
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { user } = useContext(AuthContext);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [showErrorMsg, setShowErrorMsg] = useState(false);
     async function handleSubmitLogin () {
         const username = (document.querySelector('#text') as HTMLInputElement)?.value;
@@ -26,12 +33,34 @@ function login() {
         if (data && data.accessToken && data.refreshToken) {
             localStorage.setItem('accessToken', data.accessToken);
             localStorage.setItem('refreshToken', data.refreshToken);
-            navigate('/');
+            navigate(-1);
             return;
         }
 
         setShowErrorMsg(true);
     }
+
+    async function handleLoginWithGoogle() {
+        const provider = new GoogleAuthProvider();
+        const res = await signInWithPopup(auth, provider);
+        
+        await fetch('http://localhost:3001/auth/register', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ uid: res.user.uid, displayName: res.user.displayName, type: 'google' })
+        });
+    }
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useLayoutEffect(() => {
+        if (user && (user.uid || user.id)) {
+            navigate(-1)
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user])
+
 
     return (
         <>
@@ -98,6 +127,7 @@ function login() {
                     </div>
                 </div>
             </div>
+            <button onClick={handleLoginWithGoogle}>Login with google</button>
         </>
     );
 }
