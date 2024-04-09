@@ -5,11 +5,13 @@ import { AuthContext } from "../../contexts/AuthProvider";
 import { OAuthUser, User } from "../../types/api";
 
 function Header() {
-    const { user } = useContext(AuthContext) as { user: User | OAuthUser | null };
+    const { user, setUser } = useContext(AuthContext) as {
+        user: (User & OAuthUser | null),
+        setUser: React.Dispatch<React.SetStateAction<(User & OAuthUser | null)>> };
 
     const navigate = useNavigate();
     async function handleLogout() {
-        if (user && (user as OAuthUser).uid) {
+        if (user && user.uid) {
             localStorage.removeItem('accessToken');
             return user.auth.signOut();
         }
@@ -25,13 +27,14 @@ function Header() {
 
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        setUser(null);
         navigate('/login');
     }
 
     function handleLogin() {
         navigate('/login');
     }
-    
+
     return (
         <header className="bg-white">
                 <nav className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">

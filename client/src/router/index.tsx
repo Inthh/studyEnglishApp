@@ -26,13 +26,13 @@ export default createBrowserRouter([
             {
                 element: <Home />,
                 path: '/',
-                loader: vocabularySetsLoader
+                loader: vocabularySetsLoader,
             },
             {
                 element: <ProtectedRoute />,
                 children: [
                     {
-                        path: '/learn/:setId',
+                        path: 'learn/:setId',
                         element: <Learn />,
                         loader: learnLoader,
                         children: [
@@ -52,7 +52,7 @@ export default createBrowserRouter([
                         ]
                     },
                     {
-                        path: '/practice/:setId',
+                        path: 'practice/:setId',
                         element: <Learn />,
                         id: 'practice',
                         loader: learnLoader,

@@ -7,7 +7,7 @@ import { getAuth } from "firebase/auth";
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<User | OAuthUser | null>(null);
+    const [user, setUser] = useState<User & OAuthUser | null>(null);
     const auth = getAuth();
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
@@ -28,7 +28,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
             // Reset user information
             setUser(null);
             localStorage.removeItem('accessToken');
-            navigate('/login');
         })
 
         return () => unsubscribe();
