@@ -45,8 +45,10 @@ function WordChecker() {
     }, [answer, vocabularies])
 
     useEffect(() => {
+        setAnswer(initAnswer(wordSplit));
         (inputRefs.current[0] as HTMLInputElement).focus();
-    }, [vocabularyIdx]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [vocabularyIdx, vocabularies]);
 
     function handleInputChange(e: React.ChangeEvent<HTMLInputElement>, idx: number) {
         const newAnswer = [...answer];

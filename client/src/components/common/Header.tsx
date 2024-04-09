@@ -12,9 +12,10 @@ function Header() {
     const navigate = useNavigate();
     async function handleLogout() {
         if (user && user.uid) {
-            localStorage.removeItem('accessToken');
-            return user.auth.signOut();
+            user.auth.signOut();
+            return;
         }
+
         const accessToken = localStorage.getItem('accessToken');
         if (!accessToken) return;
 
@@ -48,7 +49,7 @@ function Header() {
                     <div className="hidden lg:flex lg:flex-1 lg:justify-end">
                         { user ? (
                             <>
-                                <p className="text-base font-semibold text-blue-700 pr-4">Hello, {(user as OAuthUser).displayName || `${(user as User).firstName} ${(user as User).lastName}`}</p>
+                                <p className="text-base font-semibold text-blue-700 pr-4">Hello, {(user as OAuthUser).displayName || `${(user as User).firstname} ${(user as User).lastname}`}</p>
                                 <button className="text-base font-semibold leading-6 text-gray-900" onClick={handleLogout}>
                                     Log out <span aria-hidden="true">&rarr;</span>
                                 </button>

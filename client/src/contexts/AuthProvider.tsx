@@ -28,6 +28,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
             // Reset user information
             setUser(null);
             localStorage.removeItem('accessToken');
+            // navigate('/login');
         })
 
         return () => unsubscribe();

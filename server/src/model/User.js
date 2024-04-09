@@ -6,10 +6,13 @@ const User = (db) => db.define('user', {
         primaryKey: true,
         autoIncrement: true
     },
-    firstName: {
+    firstname: {
         type: DataTypes.STRING
     },
-    lastName: {
+    lastname: {
+        type: DataTypes.STRING
+    },
+    email: {
         type: DataTypes.STRING
     },
     uid: {

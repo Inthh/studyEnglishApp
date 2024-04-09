@@ -78,39 +78,73 @@ const authController = {
         });
     },
 
-    async register (req, res) {
-        const { username, password, uid, displayName, type } = req.body;
+    async register(req, res) {
+        const { defaultInfo, googleInfo, type } = req.body;
 
         try {
             switch (type) {
                 case 'default': {
-                    if (!username || !password) {
+                    if (!defaultInfo || Object.values(defaultInfo).some((value) => !value)) {
+                        console.log("Some registered infomation is invalid");
                         return res.status(400).json({ message: 'Bad Request' });
                     }
-                    const result = await db.Login.create({   
-                        username,
-                        password,
-                        type
+
+                    const loginInfo = await db.Login.findOne({
+                        where: { username: defaultInfo.username },
+                        raw: true
                     });
-                    const { tokens, publicKey } = generateTokensAndPublicKey(result.userId)
-    
-                    await db.Login.update({ publicKey }, {
-                        where: { userId: result.userId }
-                    });
-                    console.log("Register account with username password successful")
-                    return res.status(200).json({ tokens });
+
+                    if (loginInfo) {
+                        console.log("This username or this email is already registered");
+                        return res.status(400).json({ message: 'Username is already registered' });
+                    }
+
+                    const ts = await db.sequelize.transaction();
+                    try {
+                        const user = await db.User.create({
+                            firstname: defaultInfo.firstname,
+                            lastname: defaultInfo.lastname,
+                            email: defaultInfo.email,
+                            type
+                        }, {
+                            transaction: ts
+                        });
+
+                        const jwtOptions = {
+                            algorithm: 'RS512', expiresIn:  '30d'
+                        };
+                        const { tokens, publicKey } = generateTokensAndPublicKey({ userId: user.id, options: jwtOptions });
+
+                        await db.Login.create({
+                            userId: user.id,
+                            username: defaultInfo.username,
+                            password: defaultInfo.password,
+                            publicKey,
+                            type
+                        }, {
+                            transaction: ts
+                        });
+                        await ts.commit();
+
+                        console.log("Register account with username password successful");
+                        return res.status(200).json({ tokens });
+                    } catch (err) {
+                        await ts.rollback();
+
+                        console.log(`Register with type ${type} failed reason: ${err.message}`);
+                        return res.status(500).json({ message: 'Internal server error' });
+                    }
                 }
 
                 case 'google': {
-                    if (!uid || !displayName) {
+                    if (!googleInfo || !googleInfo.uid || !googleInfo.displayName) {
                         return res.status(400).json({ message: 'Bad Request' });
                     }
     
                     const [user, created] = await db.User.findOrCreate({
                         where: { uid }, 
                         defaults: {
-                            uid,
-                            displayName,
+                            ...googleInfo,
                             type
                         }
                     });

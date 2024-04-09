@@ -9,6 +9,8 @@ import { updateMemoried, vocabularyListLoader, vocabularySetsLoader } from "../u
 import VocabularyList from "../components/learn/VocabularyList";
 import Topics from "../components/common/Topics";
 import WordChecker from "../components/practice/WordChecker";
+import AuthTabsLayout from "../components/Layout/AuthTabsLayout";
+import Register from "../pages/Register";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () => <AuthProvider><Outlet/></AuthProvider>
@@ -20,8 +22,17 @@ export default createBrowserRouter([
         // errorElement: <ErrorPage />,
         children: [
             {
-                element: <Login />,
-                path: '/login'
+                element: <AuthTabsLayout />,
+                children: [
+                    {
+                        element: <Login />,
+                        path: '/login'
+                    },
+                    {
+                        element: <Register />,
+                        path: '/register'
+                    }
+                ]
             },
             {
                 element: <Home />,

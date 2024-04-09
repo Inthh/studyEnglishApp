@@ -8,7 +8,7 @@ function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-[70px] gap-x-3">
                 {
                     vocabularySets.map((set: VocabularySet) => (
-                        <div key={set.id} className="rounded-2xl bg-white drop-shadow-xl min-w-[300px]">
+                        <div key={set.id} className="rounded-2xl bg-white drop-shadow-xl min-w-[200px] w-[350px]">
                             <div className="grid grid-rows-[40px_1fr_40px] p-5 gap-y-3">
                                 <div className="text-lg font-semibold row-span-1">{set.name}</div>
                                 <div className="text-sm row-span-3">{set.description}</div>
