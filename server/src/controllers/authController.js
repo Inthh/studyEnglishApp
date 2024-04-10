@@ -138,18 +138,21 @@ const authController = {
                 }
 
                 case 'google': {
-                    if (!googleInfo || !googleInfo.uid || !googleInfo.displayName) {
+                    if (!googleInfo || Object.values(googleInfo).some(info => !info)) {
                         return res.status(400).json({ message: 'Bad Request' });
                     }
 
                     const [user, created] = await db.User.findOrCreate({
-                        where: { uid },
+                        where: { uid: googleInfo.uid },
                         defaults: {
                             ...googleInfo,
                             type
                         }
                     });
-                    console.log("Register account with google successful")
+
+                    if (created) {
+                        console.log("Register account with google successful")
+                    }
 
                     return res.status(200).json({ uid: user.uid, displayName: user.displayName });
                 }

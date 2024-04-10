@@ -6,7 +6,9 @@ export type User = {
 
 export type OAuthUser = {
     uid: string,
-    displayName: string
+    displayName: string,
+    email: string,
+    photoURL: string,
 }
 
 export type VocabularySet = {

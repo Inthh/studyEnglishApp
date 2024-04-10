@@ -18,6 +18,8 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 setUser({
                     uid: user.uid,
                     displayName: user.displayName ?? "",
+                    email: user.email,
+                    photoURL: user.photoURL,
                     auth: user.auth
                 });
                 localStorage.setItem('accessToken', user.accessToken);

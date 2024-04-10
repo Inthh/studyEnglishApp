@@ -48,7 +48,8 @@ function Login() {
 
         const googleInfo = {
             uid: res.user.uid,
-            displayName: res.user.displayName
+            displayName: res.user.displayName,
+            email: res.user.email
         }
 
         await fetch('http://localhost:3001/auth/register', {
