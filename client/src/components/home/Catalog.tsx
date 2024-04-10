@@ -9,10 +9,10 @@ function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
                 {
                     vocabularySets.map((set: VocabularySet) => (
                         <div key={set.id} className="rounded-2xl bg-white drop-shadow-xl min-w-[200px] w-[350px]">
-                            <div className="grid grid-rows-[40px_1fr_40px] p-5 gap-y-3">
+                            <div className="grid grid-rows-[20px_1fr_20px] p-5 gap-y-3">
                                 <div className="text-lg font-semibold row-span-1">{set.name}</div>
-                                <div className="text-sm row-span-3">{set.description}</div>
-                                <div className="grid grid-cols-2 sm:lg:grid-cols-2 row-span-1 pt-5">
+                                <div className="text-xs row-span-3">{set.description}</div>
+                                <div className="grid grid-cols-2 sm:lg:grid-cols-2 row-span-1">
                                     <div>
                                         <Link to={`/practice/${set.id}/page/1/topics/1`} className="grid rounded-lg bg-red-700 hover:scale-105 duration-300 cursor-pointer py-2 place-items-center text-slate-50 min-w-[100px] h-[40px] w-[100px]">Practice</Link>
                                     </div>

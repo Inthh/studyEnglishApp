@@ -84,7 +84,8 @@ const authController = {
         try {
             switch (type) {
                 case 'default': {
-                    if (!defaultInfo || Object.values(defaultInfo).some((value) => !value)) {
+                    if (!defaultInfo || Object.entries(defaultInfo).some(
+                        (entry) => !entry[1] && entry[0] !== 'lastname')) {
                         console.log("Some registered infomation is invalid");
                         return res.status(400).json({ message: 'Bad Request' });
                     }
@@ -140,19 +141,19 @@ const authController = {
                     if (!googleInfo || !googleInfo.uid || !googleInfo.displayName) {
                         return res.status(400).json({ message: 'Bad Request' });
                     }
-    
+
                     const [user, created] = await db.User.findOrCreate({
-                        where: { uid }, 
+                        where: { uid },
                         defaults: {
                             ...googleInfo,
                             type
                         }
                     });
                     console.log("Register account with google successful")
-    
+
                     return res.status(200).json({ uid: user.uid, displayName: user.displayName });
                 }
-                
+
                 default:
                     console.error('Register type is invalid: ', req.body.type);
                     return res.status(400).json({ message: 'Bad Request' });
@@ -160,7 +161,7 @@ const authController = {
         } catch (err) {
             console.log(`Register with type ${type} failed reason: ${err.message}`);
             return res.status(500).json({ message: 'Internal server error' });
-        }        
+        }
     }
 };
 
