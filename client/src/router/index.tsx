@@ -11,6 +11,7 @@ import Topics from "../components/common/Topics";
 import WordChecker from "../components/practice/WordChecker";
 import AuthTabsLayout from "../components/Layout/AuthTabsLayout";
 import Register from "../pages/Register";
+import Profile from "../pages/Profile";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () => <AuthProvider><Outlet/></AuthProvider>
@@ -42,6 +43,10 @@ export default createBrowserRouter([
             {
                 element: <ProtectedRoute />,
                 children: [
+                    {
+                        path: '/profile',
+                        element: <Profile />
+                    },
                     {
                         path: 'learn/:setId',
                         element: <Learn />,

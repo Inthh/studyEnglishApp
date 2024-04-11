@@ -38,9 +38,13 @@ function Header() {
         navigate('/login');
     }
 
+    function handleProfile() {
+        navigate('/profile');
+    }
+
     return (
-        <header className="bg-white border-b-[1px] border-slate-300 h-[100px]">
-                <nav className="grid grid-cols-2 sm:mx-[50px] mx-[40px] items-center justify-between p-6" aria-label="Global">
+        <header className="bg-white border-b-[1px] border-slate-300 h-[100px] grid items-center">
+                <nav className="grid grid-cols-2 sm:mx-[50px] mx-[40px] items-center justify-between" aria-label="Global">
                     <div className="">
                         <Link to="/" className="-m-1.5 p-1.5">
                             <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
@@ -51,14 +55,14 @@ function Header() {
                             <div className="grid justify-end">
                                 <div className="inline-flex items-center mr-3">
                                     <p className="text-sm font-semibold text-blue-600 mr-2">Hello, {(user as OAuthUser).displayName || `${(user as User).firstname} ${(user as User).lastname}`}</p>
-                                    <div 
+                                    <div
                                         className="relative border-2 border-slate-500 h-9 w-9 rounded-full grid justify-center items-center hover:cursor-pointer"
                                         onClick={() => setShowMenu(!showMenu)}>
                                         <img className="h-7 w-7 rounded-full" src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/3607/3607444.png"} alt="" />
                                         {
-                                            showMenu && 
+                                            showMenu &&
                                             <nav className="absolute z-10 w-[150px] h-[100px] right-1 top-10 bg-slate-500 grid grid-rows-2 text-sm text-slate-100 rounded-md">
-                                                <div className="font-semibold leading-6 rounded p-2 m-2 hover:bg-white hover:text-slate-500 hover:cursor-pointer inline-flex items-center">
+                                                <div className="font-semibold leading-6 rounded p-2 m-2 hover:bg-white hover:text-slate-500 hover:cursor-pointer inline-flex items-center" onClick={handleProfile}>
                                                     <UserIcon className="h-4 w-4 mr-2" />Profile
                                                 </div>
                                                 <div className="font-semibold leading-6 rounded p-2 m-2 hover:bg-white hover:text-slate-500 hover:cursor-pointer inline-flex items-center" onClick={handleLogout}>
