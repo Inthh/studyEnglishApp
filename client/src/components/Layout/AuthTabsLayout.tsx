@@ -15,7 +15,7 @@ function AuthTabsLayout() {
     return (
         <>
             <div className="h-screen w-screen bg-gradient-to-tr from-sky-300 via-sky-400 to-blue-500 grid justify-center">
-                <div className="md:w-[400px] sm:w-[320px] w-[320px] grid grid-rows-[50px_minmax(500px,_1fr)] mt-[70px]">
+                <div className="md:w-[400px] sm:w-[320px] w-[320px] grid grid-rows-[50px_minmax(500px,_1fr)] mt-[50%]">
                     <div className="grid grid-cols-2 bg-blue-900/20 rounded-lg text-slate-100 font-semibold">
                         <button className={`grid items-center justify-items-center m-1.5 rounded-lg ${
                             activeTab === "login" ? "bg-white text-blue-500" : "hover:bg-white/[0.14]"}`}

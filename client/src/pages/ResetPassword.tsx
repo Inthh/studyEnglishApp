@@ -1,14 +1,13 @@
-import { ToastContainer, toast, Zoom } from 'react-toastify';
+import { ToastContainer, Zoom, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
-import { AuthContext } from "../contexts/AuthProvider";
-import { useContext, useRef, useState } from "react";
-import { OAuthUser, User } from "../types/api";
+import { useRef, useState } from "react";
+import { COMMON_TOAST_OPTIONS } from '../utils/constants';
+
 
 function ResetPassword() {
-    const { user } = useContext(AuthContext) as { user: User & OAuthUser | null};
     const [oldPassword, setOldPassword] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
     const [confirmedPassword, setConfirmedPassword] = useState<string>("");
@@ -17,9 +16,11 @@ function ResetPassword() {
     const confirmedPasswordRef = useRef(null);
 
     async function handleSubmitResetPassword() {
-        if (oldPassword.length < 6 || newPassword.length < 6 || confirmedPassword !== newPassword) {
+        if (oldPassword.length < 6 || newPassword.length < 6 ||
+            confirmedPassword !== newPassword || oldPassword === newPassword) {
             const message = oldPassword.length < 6 ? "Old password field must be at least 6 characters long" :
                 newPassword.length < 6 ? "New password field must be at least 6 characters long" :
+                oldPassword === newPassword ? "The new password must be different from the previously created password" :
                 "The confirmed password does not match the new password";
             toast.error(message);
             return;
@@ -29,11 +30,12 @@ function ResetPassword() {
             position: "top-center"
         });
         const response = await fetch('http://localhost:3001/auth/password/reset', {
-            method: "POST",
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             },
-            body: JSON.stringify({ oldPassword, newPassword, userId: user?.id })
+            body: JSON.stringify({ oldPassword, newPassword })
         });
 
         const data = await response.json();
@@ -43,28 +45,14 @@ function ResetPassword() {
                 render: data.message || "An unexpected error has occurred",
                 type: "error",
                 isLoading: false,
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Zoom,
+                ...COMMON_TOAST_OPTIONS
             });
         } else if (data.accessToken && data.refreshToken) {
             toast.update(id, {
                 render: "Reset password successfully",
                 type: "success",
                 isLoading: false,
-                autoClose: 2000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-                transition: Zoom,
+                ...COMMON_TOAST_OPTIONS
             });
             localStorage.setItem("accessToken", data.accessToken);
             localStorage.setItem("refreshToken", data.refreshToken);

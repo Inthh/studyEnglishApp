@@ -6,5 +6,6 @@ import authentication from '../middlewares/authentication.js';
 const router = express.Router();
 
 router.get('/:userId', authentication, userController.getInfo);
+router.patch('/', authentication, userController.updateInfo);
 
 export default router;

@@ -5,15 +5,72 @@ import { useContext, useState } from "react";
 import { OAuthUser, User } from "../types/api";
 import { ArrowUpTrayIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer, Zoom } from "react-toastify";
+import { COMMON_TOAST_OPTIONS } from "../utils/constants";
 
 function Profile() {
-    const { user } = useContext(AuthContext) as { user: User & OAuthUser | null};
+    const { user, setUser } = useContext(AuthContext) as { user: User & OAuthUser | null,
+        setUser: React.Dispatch<React.SetStateAction<(User & OAuthUser | null)>> };
     const navigate = useNavigate();
-    const [firstname, setFirstname] = useState(user?.firstname)
-    const [lastname, setLastname] = useState(user?.lastname)
+    const [firstname, setFirstname] = useState(user?.firstname);
+    const [lastname, setLastname] = useState(user?.lastname);
+
+    async function handleUpdateUserInfo() {
+        if (user?.type !== "default") {
+            return;
+        }
+
+        if (!firstname) {
+            toast.error("First name is required")
+            return;
+        }
+        const id = toast.loading("Please wait, user's infomation updating...", {
+            position: "top-center"
+        });
+        const response = await fetch('http://localhost:3001/user', {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({ firstname, lastname })
+        });
+
+        const data = await response.json();
+
+        if (response.status !== 200) {
+            toast.update(id, {
+                render: data.message || "An unexpected error has occurred",
+                type: "error",
+                isLoading: false,
+                ...COMMON_TOAST_OPTIONS
+            });
+        } else if (data) {
+            toast.update(id, {
+                render: "User's information updated",
+                type: "success",
+                isLoading: false,
+                ...COMMON_TOAST_OPTIONS
+            });
+            setUser({ ...user, firstname: data.firstname, lastname: data.lastname });
+        }
+    }
 
     return (
         <>
+            <ToastContainer
+                position="top-center"
+                autoClose={2000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="light"
+                transition={Zoom}
+            />
             <Header />
             <div className="flex flex-col justify-between min-h-screen">
                 <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 grid justify-center items-center">
@@ -114,10 +171,14 @@ function Profile() {
                                 user?.type === "default" &&
                                 <div className="grid grid-cols-2">
                                     <div>
-                                        <button className="h-[90%] p-2 bg-blue-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300" onClick={() => navigate('/password/reset')}>Reset password</button>
+                                        <button
+                                            className="h-[90%] p-2 bg-blue-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
+                                            onClick={() => navigate('/password/reset')}>Reset password</button>
                                     </div>
                                     <div className="grid justify-end">
-                                        <button className="h-[90%] p-2 bg-green-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300">Save changes</button>
+                                        <button
+                                            className="h-[90%] p-2 bg-green-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
+                                            onClick={handleUpdateUserInfo}>Save changes</button>
                                     </div>
                                 </div>
                             }

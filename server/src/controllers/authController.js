@@ -168,7 +168,8 @@ const authController = {
     },
 
     async resetPassword(req, res) {
-        const { oldPassword, newPassword, userId } = req.body;
+        const { oldPassword, newPassword } = req.body;
+        const userId = req.userId
 
         try {
             const result = await db.Login.findOne({
