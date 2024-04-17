@@ -12,6 +12,8 @@ import WordChecker from "../components/practice/WordChecker";
 import AuthTabsLayout from "../components/Layout/AuthTabsLayout";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
+import ResetPassword from "../pages/ResetPassword";
+import ProtectedPassword from "./ProtectedPassword";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () => <AuthProvider><Outlet/></AuthProvider>
@@ -44,8 +46,18 @@ export default createBrowserRouter([
                 element: <ProtectedRoute />,
                 children: [
                     {
-                        path: '/profile',
+                        path: 'profile',
                         element: <Profile />
+                    },
+                    {
+                        element: <ProtectedPassword />,
+                        path: 'password',
+                        children: [
+                            {
+                                path: 'reset',
+                                element: <ResetPassword />
+                            }
+                        ]
                     },
                     {
                         path: 'learn/:setId',

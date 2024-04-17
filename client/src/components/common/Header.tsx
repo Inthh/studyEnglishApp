@@ -13,25 +13,34 @@ function Header() {
     const [showMenu, setShowMenu] = useState<boolean>(false)
 
     async function handleLogout() {
-        if (user && user.uid) {
-            user.auth.signOut();
-            return;
-        }
+        if (!user) return
 
-        const accessToken = localStorage.getItem('accessToken');
-        if (!accessToken) return;
-
-        await fetch('http://localhost:3001/auth/logout', {
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${accessToken}`,
+        switch (user.type) {
+            case "google": {
+                user.auth.signOut();
+                localStorage.removeItem('accessToken');
+                setUser(null);
+                navigate('/login');
+                break;
             }
-        });
 
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        setUser(null);
-        navigate('/login');
+            case "default": {
+                const accessToken = localStorage.getItem('accessToken');
+                if (!accessToken) return;
+
+                await fetch('http://localhost:3001/auth/logout', {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": `Bearer ${accessToken}`,
+                    }
+                });
+
+                localStorage.removeItem('accessToken');
+                localStorage.removeItem('refreshToken');
+                setUser(null);
+                navigate('/login');
+            }
+        }
     }
 
     function handleLogin() {

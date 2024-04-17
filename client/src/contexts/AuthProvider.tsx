@@ -18,9 +18,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 setUser({
                     uid: user.uid,
                     displayName: user.displayName ?? "",
-                    email: user.email,
-                    photoURL: user.photoURL,
-                    auth: user.auth
+                    email: user.email ?? "",
+                    photoURL: user.photoURL ?? "",
+                    auth: user.auth,
+                    type: "google"
                 });
                 localStorage.setItem('accessToken', user.accessToken);
                 setIsLoading(false);

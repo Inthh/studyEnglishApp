@@ -4,6 +4,8 @@ export type User = {
     lastname: string,
     email: string,
     photoURL: string | null,
+    type: string,
+    username: string
 }
 
 export type OAuthUser = {
@@ -11,6 +13,7 @@ export type OAuthUser = {
     displayName: string,
     email: string,
     photoURL: string,
+    type: string
 }
 
 export type VocabularySet = {

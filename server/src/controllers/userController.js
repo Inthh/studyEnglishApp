@@ -7,6 +7,11 @@ const authController = {
 
             const user = await db.User.findOne({
                 where: { id: userId },
+                include: {
+                    attributes: ["username"],
+                    model: db.Login,
+                    required: false
+                },
                 raw: true
             });
 
@@ -15,6 +20,8 @@ const authController = {
                 return;
             }
 
+            user.username = user["login.username"];
+            delete user["login.username"];
             res.json({ user });
         } catch (err) {
             console.log("Error while getting info of user: ", err.message);

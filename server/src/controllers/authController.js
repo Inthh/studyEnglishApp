@@ -165,6 +165,43 @@ const authController = {
             console.log(`Register with type ${type} failed reason: ${err.message}`);
             return res.status(500).json({ message: 'Internal server error' });
         }
+    },
+
+    async resetPassword(req, res) {
+        const { oldPassword, newPassword, userId } = req.body;
+
+        try {
+            const result = await db.Login.findOne({
+                where: { userId, password: oldPassword }
+            });
+
+            if (!result) {
+                console.log('Old password is invalid so could not change password');
+                return res.status(400).json({ message: 'Old password is invalid' });
+            }
+
+            if (newPassword.length < 6) {
+                console.log('New password is invalid so could not change password');
+                return res.status(400).json({ message: 'New password is invalid' });
+            }
+
+            const jwtOptions = {
+                algorithm: 'RS512', expiresIn:  '30d'
+            };
+            const { tokens, publicKey } = generateTokensAndPublicKey({ userId, options: jwtOptions });
+            const { accessToken, refreshToken } = tokens;
+            if (!accessToken || !refreshToken) {
+                throw new Error('Gererate tokens and public keys failed');
+            }
+            await db.Login.update({ publicKey, password: newPassword }, {
+                where: { userId }
+            });
+            console.log(`Reset password for user ${userId} successfully`);
+            res.json({ accessToken, refreshToken });
+        } catch (err) {
+            console.log('An error occured while reset password: ', err.message);
+            res.status(500).json({ message: 'Internal server error' });
+        }
     }
 };
 
