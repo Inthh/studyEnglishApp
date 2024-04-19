@@ -30,7 +30,7 @@ const userController = {
     },
 
     updateInfo: async (req, res) => {
-        const { firstname, lastname } = req.body;
+        const { firstname, lastname, photoURL } = req.body;
         const userId = req.userId;
 
         try {
@@ -41,13 +41,14 @@ const userController = {
 
             await db.User.update({
                 firstname,
-                lastname
+                lastname,
+                photoURL
             },{
                 where: { id: userId }
             });
 
             console.log("Update user's infomation successfully", { firstname, lastname, userId });
-            return res.status(200).json({ firstname, lastname });
+            return res.status(200).json({ firstname, lastname, photoURL });
         } catch (err) {
             console.log("An error occured while updating user's infomation", { firstname, lastname, userId });
             return res.status(500).json({ message: "Internal server error" });

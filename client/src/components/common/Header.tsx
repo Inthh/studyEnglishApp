@@ -4,13 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthProvider";
 import { OAuthUser, User } from "../../types/api";
 import { ArrowUturnRightIcon, UserIcon } from "@heroicons/react/16/solid";
+import { ResoucesContext, Resources } from "../../contexts/ResourcesProvider";
 
 function Header() {
     const { user, setUser } = useContext(AuthContext) as {
         user: (User & OAuthUser | null),
         setUser: React.Dispatch<React.SetStateAction<(User & OAuthUser | null)>> };
+    const { resources } = useContext(ResoucesContext) as { resources: Resources };
     const navigate = useNavigate();
-    const [showMenu, setShowMenu] = useState<boolean>(false)
+    const [showMenu, setShowMenu] = useState<boolean>(false);
 
     async function handleLogout() {
         if (!user) return
@@ -67,7 +69,7 @@ function Header() {
                                     <div
                                         className="relative border-2 border-slate-500 h-9 w-9 rounded-full grid justify-center items-center hover:cursor-pointer"
                                         onClick={() => setShowMenu(!showMenu)}>
-                                        <img className="h-7 w-7 rounded-full" src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/3607/3607444.png"} alt="" />
+                                        <img className="object-cover h-7 w-7 rounded-full" src={user.photoURL || resources.avatarDefaultURL } alt="" />
                                         {
                                             showMenu &&
                                             <nav className="absolute z-10 w-[150px] h-[100px] right-1 top-10 bg-slate-500 grid grid-rows-2 text-sm text-slate-100 rounded-md">

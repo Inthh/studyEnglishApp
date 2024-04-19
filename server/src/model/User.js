@@ -18,6 +18,9 @@ const User = (db) => db.define('user', {
     uid: {
         type: DataTypes.STRING
     },
+    photoURL: {
+        type: DataTypes.TEXT
+    },
     displayName: {
         type: DataTypes.STRING
     },

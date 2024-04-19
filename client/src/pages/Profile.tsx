@@ -1,19 +1,51 @@
+import { v4 as uuidv4 } from 'uuid';
+import { useContext, useEffect, useState } from "react";
+import { toast, ToastContainer, Zoom } from "react-toastify";
+import { ArrowUpTrayIcon, UserCircleIcon } from "@heroicons/react/16/solid";
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import { AuthContext } from "../contexts/AuthProvider";
-import { useContext, useState } from "react";
 import { OAuthUser, User } from "../types/api";
-import { ArrowUpTrayIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer, Zoom } from "react-toastify";
 import { COMMON_TOAST_OPTIONS } from "../utils/constants";
+import { storage } from "../firebase/config";
+import { ResoucesContext, Resources } from '../contexts/ResourcesProvider';
 
 function Profile() {
     const { user, setUser } = useContext(AuthContext) as { user: User & OAuthUser | null,
         setUser: React.Dispatch<React.SetStateAction<(User & OAuthUser | null)>> };
+    const { resources } = useContext(ResoucesContext) as { resources: Resources };
     const navigate = useNavigate();
     const [firstname, setFirstname] = useState(user?.firstname);
     const [lastname, setLastname] = useState(user?.lastname);
+    const [photo, setPhoto] = useState<File | null>(null);
+    const [photoURL, setPhotoURL] = useState<string | null>(user?.photoURL ?? null);
+
+    useEffect(() => {
+        return () => {
+            photo && photoURL?.search("blob:") === 0 && URL.revokeObjectURL(photoURL)
+        }
+    }, [photo, photoURL])
+
+    async function uploadPhotoToFirebaseStorage(photo: File) {
+        try {
+            const storageRef = ref(storage, `/photos/${(user?.id || user?.uid) + "-" + uuidv4()}`);
+            const uploadTask = await uploadBytes(storageRef, photo);
+
+            return await getDownloadURL(uploadTask.ref);
+        } catch(err) {
+            return null;
+        }
+    }
+
+    function handlePhotoChange(photo: File | null) {
+        if (photo) {
+            setPhotoURL(URL.createObjectURL(photo));
+            setPhoto(photo);
+        }
+    }
 
     async function handleUpdateUserInfo() {
         if (user?.type !== "default") {
@@ -27,13 +59,19 @@ function Profile() {
         const id = toast.loading("Please wait, user's infomation updating...", {
             position: "top-center"
         });
+
+        let photoFirebaseURL = null;
+        if (photo) {
+            photoFirebaseURL = await uploadPhotoToFirebaseStorage(photo);
+        }
+
         const response = await fetch('http://localhost:3001/user', {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
                 'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
             },
-            body: JSON.stringify({ firstname, lastname })
+            body: JSON.stringify({ firstname, lastname, photoURL: photoFirebaseURL ?? photoURL })
         });
 
         const data = await response.json();
@@ -52,7 +90,7 @@ function Profile() {
                 isLoading: false,
                 ...COMMON_TOAST_OPTIONS
             });
-            setUser({ ...user, firstname: data.firstname, lastname: data.lastname });
+            setUser({ ...user, ...data });
         }
     }
 
@@ -188,12 +226,21 @@ function Profile() {
                                 <div className="relative">
                                     {
                                         user?.type === "default" &&
-                                        <button className="absolute grid justify-center items-center top-0 left-0 h-[220px] w-[220px] bg-slate-100 rounded-lg hover:opacity-80 opacity-0">
-                                            <ArrowUpTrayIcon className="h-[50px] w-[50px] text-slate-700" />
-                                        </button>
+                                        <>
+                                            <input
+                                                type="file"
+                                                id="avatar"
+                                                onChange={(e) => handlePhotoChange(e.target.files ? e.target.files[0] : null)}
+                                                hidden />
+                                            <label
+                                                htmlFor="avatar"
+                                                className="absolute grid justify-center items-center top-0 left-0 h-[220px] w-[220px] bg-slate-100 rounded-lg hover:opacity-80 opacity-0" >
+                                                <ArrowUpTrayIcon className="h-[50px] w-[50px] text-slate-700" />
+                                            </label>
+                                        </>
                                     }
 
-                                    <img className="rounded-xl h-[220px] w-[220px]" src={(user && user.photoURL) || "https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"} alt="" />
+                                    <img className="object-cover rounded-xl h-[220px] w-[220px]" src={photoURL || resources.avatarDefaultURL} alt="" />
                                 </div>
                                 <div className="mt-4 text-center">
                                     {

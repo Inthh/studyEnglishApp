@@ -14,9 +14,13 @@ import Register from "../pages/Register";
 import Profile from "../pages/Profile";
 import ResetPassword from "../pages/ResetPassword";
 import ProtectedPassword from "./ProtectedPassword";
+import ResourcesProvider from "../contexts/ResourcesProvider";
 
 // eslint-disable-next-line react-refresh/only-export-components
-const AuthLayout = () => <AuthProvider><Outlet/></AuthProvider>
+const AuthLayout = () =>
+    <ResourcesProvider>
+        <AuthProvider><Outlet/></AuthProvider>
+    </ResourcesProvider>
 
 // eslint-disable-next-line react-refresh/only-export-components
 export default createBrowserRouter([
