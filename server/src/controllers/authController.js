@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 
-import db from "../model/index.js";
-import { extractPayloadFromToken, generateTokensAndPublicKey } from '../utils/tokenHandler.js';
+import db from '../model/index.js';
+import { transporter } from '../utils/mailer.js';
+import { extractPayloadFromToken, generateTokensAndPublicKey, signToken } from '../utils/tokenHandler.js';
 
 const authController = {
     login: async (req, res) => {
@@ -91,13 +93,18 @@ const authController = {
                     }
 
                     const loginInfo = await db.Login.findOne({
-                        where: { username: defaultInfo.username },
+                        where: { 
+                            [Op.or]: [
+                                { username: defaultInfo.username },
+                                { email: defaultInfo.email, type: "default" }
+                            ] 
+                        },
                         raw: true
                     });
 
                     if (loginInfo) {
-                        console.log("This username or this email is already registered");
-                        return res.status(400).json({ message: 'Username is already registered' });
+                        console.log("This username or email or this email is already registered");
+                        return res.status(400).json({ message: 'Username or email is already registered' });
                     }
 
                     const ts = await db.sequelize.transaction();
@@ -167,7 +174,7 @@ const authController = {
         }
     },
 
-    async resetPassword(req, res) {
+    async changePassword(req, res) {
         const { oldPassword, newPassword } = req.body;
         const userId = req.userId
 
@@ -197,11 +204,62 @@ const authController = {
             await db.Login.update({ publicKey, password: newPassword }, {
                 where: { userId }
             });
-            console.log(`Reset password for user ${userId} successfully`);
+            console.log(`Change password for user ${userId} successfully`);
             res.json({ accessToken, refreshToken });
         } catch (err) {
-            console.log('An error occured while reset password: ', err.message);
+            console.log('An error occured while change password: ', err.message);
             res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async forgotPassword(req, res) {
+        const { email } = req.body;
+
+        try {
+            const user = await db.User.findOne({ where: { email } });
+
+            if (!user || user.type !== 'default') {
+                return res.status(404).json({ message: "User is not exist"});
+            }
+
+            const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
+                modulusLength: 4096,
+                publicKeyEncoding: {
+                    type: 'spki',
+                    format: 'pem'
+                },
+                privateKeyEncoding: {
+                    type: 'pkcs8',
+                    format: 'pem'
+                }
+            });
+            const jwtOptions = {
+                algorithm: 'RS512', expiresIn: '10m'
+            };
+            const token = signToken({ userId: user.id }, privateKey, jwtOptions);
+            await db.Login.update({
+                resetKey: publicKey
+            }, {
+                where: { userId: user.id }
+            });
+
+            const resetLink = `http://${req.headers.host}/reset-password/${user.id}/${token}`;
+            console.log(resetLink);
+
+            // await transporter.sendMail({
+            //     from: 'dolphin.learning.01@gmail.com',
+            //     to: email, 
+            //     subject: 'Password Reset Request',
+            //     html: `
+            //         <p>You requested a password reset. Click the link below to reset your password:</p>
+            //         <a href="${resetLink}">${resetLink}</a>
+            //     `,
+            // });
+
+            res.status(200).json({ message: "Reset link sent to your email" });
+        } catch (err) {
+            console.log(`An error occured while forgoting password reason=${err.message}`);
+            res.status(500).json({ message: "Internal server error" });
         }
     }
 };

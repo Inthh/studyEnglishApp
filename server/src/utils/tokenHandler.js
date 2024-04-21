@@ -45,5 +45,6 @@ const generateTokensAndPublicKey = ({ userId, options }) => {
 
 export {
     generateTokensAndPublicKey,
-    extractPayloadFromToken
+    extractPayloadFromToken,
+    signToken
 }

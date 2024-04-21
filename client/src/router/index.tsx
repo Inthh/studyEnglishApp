@@ -12,9 +12,11 @@ import WordChecker from "../components/practice/WordChecker";
 import AuthTabsLayout from "../components/Layout/AuthTabsLayout";
 import Register from "../pages/Register";
 import Profile from "../pages/Profile";
-import ResetPassword from "../pages/ResetPassword";
+import ChangePassword from "../pages/ChangePassword";
 import ProtectedPassword from "./ProtectedPassword";
 import ResourcesProvider from "../contexts/ResourcesProvider";
+import ResetPassword from "../pages/ResetPassword";
+import ForgotPassword from "../pages/ForgotPassword";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () =>
@@ -44,7 +46,15 @@ export default createBrowserRouter([
             {
                 element: <Home />,
                 path: '/',
-                loader: vocabularySetsLoader,
+                loader: vocabularySetsLoader
+            },
+            {
+                element: <ResetPassword />,
+                path: '/reset-password/:userId/:token'
+            },
+            {
+                element: <ForgotPassword />,
+                path: '/forgot-password'
             },
             {
                 element: <ProtectedRoute />,
@@ -55,11 +65,10 @@ export default createBrowserRouter([
                     },
                     {
                         element: <ProtectedPassword />,
-                        path: 'password',
                         children: [
                             {
-                                path: 'reset',
-                                element: <ResetPassword />
+                                path: 'change-password',
+                                element: <ChangePassword />
                             }
                         ]
                     },

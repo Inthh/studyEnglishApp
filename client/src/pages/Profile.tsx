@@ -211,7 +211,7 @@ function Profile() {
                                     <div>
                                         <button
                                             className="h-[90%] p-2 bg-blue-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
-                                            onClick={() => navigate('/password/reset')}>Reset password</button>
+                                            onClick={() => navigate('/change-password')}>Change password</button>
                                     </div>
                                     <div className="grid justify-end">
                                         <button

@@ -124,12 +124,14 @@ function Login() {
                             />
                             <p className="pl-1">Remember me</p>
                         </div>
-                        <div className="text-center text-sm text-blue-500 grid justify-end hover:cursor-pointer hover:underline font-medium">
+                        <div
+                            onClick={() => navigate('/forgot-password')} 
+                            className="text-center text-sm text-blue-500 grid justify-end hover:cursor-pointer hover:underline font-medium">
                             Forgot password
                         </div>
                     </div>
                     <button
-                        className=" bg-blue-600 p-3 text-slate-100 font-semibold rounded text-center hover:bg-blue-500 drop-shadow-xl"
+                        className="bg-blue-600 p-3 text-slate-100 font-semibold rounded text-center hover:bg-blue-500 drop-shadow-xl"
                         onClick={handleSubmitLogin}>
                             LOGIN
                     </button>

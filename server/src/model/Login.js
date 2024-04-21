@@ -15,6 +15,9 @@ const Login = (db) => db.define('login', {
     },
     publicKey: {
         type: DataTypes.TEXT
+    },
+    resetKey: {
+        type: DataTypes.TEXT
     }
 }, {
     tableName: 'login',
