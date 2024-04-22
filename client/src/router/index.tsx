@@ -50,7 +50,7 @@ export default createBrowserRouter([
             },
             {
                 element: <ResetPassword />,
-                path: '/reset-password/:userId/:token'
+                path: '/reset-password/:token'
             },
             {
                 element: <ForgotPassword />,

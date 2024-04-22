@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import { Op } from 'sequelize';
 
 import db from '../model/index.js';
 import { transporter } from '../utils/mailer.js';
@@ -10,7 +11,7 @@ const authController = {
         const { username, password } = req.body;
         try {
             const login = await db.Login.findOne({
-                attributes: ["userId"],
+                attributes: ['userId'],
                 where: { username, password }
             });
 
@@ -82,28 +83,27 @@ const authController = {
 
     async register(req, res) {
         const { defaultInfo, googleInfo, type } = req.body;
-
         try {
             switch (type) {
                 case 'default': {
                     if (!defaultInfo || Object.entries(defaultInfo).some(
                         (entry) => !entry[1] && entry[0] !== 'lastname')) {
-                        console.log("Some registered infomation is invalid");
-                        return res.status(400).json({ message: 'Bad Request' });
+                        console.log('Some registered infomation is invalid');
+                        return res.status(400).json({ message: 'Some registered infomation is invalid' });
                     }
 
                     const loginInfo = await db.Login.findOne({
-                        where: { 
+                        where: {
                             [Op.or]: [
                                 { username: defaultInfo.username },
-                                { email: defaultInfo.email, type: "default" }
-                            ] 
+                                { email: defaultInfo.email, type: 'default' }
+                            ]
                         },
                         raw: true
                     });
 
                     if (loginInfo) {
-                        console.log("This username or email or this email is already registered");
+                        console.log('This username or email or this email is already registered');
                         return res.status(400).json({ message: 'Username or email is already registered' });
                     }
 
@@ -112,8 +112,6 @@ const authController = {
                         const user = await db.User.create({
                             firstname: defaultInfo.firstname,
                             lastname: defaultInfo.lastname,
-                            email: defaultInfo.email,
-                            type
                         }, {
                             transaction: ts
                         });
@@ -127,14 +125,15 @@ const authController = {
                             userId: user.id,
                             username: defaultInfo.username,
                             password: defaultInfo.password,
-                            publicKey,
-                            type
+                            email: defaultInfo.email,
+                            type,
+                            publicKey
                         }, {
                             transaction: ts
                         });
                         await ts.commit();
 
-                        console.log("Register account with username password successful");
+                        console.log('Register account with username password successful');
                         return res.status(200).json({ tokens });
                     } catch (err) {
                         await ts.rollback();
@@ -158,7 +157,7 @@ const authController = {
                     });
 
                     if (created) {
-                        console.log("Register account with google successful")
+                        console.log('Register account with google successful')
                     }
 
                     return res.status(200).json({ uid: user.uid, displayName: user.displayName });
@@ -216,10 +215,10 @@ const authController = {
         const { email } = req.body;
 
         try {
-            const user = await db.User.findOne({ where: { email } });
+            const loginInfo = await db.Login.findOne({ where: { email } });
 
-            if (!user || user.type !== 'default') {
-                return res.status(404).json({ message: "User is not exist"});
+            if (!loginInfo || loginInfo.type !== 'default') {
+                return res.status(404).json({ message: 'User is not exist'});
             }
 
             const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
@@ -236,30 +235,77 @@ const authController = {
             const jwtOptions = {
                 algorithm: 'RS512', expiresIn: '10m'
             };
-            const token = signToken({ userId: user.id }, privateKey, jwtOptions);
+            const token = signToken({ userId: loginInfo.userId }, privateKey, jwtOptions);
             await db.Login.update({
                 resetKey: publicKey
             }, {
-                where: { userId: user.id }
+                where: { userId: loginInfo.userId }
             });
 
-            const resetLink = `http://${req.headers.host}/reset-password/${user.id}/${token}`;
+            const resetLink = `${req.headers.origin}/reset-password/${token}`;
             console.log(resetLink);
 
             // await transporter.sendMail({
             //     from: 'dolphin.learning.01@gmail.com',
-            //     to: email, 
+            //     to: email,
             //     subject: 'Password Reset Request',
             //     html: `
             //         <p>You requested a password reset. Click the link below to reset your password:</p>
-            //         <a href="${resetLink}">${resetLink}</a>
+            //         <a href='${resetLink}'>${resetLink}</a>
             //     `,
             // });
 
-            res.status(200).json({ message: "Reset link sent to your email" });
+            res.status(200).json({ message: 'Reset link sent to your email' });
         } catch (err) {
             console.log(`An error occured while forgoting password reason=${err.message}`);
-            res.status(500).json({ message: "Internal server error" });
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async resetPassword(req, res) {
+        const { token, newPassword } = req.body;
+
+        try {
+            const payload = extractPayloadFromToken(token);
+
+            if (!payload || !payload.userId) {
+                return res.status(400).json({ message: 'Reset token is invalid' });
+            }
+
+            const loginInfo = await db.Login.findOne({
+                attributes: ['resetKey'],
+                where: { userId: payload.userId },
+                raw: true
+            });
+
+            if (!loginInfo) {
+                return res.status(404).json({ message: 'Not found user' });
+            }
+
+            jwt.verify(token, loginInfo.resetKey, function(err, decoded) {
+                if (err) {
+                    console.log('Error during verification: ', err.message);
+                    if (err.name === 'TokenExpiredError') {
+                        res.status(401).json({ message: 'jwt expired' });
+                    } else {
+                        res.status(401).json({ message: 'jwt error' });
+                    }
+                    return;
+                }
+            });
+
+            await db.Login.update({
+                password: newPassword,
+                publicKey: null
+            }, {
+                where: { userId: payload.userId }
+            });
+
+            console.log(`Reset password for user id ${payload.userId} successful`);
+            res.status(200).json({ message: 'Reset password successful' });
+        } catch (err) {
+            console.log(`An error occured while reseting password reason=${err.message}`);
+            res.status(500).json({ message: 'Internal server error' });
         }
     }
 };

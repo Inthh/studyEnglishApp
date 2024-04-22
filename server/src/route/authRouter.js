@@ -10,5 +10,6 @@ router.put('/logout', authController.logout);
 router.post('/register', authController.register);
 router.patch('/password/change', authentication, authController.changePassword);
 router.patch('/password/forgot', authController.forgotPassword);
+router.patch('/password/reset', authController.resetPassword);
 
 export default router;

@@ -8,14 +8,16 @@ export type Resources = {
     avatarDefaultURL: string
 }
 function ResourcesProvider({ children }: { children: ReactNode }) {
-    const [resources, setResources] = useState<Resources | null>(null);
+    const [resources, setResources] = useState<Resources>({
+        avatarDefaultURL: ""
+    });
 
     useEffect(() => {
         const storageRef = ref(storage, `/photos/avatar-default.png`);
         getDownloadURL(storageRef).then((url) => {
             setResources({
                 avatarDefaultURL: url
-            })
+            });
         }).catch((error) => {
             console.error(error);
         })

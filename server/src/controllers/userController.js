@@ -3,12 +3,12 @@ import db from "../model/index.js";
 const userController = {
     getInfo: async (req, res) => {
         try {
-            const { userId } = req.params;
-
+            const { userId } = req.params,
+                includeAttributes = ["username", "email", "type"];
             const user = await db.User.findOne({
                 where: { id: userId },
                 include: {
-                    attributes: ["username"],
+                    attributes: includeAttributes,
                     model: db.Login,
                     required: false
                 },
@@ -20,8 +20,10 @@ const userController = {
                 return;
             }
 
-            user.username = user["login.username"];
-            delete user["login.username"];
+            includeAttributes.forEach(attribute => {
+                user[attribute] = user[`login.${attribute}`];
+                delete user[`login.${attribute}`];
+            });
             res.json({ user });
         } catch (err) {
             console.log("Error while getting info of user: ", err.message);

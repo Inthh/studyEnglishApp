@@ -12,9 +12,6 @@ const User = (db) => db.define('user', {
     lastname: {
         type: DataTypes.STRING
     },
-    email: {
-        type: DataTypes.STRING
-    },
     uid: {
         type: DataTypes.STRING
     },
@@ -23,10 +20,6 @@ const User = (db) => db.define('user', {
     },
     displayName: {
         type: DataTypes.STRING
-    },
-    type: {
-        type: DataTypes.STRING,
-        defaultValue: 'default'
     }
 }, {
     tableName: 'user',

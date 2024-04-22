@@ -106,13 +106,13 @@ function ChangePassword() {
                             </div>
                         </div>
                         <div className="mt-4">
-                            <label htmlFor="old-password" className="text-sm font-semibold text-slate-700">
+                            <label htmlFor="new-password" className="text-sm font-semibold text-slate-700">
                                 New password
                             </label>
                             <div className="mt-2">
                                 <input
                                     ref={newPasswordRef}
-                                    name="old-password"
+                                    name="new-password"
                                     type="password"
                                     autoComplete="current-password"
                                     required
@@ -122,13 +122,13 @@ function ChangePassword() {
                             </div>
                         </div>
                         <div className="">
-                            <label htmlFor="old-password" className="text-sm font-semibold text-slate-700">
+                            <label htmlFor="confirmed-password" className="text-sm font-semibold text-slate-700">
                                 Confirmed password
                             </label>
                             <div className="mt-2">
                                 <input
                                     ref={confirmedPasswordRef}
-                                    name="old-password"
+                                    name="confirmed-password"
                                     type="password"
                                     autoComplete="current-password"
                                     required

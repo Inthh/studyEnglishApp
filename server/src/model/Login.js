@@ -13,6 +13,13 @@ const Login = (db) => db.define('login', {
         type: DataTypes.STRING,
         allowNull: false
     },
+    email: {
+        type: DataTypes.STRING
+    },
+    type: {
+        type: DataTypes.STRING,
+        defaultValue: 'default'
+    },
     publicKey: {
         type: DataTypes.TEXT
     },
