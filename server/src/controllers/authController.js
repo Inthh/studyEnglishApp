@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import { Op } from 'sequelize';
 
 import db from '../model/index.js';
-import { transporter } from '../utils/mailer.js';
+import { createTransporter } from '../utils/mailer.js';
 import { extractPayloadFromToken, generateTokensAndPublicKey, signToken } from '../utils/tokenHandler.js';
 
 const authController = {
@@ -243,17 +243,22 @@ const authController = {
             });
 
             const resetLink = `${req.headers.origin}/reset-password/${token}`;
-            console.log(resetLink);
-
-            // await transporter.sendMail({
-            //     from: 'dolphin.learning.01@gmail.com',
-            //     to: email,
-            //     subject: 'Password Reset Request',
-            //     html: `
-            //         <p>You requested a password reset. Click the link below to reset your password:</p>
-            //         <a href='${resetLink}'>${resetLink}</a>
-            //     `,
-            // });
+            const transporter = await createTransporter();
+            transporter.sendMail({
+                to: email,
+                subject: 'Password Reset Request',
+                html: `
+                    <p>You requested a password reset. Click the link below to reset your password:</p>
+                    <a href='${resetLink}'>${resetLink}</a>
+                `,
+            },
+            (error, info) => {
+                if (error) {
+                    console.error("Error sending email: ", error);
+                } else {
+                    console.log("Email sent: ", info.response);
+                }
+            });
 
             res.status(200).json({ message: 'Reset link sent to your email' });
         } catch (err) {
