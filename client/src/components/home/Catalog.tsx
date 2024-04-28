@@ -1,15 +1,20 @@
 import { Link } from "react-router-dom";
 import { VocabularySet } from "../../types/api";
+import { BookOpenIcon } from "@heroicons/react/16/solid";
 
 function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
     return (
         <div className="mt-20 grid-rows-[40px_1fr]">
-            <p className="ml-[80px] text-2xl font-bold">Bộ từ vựng</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-[70px] gap-x-3">
+            <div className="ml-[80px] inline-flex text-slate-700">
+                <BookOpenIcon className="h-8 w-8"></BookOpenIcon>
+                <p className="ml-2 text-2xl font-bold">Vocabulary</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-[70px] gap-x-3 text-slate-700">
                 {
                     vocabularySets.map((set: VocabularySet) => (
                         <div key={set.id} className="rounded-2xl bg-white drop-shadow-xl min-w-[200px] w-[350px]">
-                            <div className="grid grid-rows-[20px_1fr_20px] p-5 gap-y-3">
+                            <div className="grid grid-rows-[1fr_20px_50px_20px] p-5 gap-y-3">
+                                <img className="h-[180px] w-[100%] object-cover rounded-xl border-2" src={set.thumbnail} alt="" />
                                 <div className="text-lg font-semibold row-span-1">{set.name}</div>
                                 <div className="text-xs row-span-3">{set.description}</div>
                                 <div className="grid grid-cols-2 sm:lg:grid-cols-2 row-span-1">

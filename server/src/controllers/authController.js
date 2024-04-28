@@ -1,21 +1,22 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Op } from 'sequelize';
+import bcrypt from 'bcrypt';
 
 import db from '../model/index.js';
 import { createTransporter } from '../utils/mailer.js';
 import { extractPayloadFromToken, generateTokensAndPublicKey, signToken } from '../utils/tokenHandler.js';
+import { SALT_ROUNDS } from '../utils/constants.js';
 
 const authController = {
     login: async (req, res) => {
         const { username, password } = req.body;
         try {
             const login = await db.Login.findOne({
-                attributes: ['userId'],
-                where: { username, password }
+                attributes: ['userId', 'password'],
+                where: { username }
             });
-
-            if (!login) {
+            if (!login || !await bcrypt.compare(password, login.password)) {
                 res.status(401).json({ message: 'Unauthorized' });
                 return;
             }
@@ -121,10 +122,11 @@ const authController = {
                         };
                         const { tokens, publicKey } = generateTokensAndPublicKey({ userId: user.id, options: jwtOptions });
 
+                        const hashPassword = await bcrypt.hash(defaultInfo.password, SALT_ROUNDS);
                         await db.Login.create({
                             userId: user.id,
                             username: defaultInfo.username,
-                            password: defaultInfo.password,
+                            password: hashPassword,
                             email: defaultInfo.email,
                             type,
                             publicKey
@@ -179,10 +181,10 @@ const authController = {
 
         try {
             const result = await db.Login.findOne({
-                where: { userId, password: oldPassword }
+                where: { userId }
             });
 
-            if (!result) {
+            if (!result || !await bcrypt.compare(oldPassword, result.password)) {
                 console.log('Old password is invalid so could not change password');
                 return res.status(400).json({ message: 'Old password is invalid' });
             }
@@ -200,7 +202,8 @@ const authController = {
             if (!accessToken || !refreshToken) {
                 throw new Error('Gererate tokens and public keys failed');
             }
-            await db.Login.update({ publicKey, password: newPassword }, {
+            const hashPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
+            await db.Login.update({ publicKey, password: hashPassword }, {
                 where: { userId }
             });
             console.log(`Change password for user ${userId} successfully`);
@@ -299,8 +302,9 @@ const authController = {
                 }
             });
 
+            const hashPassword = await bcrypt.hash(newPassword, SALT_ROUNDS);
             await db.Login.update({
-                password: newPassword,
+                password: hashPassword,
                 publicKey: null
             }, {
                 where: { userId: payload.userId }

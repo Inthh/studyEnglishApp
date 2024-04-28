@@ -19,7 +19,8 @@ export type OAuthUser = {
 export type VocabularySet = {
     id: number,
     name: string,
-    description: string
+    description: string,
+    thumbnail: string
 }
 
 export type Vocabulary = {
@@ -30,7 +31,8 @@ export type Vocabulary = {
     vietnamese: string,
     example: string,
     isMemoried: boolean,
-    explaination: string
+    explaination: string,
+    audioUrl: string
 }
 
 export type Topic = {

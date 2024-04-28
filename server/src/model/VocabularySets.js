@@ -11,6 +11,9 @@ const VocabularySets = (db) => db.define('VocabularySets', {
     },
     description: {
         type: DataTypes.TEXT
+    },
+    thumbnail: {
+        type: DataTypes.TEXT
     }
 }, {
     tableName: 'VocabularySets',

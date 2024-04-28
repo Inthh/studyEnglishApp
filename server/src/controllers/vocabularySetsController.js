@@ -4,7 +4,7 @@ const vocaSetsController = {
     getAllVocaSets: async (req, res) => {
         try {
             const vocabularySets = await db.VocabularySets.findAll({
-                attributes: ['id', 'name', 'description'],
+                attributes: ['id', 'name', 'description', 'thumbnail'],
                 raw: true
             });
             console.log('Getting all vocabulary sets successfully');

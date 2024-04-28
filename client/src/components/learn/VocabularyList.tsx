@@ -6,7 +6,7 @@ import { useActionData, useLoaderData, useParams, useSubmit } from "react-router
 function VocabularyList() {
     const { topicId } = useParams()
     const submit = useSubmit()
-    const actionData = useActionData() as { vocabularyId: number, isMemoried: boolean };
+    const actionData = useActionData() as { vocabularyId: number, isMemoried: boolean }
     const { vocabularies } = useLoaderData() as { vocabularies: Vocabulary[] }
     const totalMemoried = useMemo(() =>
         vocabularies.reduce((totalMemoried, currentVoca) => {
@@ -18,7 +18,7 @@ function VocabularyList() {
     const [vocabularyIndex, setVocabularyIndex] = useState<number>(getFirstUnmemoriedVoca())
     const [activeMemoriedBtn, setActiveMemoriedBtn] = useState<boolean>(
         actionData ? actionData.isMemoried : vocabularies[vocabularyIndex].isMemoried)
-
+    const [audio, setAudio] = useState(new Audio(vocabularies[vocabularyIndex].audioUrl));
     useEffect(() => {
         setCountMemorized(totalMemoried);
         if (totalMemoried === vocabularies.length) {
@@ -28,7 +28,11 @@ function VocabularyList() {
         setIsMemoriedDone(false);
         setVocabularyIndex(getFirstUnmemoriedVoca());
         setActiveMemoriedBtn(actionData && actionData.isMemoried || false);
-    }, [vocabularies])
+    }, [vocabularies]);
+
+    useEffect(() => {
+        setAudio(new Audio(vocabularies[vocabularyIndex].audioUrl));
+    }, [vocabularyIndex]);
 
     function getFirstUnmemoriedVoca() {
         if (actionData) {
@@ -98,6 +102,10 @@ function VocabularyList() {
         setActiveMemoriedBtn(false);
     }
 
+    function handlePlayAudio() {
+        audio.play();
+    }
+
     return (
         <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
             <p className="text-2xl font-bold text-slate-700">Vocabulary</p>
@@ -131,8 +139,11 @@ function VocabularyList() {
                             </div>
                         </div>
                         <div className="row-span-1 grid grid-cols-3 w-[92%] mb-2">
-                            <div className="text-center rounded-full lg:w-14 lg:h-14 sm:w-11 sm:h-11 w-11 h-11 grid justify-items-center items-center drop-shadow-xl bg-white hover:cursor-pointer hover:scale-110 duration-300">
-                                <SpeakerWaveIcon className="lg:w-7 lg:h-7 sm:w-5 sm:h-5 w-5 h-5 text-slate-700"></SpeakerWaveIcon>
+                            <div 
+                                onClick={handlePlayAudio}
+                                className="text-center rounded-full lg:w-14 lg:h-14 sm:w-11 sm:h-11 w-11 h-11 grid justify-items-center items-center drop-shadow-xl bg-white hover:cursor-pointer hover:scale-110 duration-300">
+                                <SpeakerWaveIcon className="lg:w-7 lg:h-7 sm:w-5 sm:h-5 w-5 h-5 text-slate-700">
+                                </SpeakerWaveIcon>
                             </div>
                             <div className="grid grid-cols-2 justify-items-center items-center">
                                 <ChevronLeftIcon onClick={() => handleChevronLeft(vocabularyIndex - 1)} className="lg:w-11 lg:h-11 sm:w-9 sm:h-9 w-9 h-9 border border-sky-900/75 rounded-full text-sky-900/75 hover:cursor-pointer hover:text-white hover:bg-sky-900/75"></ChevronLeftIcon>
