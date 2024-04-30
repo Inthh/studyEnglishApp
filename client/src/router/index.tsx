@@ -17,6 +17,7 @@ import ProtectedPassword from "./ProtectedPassword";
 import ResourcesProvider from "../contexts/ResourcesProvider";
 import ResetPassword from "../pages/ResetPassword";
 import ForgotPassword from "../pages/ForgotPassword";
+import AboutMe from "../pages/AboutMe";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () =>
@@ -47,6 +48,10 @@ export default createBrowserRouter([
                 element: <Home />,
                 path: '/',
                 loader: vocabularySetsLoader
+            },
+            {
+                element: <AboutMe />,
+                path: '/about-me'
             },
             {
                 element: <ResetPassword />,

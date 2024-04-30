@@ -1,18 +1,32 @@
 import { useContext, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { ArrowUturnRightIcon, UserIcon } from "@heroicons/react/16/solid";
 
 import { AuthContext } from "../../contexts/AuthProvider";
 import { OAuthUser, User } from "../../types/api";
-import { ArrowUturnRightIcon, UserIcon } from "@heroicons/react/16/solid";
 import { ResoucesContext, Resources } from "../../contexts/ResourcesProvider";
 
+type ActivePage = "about-me";
+type ActivePageNameMap = {
+    [key in ActivePage]: string;
+};
+const ACTIVE_PAGE_NAME_MAP: ActivePageNameMap = {
+    "about-me": "About me"
+}
+const pages: ActivePage[] = ["about-me"];
+
 function Header() {
+    const location = useLocation();
     const { user, setUser } = useContext(AuthContext) as {
         user: (User & OAuthUser | null),
         setUser: React.Dispatch<React.SetStateAction<(User & OAuthUser | null)>> };
     const { resources } = useContext(ResoucesContext) as { resources: Resources };
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState<boolean>(false);
+    const pageName = location.pathname.replace('/', '') as ActivePage;
+    const [activePage, setActivePage] = useState<ActivePage | "">(
+        pages.includes(pageName) ? pageName : ""
+    );
 
     async function handleLogout() {
         if (!user) return
@@ -53,14 +67,31 @@ function Header() {
         navigate('/profile');
     }
 
+    function handleSwitchPage(page: ActivePage) {
+        setActivePage(page);
+        navigate(`/${page}`);
+    }
+
     return (
         <header className="bg-white border-b-[1px] border-slate-300 h-[100px] grid items-center">
-                <nav className="grid grid-cols-2 sm:mx-[50px] mx-[40px] items-center justify-between" aria-label="Global">
+                <nav className="grid grid-cols-3 sm:mx-[50px] mx-[40px] items-center justify-between" aria-label="Global">
                     <div className="">
                         <Link to="/" className="-m-1.5 p-1.5">
                             <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
                         </Link>
                     </div>
+                    <nav className={`grid grid-cols-${pages.length} justify-items-center`}>
+                        {
+                            pages.map((page) => (
+                                <button
+                                onClick={() => handleSwitchPage(page)}
+                                className={`text-lg font-bold text-slate-700 w-[120px] ${activePage === page && "p-2 rounded-lg bg-slate-300"}`}>
+                                {ACTIVE_PAGE_NAME_MAP[page]}
+                                </button>
+                            )) 
+                        }
+                        
+                    </nav>
                     { user ? (
                         <>
                             <div className="grid justify-end">

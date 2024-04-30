@@ -3,6 +3,8 @@ import { useContext, useEffect, useState } from "react";
 import { toast, ToastContainer, Zoom } from "react-toastify";
 import { ArrowUpTrayIcon, UserCircleIcon } from "@heroicons/react/16/solid";
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/opacity.css';
 
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
@@ -239,8 +241,11 @@ function Profile() {
                                             </label>
                                         </>
                                     }
-
-                                    <img className="object-cover rounded-xl h-[220px] w-[220px]" src={photoURL || resources.avatarDefaultURL} alt="" />
+                                    <LazyLoadImage 
+                                        className="object-cover rounded-xl h-[220px] w-[220px]" 
+                                        src={photoURL || resources.avatarDefaultURL} 
+                                        effect="opacity"
+                                        alt="" />
                                 </div>
                                 <div className="mt-4 text-center">
                                     {

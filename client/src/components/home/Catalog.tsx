@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
-import { VocabularySet } from "../../types/api";
 import { BookOpenIcon } from "@heroicons/react/16/solid";
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
+
+import { VocabularySet } from "../../types/api";
 
 function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
     return (
@@ -14,7 +17,11 @@ function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
                     vocabularySets.map((set: VocabularySet) => (
                         <div key={set.id} className="rounded-2xl bg-white drop-shadow-xl min-w-[200px] w-[350px]">
                             <div className="grid grid-rows-[1fr_20px_50px_20px] p-5 gap-y-3">
-                                <img className="h-[180px] w-[100%] object-cover rounded-xl border-2" src={set.thumbnail} alt="" />
+                                <LazyLoadImage 
+                                    className="h-[180px] w-[100%] object-cover rounded-xl border-2"
+                                    src={set.thumbnail} 
+                                    effect="blur"
+                                    alt="" />
                                 <div className="text-lg font-semibold row-span-1">{set.name}</div>
                                 <div className="text-xs row-span-3">{set.description}</div>
                                 <div className="grid grid-cols-2 sm:lg:grid-cols-2 row-span-1">
