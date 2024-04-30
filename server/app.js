@@ -4,6 +4,7 @@ import cors from 'cors';
 import route from './src/route/index.js';
 import db from './src/model/index.js';
 import './src/firebase/config.js';
+import './src/utils/constants.js'
 
 const app = express();
 

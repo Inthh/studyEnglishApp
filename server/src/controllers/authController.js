@@ -2,6 +2,10 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { Op } from 'sequelize';
 import bcrypt from 'bcrypt';
+import fs from 'fs';
+import path, { dirname } from 'path';
+import handlebars from 'handlebars';
+import { fileURLToPath } from 'url';
 
 import db from '../model/index.js';
 import { createTransporter } from '../utils/mailer.js';
@@ -246,16 +250,22 @@ const authController = {
             });
 
             const resetLink = `${req.headers.origin}/reset-password/${token}`;
+            const __filename = fileURLToPath(import.meta.url);
+            const __dirname = dirname(__filename);
+            const resetPage = fs.readFileSync(path.join(__dirname, '../templates/reset-password.html'), 
+                'utf-8').toString();
+            const template = handlebars.compile(resetPage);
+            const replacements = {
+                resetLink
+            };
+            const htmlToSend = template(replacements);
+
             const transporter = await createTransporter();
             transporter.sendMail({
                 to: email,
                 subject: 'Password Reset Request',
-                html: `
-                    <p>You requested a password reset. Click the link below to reset your password:</p>
-                    <a href='${resetLink}'>${resetLink}</a>
-                `,
-            },
-            (error, info) => {
+                html: htmlToSend,
+            }, (error, info) => {
                 if (error) {
                     console.error("Error sending email: ", error);
                 } else {

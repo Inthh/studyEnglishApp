@@ -5,14 +5,16 @@ import Topics from './Topics.js';
 import Vocabularies from './Vocabularies.js';
 import UserVocabulary from './UserVocabulary.js';
 import VocabularySets from './VocabularySets.js';
+import { DB_DBMS, DB_HOSTNAME, DB_NAME, DB_PASSWORD, DB_USERNAME } from '../utils/constants.js';
+
 
 const sequelize = new Sequelize(
-    'estudy',
-    'root',
-    'my-secret-pw',
+    DB_NAME,
+    DB_USERNAME,
+    DB_PASSWORD,
     {
-        host: 'localhost',
-        dialect: 'mysql'
+        host: DB_HOSTNAME,
+        dialect: DB_DBMS
     }
 );
 
