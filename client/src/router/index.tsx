@@ -18,6 +18,7 @@ import ResourcesProvider from "../contexts/ResourcesProvider";
 import ResetPassword from "../pages/ResetPassword";
 import ForgotPassword from "../pages/ForgotPassword";
 import AboutMe from "../pages/AboutMe";
+import ErrorPage from "../pages/ErrorPage";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () =>
@@ -29,7 +30,7 @@ const AuthLayout = () =>
 export default createBrowserRouter([
     {
         element: <AuthLayout />,
-        // errorElement: <ErrorPage />,
+        errorElement: <ErrorPage />,
         children: [
             {
                 element: <AuthTabsLayout />,

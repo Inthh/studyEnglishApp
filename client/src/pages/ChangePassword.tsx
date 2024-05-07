@@ -5,9 +5,11 @@ import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import { useRef, useState } from "react";
 import { COMMON_TOAST_OPTIONS } from '../utils/constants';
+import { useNavigate } from 'react-router-dom';
 
 
 function ChangePassword() {
+    const navigate = useNavigate();
     const [oldPassword, setOldPassword] = useState<string>("");
     const [newPassword, setNewPassword] = useState<string>("");
     const [confirmedPassword, setConfirmedPassword] = useState<string>("");
@@ -47,6 +49,12 @@ function ChangePassword() {
                 isLoading: false,
                 ...COMMON_TOAST_OPTIONS
             });
+            if (response.status === 401) {
+                setTimeout(() => {
+                    navigate(0);
+                }, 1500);
+                return;
+            }
         } else if (data.accessToken && data.refreshToken) {
             toast.update(id, {
                 render: "Change password successfully",

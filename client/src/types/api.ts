@@ -13,7 +13,8 @@ export type OAuthUser = {
     displayName: string,
     email: string,
     photoURL: string,
-    type: string
+    type: string,
+    accessToken: string
 }
 
 export type VocabularySet = {

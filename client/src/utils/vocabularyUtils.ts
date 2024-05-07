@@ -2,41 +2,37 @@ import { BASE_URL } from "./constants"
 
 export async function vocabularyListLoader({ params }: any) {
     const { topicId } = params
-    try {
-        const reponse = await fetch(BASE_URL + `/vocabularies?topicId=${topicId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        })
-
-        const { vocabularies } = await reponse.json()
-
-        return { vocabularies }
-    } catch (err) {
-        console.log(`Error while fetching vocabularies of topicId=${topicId} reason=${err}`)
-        return {
-            vocabularies: []
+    const reponse = await fetch(BASE_URL + `/vocabularies?topicId=${topicId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
         }
+    })
+
+    const data =  await reponse.json();
+    if (reponse.status !== 200) {
+        console.log(`Error while fetching vocabularies of topicId=${topicId} status=${reponse.status} reason=${data.message}`);
+        throw new Error(`${reponse.status}`);
     }
+
+    return { ...data };
 }
 
 export async function vocabularySetsLoader() {
-    try {
-        const reponse = await fetch(BASE_URL + `/vocabulary-sets`, {
-            method: 'GET'
-        })
+    const reponse = await fetch(BASE_URL + `/vocabulary-sets`, {
+        method: 'GET'
+    });
 
-        const { vocabularySets } = await reponse.json()
-        return {
-            vocabularySets
-        }
-    } catch (err) {
-        console.log("Error while fetching vocabulary sets", err)
-        return {
-            vocabularySets: []
-        }
+    const data =  await reponse.json();
+    if (reponse.status !== 200) {
+        console.log(`Error while fetching vocabulary sets status=${reponse.status} reason=${data.message}`);
+        throw new Error(`${reponse.status}`);
     }
+
+    const { vocabularySets } = data;
+    return {
+        vocabularySets
+    };
 }
 
 type UpdateMemoriedData = {
@@ -71,17 +67,19 @@ export async function updateMemoried({ params, request }) {
         })
     }
 
-    try {
-        result = await (await fetch(BASE_URL + `/vocabularies`, {
-            method: 'PATCH',
-            body: JSON.stringify(dataSubmit),
-            headers: {
-                "Content-Type": "application/json",
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        })).json()
-    } catch (err) {
-        console.log("Error while updating for vocabulary", err)
+    const reponse = await fetch(BASE_URL + `/vocabularies`, {
+        method: 'PATCH',
+        body: JSON.stringify(dataSubmit),
+        headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    });
+
+    result =  await reponse.json();
+    if (reponse.status !== 200) {
+        console.log(`Error while updating for vocabulary status=${reponse.status} reason=${result.message}`);
+        throw new Error(`${reponse.status}`);
     }
     return result;
 }

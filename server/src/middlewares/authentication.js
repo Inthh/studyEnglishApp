@@ -14,6 +14,7 @@ const authentication = async (req, res, next) => {
                 token = authorizationSplit[1]
                 const payload = extractPayloadFromToken(token);
 
+                // Sign in with google
                 if (payload && payload?.firebase?.sign_in_provider === 'google.com') {
                     const res = await getAuth().verifyIdToken(token);
 

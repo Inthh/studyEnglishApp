@@ -84,6 +84,7 @@ function Header() {
                         {
                             pages.map((page) => (
                                 <button
+                                key={page}
                                 onClick={() => handleSwitchPage(page)}
                                 className={`text-lg font-bold text-slate-700 w-[120px] ${activePage === page && "p-2 rounded-lg bg-slate-300"}`}>
                                 {ACTIVE_PAGE_NAME_MAP[page]}

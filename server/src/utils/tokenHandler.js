@@ -37,7 +37,7 @@ const generateTokensAndPublicKey = ({ userId, options }) => {
     });
 
     const accessToken = signToken({ userId }, privateKey, options);
-    options.expiresIn = '15 days';
+    options.expiresIn = '30 days';
     const refreshToken = signToken({ userId }, privateKey, options);
 
     return { tokens: { accessToken, refreshToken }, publicKey };

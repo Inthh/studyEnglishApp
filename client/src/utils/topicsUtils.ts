@@ -1,20 +1,21 @@
 import { BASE_URL, TOPICS_PAGE_SIZE } from "./constants"
 
 export async function getTopicsOfSetByPageNum(setId: number, pageNum: number) {
-    try {
-        const reponse = await fetch(BASE_URL + `/topics?setId=${setId}&pageNumber=${pageNum}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        })
+    const reponse = await fetch(BASE_URL + `/topics?setId=${setId}&pageNumber=${pageNum}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    });
 
-        const { topics } = await reponse.json();
-        return { topics };
-    } catch (err) {
-        console.log("Error while fetching topics", err)
-        return null;
+    const data =  await reponse.json();
+    if (reponse.status !== 200) {
+        console.log(`Error while fetching topics status=${reponse.status} reason=${data.message}`);
+        throw new Error(`${reponse.status}`);
     }
+
+    const { topics } = data;
+    return { topics };
 }
 
 export async function topicsLoader({ params }: any) {
@@ -24,19 +25,20 @@ export async function topicsLoader({ params }: any) {
 }
 
 export async function learnLoader({ params }: any) {
-    try {
-        const { setId } = params
-        const reponse = await fetch(BASE_URL + `/topics/total?setId=${setId}`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-            }
-        })
+    const { setId } = params
+    const reponse = await fetch(BASE_URL + `/topics/total?setId=${setId}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+        }
+    })
 
-        const { totalTopics } = await reponse.json();
-        return { totalTopics };
-    } catch (err) {
-        console.log("Error while fetching total topics", err)
-        return { totalTopics: 0 };
+    const data =  await reponse.json();
+    if (reponse.status !== 200) {
+        console.log(`Error while fetching total topics" status=${reponse.status} reason=${data.message}`);
+        throw new Error(`${reponse.status}`);
     }
+
+    const { totalTopics } = data;
+    return { totalTopics };
 }

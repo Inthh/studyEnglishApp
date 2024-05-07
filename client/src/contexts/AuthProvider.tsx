@@ -41,7 +41,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
         const payload = extractPayloadFromToken(accessToken);
         if (payload && payload.userId && !user) {
-            fetch(`http://localhost:3001/user/ ${payload.userId}`, {
+            fetch(`http://localhost:3001/user/${payload.userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -49,6 +49,28 @@ function AuthProvider({ children }: { children: ReactNode }) {
             })
             .then((res) => res.json())
             .then((data) => {
+                if (data.message === "jwt expired") {
+                    // Access token expired, reset pair token from refresh token
+                    const refreshToken = localStorage.getItem('refreshToken');
+                    fetch(`http://localhost:3001/auth/refresh-token`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json"                        
+                        },
+                        body: JSON.stringify({ refreshToken })
+                    })            // Handle promise when call refresh token API
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (!data) return;
+                        const { accessToken, refreshToken } = data;
+                        if (accessToken && refreshToken) {
+                            localStorage.setItem('accessToken', accessToken);
+                            localStorage.setItem('refreshToken', refreshToken);
+                            navigate(0);
+                        }
+                    });
+                    return;
+                }
                 if (data.user) {
                     setUser(data.user);
                 } else {
@@ -58,7 +80,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                     navigate('/login');
                 }
                 setIsLoading(false);
-            });
+            })
         }
     });
 

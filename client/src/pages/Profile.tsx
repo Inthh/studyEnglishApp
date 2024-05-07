@@ -20,8 +20,8 @@ function Profile() {
         setUser: React.Dispatch<React.SetStateAction<(User & OAuthUser | null)>> };
     const { resources } = useContext(ResoucesContext) as { resources: Resources };
     const navigate = useNavigate();
-    const [firstname, setFirstname] = useState(user?.firstname);
-    const [lastname, setLastname] = useState(user?.lastname);
+    const [firstname, setFirstname] = useState(user?.firstname || "");
+    const [lastname, setLastname] = useState(user?.lastname || "");
     const [photo, setPhoto] = useState<File | null>(null);
     const [photoURL, setPhotoURL] = useState<string | null>(user?.photoURL ?? null);
 
@@ -85,6 +85,12 @@ function Profile() {
                 isLoading: false,
                 ...COMMON_TOAST_OPTIONS
             });
+            if (response.status === 401) {
+                setTimeout(() => {
+                    navigate(0);
+                }, 1500);
+                return;
+            }
         } else if (data) {
             toast.update(id, {
                 render: "User's information updated",
@@ -132,7 +138,7 @@ function Profile() {
                                                 type="text"
                                                 autoComplete="text"
                                                 readOnly={true}
-                                                value={user?.email}
+                                                value={user?.email || ""}
                                                 className="p-2 border-2 w-full rounded text-sm border-slate-300 focus:outline-none bg-slate-300"
                                             />
                                         </div>
@@ -147,7 +153,7 @@ function Profile() {
                                                 type="text"
                                                 autoComplete="text"
                                                 readOnly={true}
-                                                value={user?.username}
+                                                value={user?.username || ""}
                                                 className="p-2 border-2 w-full rounded text-sm border-slate-300 focus:outline-none bg-slate-300"
                                             />
                                         </div>
@@ -198,7 +204,7 @@ function Profile() {
                                                         type="text"
                                                         autoComplete="text"
                                                         readOnly={true}
-                                                        value={user?.displayName}
+                                                        value={user?.displayName || ""}
                                                         className="p-2 border-2 w-full rounded text-sm border-slate-300 focus:outline-none bg-slate-300"
                                                     />
                                                 </div>

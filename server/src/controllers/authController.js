@@ -13,7 +13,7 @@ import { extractPayloadFromToken, generateTokensAndPublicKey, signToken } from '
 import { SALT_ROUNDS } from '../utils/constants.js';
 
 const authController = {
-    login: async (req, res) => {
+    async login(req, res) {
         const { username, password } = req.body;
         try {
             const login = await db.Login.findOne({
@@ -26,7 +26,7 @@ const authController = {
             }
 
             const jwtOptions = {
-                algorithm: 'RS512', expiresIn:  '30d'
+                algorithm: 'RS512', expiresIn: '7 days'
             };
             const { tokens, publicKey } = generateTokensAndPublicKey({ userId: login.userId, options: jwtOptions });
             const { accessToken, refreshToken } = tokens;
@@ -47,7 +47,7 @@ const authController = {
         }
     },
 
-    logout: async (req, res) => {
+    async logout(req, res) {
         const { authorization } = req.headers;
         const accessToken = authorization.split(' ')[1];
         if (!accessToken) {
@@ -324,6 +324,55 @@ const authController = {
             res.status(200).json({ message: 'Reset password successful' });
         } catch (err) {
             console.log(`An error occured while reseting password reason=${err.message}`);
+            res.status(500).json({ message: 'Internal server error' });
+        }
+    },
+
+    async refreshToken(req, res) {
+        try {
+            const { refreshToken } = req.body;
+            const payload = extractPayloadFromToken(refreshToken);
+            const { publicKey } = await db.Login.findOne({
+                attributes: ['publicKey'],
+                where: {
+                    userId: payload.userId
+                }
+            });
+    
+            jwt.verify(refreshToken, publicKey, function(err, decoded) {
+                if (err) {
+                    console.log('Error during verification while refreshing tokens: ', err.message);
+                    if (err.name === 'TokenExpiredError') {
+                        res.status(401).json({ message: 'jwt expired' });
+                    } else {
+                        res.status(401).json({ message: 'jwt error' });
+                    }
+                    return;
+                }
+    
+                const jwtOptions = {
+                    algorithm: 'RS512', expiresIn: '7 days'
+                };
+                const { tokens, publicKey } = generateTokensAndPublicKey({ 
+                    userId: payload.userId, options: jwtOptions });
+                const newAccessToken = tokens.accessToken;
+                const newRefreshToken = tokens.refreshToken;
+                if (!newAccessToken || !newRefreshToken) {
+                    res.status(500).json({ message: 'Internal server error' });
+                } else {
+                    db.Login.update({ publicKey }, {
+                        where: { userId: payload.userId }
+                    }).then(() => {
+                        console.log("Refresh token successfully userId=", payload.userId);
+                        res.json({ accessToken: newAccessToken, refreshToken: newRefreshToken });
+                    }).catch((err) => {
+                        console.log("Error while refreshing token", err.message);
+                        res.status(500).json({ message: 'Internal server error' });
+                    });
+                }
+            });
+        } catch (err) {
+            console.log("Error while refreshing token", err.message);
             res.status(500).json({ message: 'Internal server error' });
         }
     }
