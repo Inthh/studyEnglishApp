@@ -71,7 +71,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                     });
                     return;
                 }
-                if (data.user) {
+                if (data && data.user) {
                     setUser(data.user);
                 } else {
                     setUser(null);

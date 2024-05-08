@@ -29,7 +29,7 @@ function Header() {
     );
 
     async function handleLogout() {
-        if (!user) return
+        if (!user) return;
 
         switch (user.type) {
             case "google": {
@@ -71,7 +71,7 @@ function Header() {
         setActivePage(page);
         navigate(`/${page}`);
     }
-
+    
     return (
         <header className="bg-white border-b-[1px] border-slate-300 h-[100px] grid items-center">
                 <nav className="grid grid-cols-3 sm:mx-[50px] mx-[40px] items-center justify-between" aria-label="Global">
