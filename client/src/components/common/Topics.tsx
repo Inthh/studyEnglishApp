@@ -22,8 +22,8 @@ function Topics() {
         <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center">
             <div className="lg:col-span-1 w-[80%] lg:order-1 sm:order-last order-last">
                 <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
-                    <p className="row-span-1 text-2xl font-bold text-slate-700">Topics</p>
-                    <div className="w-[330px] rounded-2xl px-2 py-4 bg-slate-300">
+                    <p className="row-span-1 text-2xl font-bold text-slate-700 dark:text-gray-300">Topics</p>
+                    <div className="w-[330px] rounded-2xl px-2 py-4 bg-slate-300 dark:bg-gray-400">
                         <div className={`grid grid-rows-${TOPICS_PAGE_SIZE} justify-center items-center gap-y-1`}>
                             {
                                 topics.map((topic: Topic) => {

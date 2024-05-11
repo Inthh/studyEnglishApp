@@ -167,12 +167,12 @@ function WordChecker() {
 
             <div className="grid grid-rows-[90px_380px_1fr] w-[100%]">
                 <div className="grid items-center">
-                    <p className="text-2xl font-bold text-center text-slate-700">Practice</p>
+                    <p className="text-2xl font-bold text-center text-slate-700 dark:text-gray-300">Practice</p>
                 </div>
-                <div className="grid grid-rows-[70px_minmax(170px, 1fr)_140px] rounded-2xl bg-white drop-shadow-xl">
+                <div className="grid grid-rows-[70px_minmax(170px, 1fr)_140px] rounded-2xl bg-white dark:bg-gray-400 drop-shadow-xl">
                     <div className="my-3 ml-6 grid grid-cols-3 md:text-base sm:text-sm text-sm items-center">
                         <div className="inline-flex col-span-2 items-center">
-                            <p className="border-l-4 pl-2 border-slate-500 text-slate-700">({vocabularies[vocabularyIdx].partsOfSpeech}) {vocabularies[vocabularyIdx].vietnamese}</p>
+                            <p className="border-l-4 pl-2 border-slate-500 text-slate-700 dark:text-slate-800">({vocabularies[vocabularyIdx].partsOfSpeech}) {vocabularies[vocabularyIdx].vietnamese}</p>
                             <div
                                 onClick={() => handleToggleSuggestion(true)}
                                 className="md:text-sm sm:text-xs text-xs text-white ml-[6px] md:w-[100px] sm:w-[120px] w-[120px] h-[30px] bg-green-700 grid justify-center items-center rounded-xl hover:cursor-pointer hover:bg-green-500">
@@ -183,7 +183,7 @@ function WordChecker() {
                             <div className="md:mt-[2px] sm:mt-[4px] mt-[4px]">
                                 Skip
                             </div>
-                            <ForwardIcon onClick={handleSkip} className="h-8 w-8 text-slate-700 hover:cursor-pointer hover:text-slate-500" />
+                            <ForwardIcon onClick={handleSkip} className="h-8 w-8 text-slate-700 dark:text-gray-300 hover:cursor-pointer hover:text-slate-500 dark:hover:text-slate-700" />
                         </div>
                     </div>
                     <div className={`grid md:grid-cols-8 sm:grid-cols-5 grid-cols-5 gap-2 mx-3 mb-3 items-center justify-items-center`}>
@@ -191,7 +191,7 @@ function WordChecker() {
                             wordSplit.map((char, idx) => {
                                 const isSpace = char === ' ';
                                 return (
-                                    <div key={idx} className={`${isSpace ? "bg-white" : isWrong ? "bg-red-300 border-2 border-red-500" : isCorrect ? "bg-green-300 border-2 border-green-500" : "bg-slate-300"} md:w-[70px] md:h-[70px] sm:w-[50px] sm:h-[50px] w-[50px] h-[50px] rounded grid justify-items-center items-center`}>
+                                    <div key={idx} className={`${isSpace ? "bg-white dark:bg-gray-400" : isWrong ? "bg-red-300 border-2 border-red-500" : isCorrect ? "bg-green-300 border-2 border-green-500" : "bg-slate-300"} md:w-[70px] md:h-[70px] sm:w-[50px] sm:h-[50px] w-[50px] h-[50px] rounded grid justify-items-center items-center`}>
                                         <input
                                             ref={(el) => ((inputRefs.current[idx] as any) = el)}
                                             type="text"
@@ -200,15 +200,15 @@ function WordChecker() {
                                             onKeyDown={(event) => handleKeyDown(event, idx)}
                                             maxLength={isSpace ? 0 : 1}
                                             readOnly={isSpace}
-                                            className={`${isSpace ? "bg-white hover:cursor-default" : isWrong ? "bg-red-300" : isCorrect ? "bg-green-300" : "bg-slate-300"} text-center text-4xl font-semibold text-sky-900/75 md:w-[50px] md:h-[50px] sm:w-[30px] sm:h-[30px] w-[30px] h-[30px] focus:outline-none`} />
+                                            className={`${isSpace ? "bg-white dark:bg-gray-400 hover:cursor-default" : isWrong ? "bg-red-300" : isCorrect ? "bg-green-300" : "bg-slate-300"} text-center text-4xl font-semibold text-sky-900/75 md:w-[50px] md:h-[50px] sm:w-[30px] sm:h-[30px] w-[30px] h-[30px] focus:outline-none`} />
                                     </div>
                                 )
                             })
                         }
                     </div>
                     <div className="grid justify-items-center items-center mb-3 md:text-base sm:text-sm text-sm">
-                        <div className="inline-flex items-center p-2 border-2 border-blue-400 rounded-xl">
-                            <div className="inline-flex mr-2 md:w-[240px] sm:w-[200px] w-[200px] md:h-[50px] sm:h-[40px] h-[40px] items-center border-2 border-blue-200 p-2 rounded-lg">
+                        <div className="inline-flex items-center p-2 border-2 border-blue-400 dark:border-blue-600 rounded-xl">
+                            <div className="inline-flex mr-2 md:w-[240px] sm:w-[200px] w-[200px] md:h-[50px] sm:h-[40px] h-[40px] items-center border-2 border-blue-200 dark:border-blue-400 p-2 rounded-lg">
                                 <div className="font-bold text-slate-700">Answer:</div>
                                 <div className="ml-2">{answer.join('')}</div>
                             </div>
@@ -225,7 +225,7 @@ function WordChecker() {
                         </div>
                     </div>
                 </div>
-                <div className="grid grid-rows-2 rounded-2xl bg-white drop-shadow-xl mt-8">
+                <div className="grid grid-rows-2 rounded-2xl bg-white dark:bg-gray-400 drop-shadow-xl mt-8">
                     <div className="grid grid-rows mt-7 ml-7 text-sm font-medium">
                         <div className="text-blue-900">Total: {vocabularies.length}</div>
                         <div className="text-green-700">Completed: {passedVocIdxList.current.length}</div>
@@ -236,7 +236,7 @@ function WordChecker() {
                         <div className="inline-flex">
                             {
                                 passedVocIdxList.current.map((passedVocIdx, idx) => (
-                                    <span key={idx} className={`mx-1 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 mb-2 py-2 px-3 rounded-xl text-white text-sm flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
+                                    <span key={idx} className={`mx-1 ${idx === 0 && "ml-0"} ${idx === passedVocIdxList.current.length - 1 && "mr-0"} bg-green-500 dark:bg-green-700 mb-2 py-2 px-3 rounded-xl text-white text-sm flex-shrink-0`}>{vocabularies[passedVocIdx].word}</span>
                                 ))
                             }
                         </div>

@@ -5,7 +5,7 @@ import { ArrowUturnLeftIcon, ArrowUturnRightIcon, Bars3Icon, InformationCircleIc
 import { AuthContext } from "../../contexts/AuthProvider";
 import { OAuthUser, User } from "../../types/api";
 import { ResoucesContext, Resources } from "../../contexts/ResourcesProvider";
-import { LOGO_LIGHT_PATH } from "../../utils/constants";
+import { LOGO_DARK_PATH, LOGO_PATH } from "../../utils/constants";
 
 type ActivePage = "about-me";
 type ActivePageNameMap = {
@@ -73,19 +73,19 @@ function Header() {
         setActivePage(page);
         navigate(`/${page}`);
     }
-    
+
     return (
         <>
-            <header className="bg-white border-b-[1px] border-slate-300 h-[100px] grid items-center">
+            <header className="bg-white dark:bg-gray-700 dark:border-slate-800 border-b-[1px] border-slate-300 h-[100px] grid items-center">
                     <nav className="grid sm:grid-cols-3 grid-cols-2 sm:mx-[50px] mx-[40px] items-center justify-between" aria-label="Global">
                         <div className="">
                             <Link to="/" className="-m-1.5 p-1.5">
-                                <img className="h-[70px] w-auto" src={LOGO_LIGHT_PATH} alt="" />
+                                <img className="h-[70px] w-[120px]" src={LOGO_PATH} alt="" />
                             </Link>
                         </div>
                         <div className="sm:hidden grid justify-end">
                             <div className={`${showNavbar && 'p-1 border-[1px] rounded-full'} border-slate-700`}>
-                                <Bars3Icon className="h-8 w-8 text-slate-700" onClick={() => setShowNavbar(!showNavbar)}/> 
+                                <Bars3Icon className="h-8 w-8 text-slate-700 dark:text-gray-300" onClick={() => setShowNavbar(!showNavbar)}/> 
                             </div>
                         </div>
                         <nav className={`sm:grid grid-cols-${pages.length} justify-items-center hidden`}>
@@ -94,7 +94,7 @@ function Header() {
                                     <button
                                     key={page}
                                     onClick={() => handleSwitchPage(page)}
-                                    className={`text-lg font-bold text-slate-700 w-[120px] ${activePage === page && "p-2 rounded-lg bg-slate-300"}`}>
+                                    className={`text-lg font-bold text-slate-700 dark:text-gray-300 w-[120px] ${activePage === page && "p-2 rounded-lg bg-slate-300 dark:bg-gray-800"}`}>
                                     {ACTIVE_PAGE_NAME_MAP[page]}
                                     </button>
                                 )) 
@@ -105,7 +105,7 @@ function Header() {
                             <>
                                 <div className="sm:grid justify-end hidden">
                                     <div className="inline-flex items-center mr-3">
-                                        <p className="text-sm font-semibold text-blue-600 mr-2">Hello, {(user as OAuthUser).displayName || `${(user as User).firstname} ${(user as User).lastname}`}</p>
+                                        <p className="text-sm font-semibold text-blue-600 mr-2 dark:text-gray-300">Hello, {(user as OAuthUser).displayName || `${(user as User).firstname} ${(user as User).lastname}`}</p>
                                         <div
                                             className="relative border-2 border-slate-500 h-9 w-9 rounded-full grid justify-center items-center hover:cursor-pointer"
                                             onClick={() => setShowMenu(!showMenu)}>
@@ -136,7 +136,7 @@ function Header() {
             </header>
             {
                 showNavbar && 
-                <div className="bg-white sm:hidden grid">
+                <div className="bg-white dark:bg-gray-400 sm:hidden grid">
                     <nav className={`grid ${user ? 'grid-rows-[50px_50px_50px]' : 'grid-rows-[50px_50px]'} mx-4 text-slate-700 font-semibold`}>
                         <Link to='/about-me' className="order-2 border-b-[1px] grid items-center">
                             <div className="inline-flex"><InformationCircleIcon className="h-6 w-6" /> <p className="ml-2">About me</p></div>

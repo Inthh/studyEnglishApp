@@ -92,13 +92,13 @@ function ChangePassword() {
             />
             <Header />
             <div className="flex flex-col justify-between min-h-screen">
-                <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 grid justify-center items-center">
-                    <div className="grid grid-rows-[20px_1fr_1fr_1fr_50px] sm:h-[500px] sm:w-[450px] h-[500px] w-[350px] bg-white rounded-2xl border-[1px] border-slate-300 p-10">
-                        <div className="inline-flex items-center border-l-4 border-slate-700 text-slate-700">
+                <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 dark:from-slate-600 dark:to-gray-700 grid justify-center items-center">
+                    <div className="grid grid-rows-[20px_1fr_1fr_1fr_50px] sm:h-[500px] sm:w-[450px] h-[500px] w-[350px] bg-white dark:bg-gray-400 rounded-2xl border-[1px] border-slate-300 dark:border-slate-800 p-10">
+                        <div className="inline-flex items-center border-l-4 border-slate-700 text-slate-700 dark:text-slate-900">
                             <p className="pl-2 font-bold text-lg">Change password</p>
                         </div>
                         <div className="mt-4 border-b-[1px] border-slate-300">
-                            <label htmlFor="old-password" className="text-sm font-semibold text-slate-700">
+                            <label htmlFor="old-password" className="text-sm font-semibold text-slate-700 dark:text-slate-900">
                                 Old password
                             </label>
                             <div className="mt-2">
@@ -109,12 +109,12 @@ function ChangePassword() {
                                     autoComplete="current-password"
                                     required
                                     onChange={(e) => setOldPassword(e.target.value)}
-                                    className="p-2 border-2 w-full border-blue-300 rounded focus:outline-blue-500"
+                                    className="p-2 border-2 w-full border-blue-300 dark:border-blue-400 rounded focus:outline-blue-500 dark:focus:outline-blue-700"
                                 />
                             </div>
                         </div>
                         <div className="mt-4">
-                            <label htmlFor="new-password" className="text-sm font-semibold text-slate-700">
+                            <label htmlFor="new-password" className="text-sm font-semibold text-slate-700 dark:text-slate-900">
                                 New password
                             </label>
                             <div className="mt-2">
@@ -125,12 +125,12 @@ function ChangePassword() {
                                     autoComplete="current-password"
                                     required
                                     onChange={(e) => setNewPassword(e.target.value)}
-                                    className="p-2 border-2 w-full border-blue-300 rounded focus:outline-blue-500"
+                                    className="p-2 border-2 w-full border-blue-300 dark:border-blue-400 rounded focus:outline-blue-500 dark:focus:outline-blue-700"
                                 />
                             </div>
                         </div>
                         <div className="">
-                            <label htmlFor="confirmed-password" className="text-sm font-semibold text-slate-700">
+                            <label htmlFor="confirmed-password" className="text-sm font-semibold text-slate-700 dark:text-slate-900">
                                 Confirmed password
                             </label>
                             <div className="mt-2">
@@ -141,13 +141,13 @@ function ChangePassword() {
                                     autoComplete="current-password"
                                     required
                                     onChange={(e) => setConfirmedPassword(e.target.value)}
-                                    className="p-2 border-2 w-full border-blue-300 rounded focus:outline-blue-500"
+                                    className="p-2 border-2 w-full border-blue-300 dark:border-blue-400 rounded focus:outline-blue-500 dark:focus:outline-blue-700"
                                 />
                             </div>
                         </div>
                         <div className="grid justify-end">
                             <button
-                                className="sm:h-[50px] h-[40px] p-2 bg-blue-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
+                                className="sm:h-[50px] h-[40px] p-2 bg-blue-500 dark:bg-blue-700 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
                                 onClick={handleSubmitChangePassword}>
                                 Save changes
                             </button>

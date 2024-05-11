@@ -20,6 +20,7 @@ import ForgotPassword from "../pages/ForgotPassword";
 import AboutMe from "../pages/AboutMe";
 import ErrorPage from "../pages/ErrorPage";
 import NotFound from "../pages/NotFound";
+import ThemeModeLayout from "../components/Layout/ThemeModeLayout";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () =>
@@ -34,8 +35,13 @@ export default createBrowserRouter([
         errorElement: <ErrorPage />,
         children: [
             {
-                path: '*',
-                element: <NotFound />
+                element: <ThemeModeLayout />,
+                children: [
+                    {
+                        path: '*',
+                        element: <NotFound />
+                    }
+                ]
             },
             {
                 element: <AuthTabsLayout />,
@@ -51,15 +57,6 @@ export default createBrowserRouter([
                 ]
             },
             {
-                element: <Home />,
-                path: '/',
-                loader: vocabularySetsLoader
-            },
-            {
-                element: <AboutMe />,
-                path: '/about-me'
-            },
-            {
                 element: <ResetPassword />,
                 path: '/reset-password/:token'
             },
@@ -68,61 +65,75 @@ export default createBrowserRouter([
                 path: '/forgot-password'
             },
             {
-                element: <ProtectedRoute />,
+                element: <ThemeModeLayout />,
                 children: [
                     {
-                        path: 'profile',
-                        element: <Profile />
+                        element: <Home />,
+                        path: '/',
+                        loader: vocabularySetsLoader
                     },
                     {
-                        element: <ProtectedPassword />,
-                        children: [
-                            {
-                                path: 'change-password',
-                                element: <ChangePassword />
-                            }
-                        ]
+                        element: <AboutMe />,
+                        path: '/about-me'
                     },
                     {
-                        path: 'learn/:setId',
-                        element: <Learn />,
-                        loader: learnLoader,
+                        element: <ProtectedRoute />,
                         children: [
                             {
-                                path: 'page/:pageNum',
-                                element: <Topics />,
-                                loader: topicsLoader,
+                                path: 'profile',
+                                element: <Profile />
+                            },
+                            {
+                                element: <ProtectedPassword />,
                                 children: [
                                     {
-                                        path: 'topics/:topicId',
-                                        element: <VocabularyList />,
-                                        loader: vocabularyListLoader,
-                                        action: updateMemoried
+                                        path: 'change-password',
+                                        element: <ChangePassword />
                                     }
                                 ]
-                            }
-                        ]
-                    },
-                    {
-                        path: 'practice/:setId',
-                        element: <Learn />,
-                        id: 'practice',
-                        loader: learnLoader,
-                        children: [
+                            },
                             {
-                                path: 'page/:pageNum',
-                                element: <Topics />,
-                                loader: topicsLoader,
+                                path: 'learn/:setId',
+                                element: <Learn />,
+                                loader: learnLoader,
                                 children: [
                                     {
-                                        path: 'topics/:topicId',
-                                        element: <WordChecker />,
-                                        loader: vocabularyListLoader
+                                        path: 'page/:pageNum',
+                                        element: <Topics />,
+                                        loader: topicsLoader,
+                                        children: [
+                                            {
+                                                path: 'topics/:topicId',
+                                                element: <VocabularyList />,
+                                                loader: vocabularyListLoader,
+                                                action: updateMemoried
+                                            }
+                                        ]
                                     }
                                 ]
-                            }
+                            },
+                            {
+                                path: 'practice/:setId',
+                                element: <Learn />,
+                                id: 'practice',
+                                loader: learnLoader,
+                                children: [
+                                    {
+                                        path: 'page/:pageNum',
+                                        element: <Topics />,
+                                        loader: topicsLoader,
+                                        children: [
+                                            {
+                                                path: 'topics/:topicId',
+                                                element: <WordChecker />,
+                                                loader: vocabularyListLoader
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
                         ]
-                    },
+                    }
                 ]
             }
         ]

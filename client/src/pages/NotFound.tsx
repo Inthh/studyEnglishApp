@@ -7,7 +7,7 @@ function NotFound() {
         <>
             <Header />
             <div className="flex flex-col justify-between min-h-screen">
-                <div className="flex-grow grid justify-center items-center bg-gradient-to-r from-slate-100/40 to-gray-100">
+                <div className="flex-grow grid justify-center items-center bg-gradient-to-r from-slate-100/40 to-gray-100 dark:from-slate-600 dark:to-gray-700">
                     <div className="w-[560px]">
                         <div className="grid grid-cols-3">
                             <div className="grid justify-end items-center text-9xl font-bold text-sky-600">4</div>
@@ -30,10 +30,10 @@ function NotFound() {
                             </div>
                             <div className="grid justify-start items-center text-9xl font-bold text-sky-600">4</div>
                         </div>
-                        <p className="h-[50px] text-center text-3xl font-bold text-slate-700 mt-2">
+                        <p className="h-[50px] text-center text-3xl font-bold text-slate-700 dark:text-gray-300 mt-2">
                             UH OH! You're lost.
                         </p>
-                        <p className="h-[50px] text-center text-sm italic text-slate-700">
+                        <p className="h-[50px] text-center text-sm italic text-slate-700 dark:text-gray-300">
                             The page you are looking for does not exist. How you got here is a mystery. But you can click the button bellow to go back to the your planet.
                         </p>
                         <div className="text-center mt-5">

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthProvider';
 import { OAuthUser, User } from '../types/api';
 import { HashLoader } from 'react-spinners';
-import { LOGO_LIGHT_PATH } from '../utils/constants';
+import { LOGO_PATH } from '../utils/constants';
 
 type Tokens = {
     accessToken: string;
@@ -81,7 +81,7 @@ function Login() {
             <div className="bg-white mt-4 rounded-lg grid-rows-[100px_1fr_100px] h-[530px]">
                 <div className="grid justify-center items-center mt-8 mb-2">
                     <Link to="/" className="-m-1.5 p-1.5 grid justify-center items-center">
-                        <img className="h-[70px] w-auto" src={LOGO_LIGHT_PATH} alt="" />
+                        <img className="h-[70px] w-auto" src={LOGO_PATH} alt="" />
                     </Link>
                     <p className="mt-6 text-xs text-red-500 h-[20px]">{showErrorMsg && "Login information is incorrect, please try again"}</p>
                 </div>

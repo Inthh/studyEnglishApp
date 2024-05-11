@@ -12,7 +12,7 @@ function Practice() {
     }
 
     return (
-        <div className="bg-gradient-to-r from-slate-100/40 to-gray-100">
+        <div className="bg-gradient-to-r from-slate-100/40 to-gray-100 dark:from-slate-600 dark:to-gray-700">
             <Header />
             <div className="grid grid-rows-7">
                 <div className="row-span-6"> <Outlet /> </div>

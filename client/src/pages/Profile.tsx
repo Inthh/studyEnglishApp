@@ -119,8 +119,8 @@ function Profile() {
             />
             <Header />
             <div className="flex flex-col justify-between min-h-screen">
-                <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 grid justify-items-center items-center">
-                    <div className="md:h-[450px] h-[900px] lg:w-[1000px] md:w-[750px] w-[90%] grid lg:grid-cols-[70%_30%] md:grid-cols-[60%_40%] grid-cols-1 bg-white rounded-2xl border-[1px] border-slate-300 my-6">
+                <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 dark:from-slate-600 dark:to-gray-700 grid justify-items-center items-center">
+                    <div className="md:h-[450px] h-[900px] lg:w-[1000px] md:w-[750px] w-[90%] grid lg:grid-cols-[70%_30%] md:grid-cols-[60%_40%] grid-cols-1 bg-white dark:bg-gray-400 rounded-2xl border-[1px] border-slate-300 dark:border-slate-800 my-6">
                         <div className="grid grid-rows-[50px_1fr_50px] p-10 md:order-1 order-last">
                             <div className="inline-flex items-center border-l-4 mb-4 border-slate-700 text-slate-700">
                                 <p className="pl-2 font-bold text-2xl">Information</p>
@@ -218,12 +218,12 @@ function Profile() {
                                 <div className="grid grid-cols-2">
                                     <div>
                                         <button
-                                            className="h-[90%] p-2 bg-blue-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
+                                            className="h-[90%] p-2 bg-blue-500 dark:bg-blue-600 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
                                             onClick={() => navigate('/change-password')}>Change password</button>
                                     </div>
                                     <div className="grid justify-end">
                                         <button
-                                            className="h-[90%] p-2 bg-green-500 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
+                                            className="h-[90%] p-2 bg-green-500 dark:bg-green-600 rounded font-semibold text-slate-100 hover:scale-105 duration-300"
                                             onClick={handleUpdateUserInfo}>Save changes</button>
                                     </div>
                                 </div>

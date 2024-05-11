@@ -108,8 +108,8 @@ function VocabularyList() {
 
     return (
         <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
-            <p className="text-2xl font-bold text-slate-700">Vocabulary</p>
-            <div className="grid grid-rows-8 w-[100%] py-2 bg-slate-300 rounded-2xl justify-items-center items-center max-w-[830px] max-h-[480px] h-[480px]">
+            <p className="text-2xl font-bold text-slate-700 dark:text-gray-300">Vocabulary</p>
+            <div className="grid grid-rows-8 w-[100%] py-2 bg-slate-300 dark:bg-gray-400 rounded-2xl justify-items-center items-center max-w-[830px] max-h-[480px] h-[480px]">
                 {
                     isMemoriedDone ?
                     <>
