@@ -3,7 +3,7 @@ function Footer() {
         <footer className="bg-white h-[150px] w-[100%] border-t-[1px] border-slate-300">
             <nav className="grid lg:grid-cols-2 sm:grid-cols-1 grid-cols-1 h-[100%] items-center md:mx-[200px] lg:justify-start sm:sm:justify-center sm:justify-center">
                 <div className="text-xs text-slate-500 lg:text-start sm:text-center text-center">
-                    © 2024 Your Company, Inc. All rights reserved.
+                    © 2024 Dolphin Learning, Inc. All rights reserved.
                 </div>
                 <div className="grid lg:justify-end">
                     <ul className="flex justify-center space-x-5 items-center">

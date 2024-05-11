@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { EMAIL_VALIDATION_REGEX, REGISTER_FIELD_ERROR_MESSAGES } from "../utils/constants";
+import { EMAIL_VALIDATION_REGEX, LOGO_LIGHT_PATH, REGISTER_FIELD_ERROR_MESSAGES } from "../utils/constants";
 import { HashLoader } from "react-spinners";
 
 type ErrorField = keyof typeof REGISTER_FIELD_ERROR_MESSAGES
@@ -69,10 +69,10 @@ function Register() {
                     <HashLoader color="#3B82F6" />
                 </div>
             }
-            <div className="bg-white mt-4 rounded-lg grid-rows-[70px_1fr] h-[500px]">
+            <div className="bg-white mt-4 rounded-lg grid-rows-[70px_1fr] h-[530px]">
                 <div className="grid justify-center items-center mt-8 mb-2">
                     <Link to="/" className="-m-1.5 p-1.5 grid justify-center items-center">
-                        <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
+                        <img className="h-[70px] w-auto" src={LOGO_LIGHT_PATH} alt="" />
                     </Link>
                     <p className="mt-6 text-xs text-red-500 h-[20px]">{REGISTER_FIELD_ERROR_MESSAGES[fieldError] ? responseError : ""}</p>
                 </div>

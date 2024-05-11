@@ -13,6 +13,8 @@ export const REGISTER_FIELD_ERROR_MESSAGES = {
     invalid: "",
 };
 
+export const LOGO_LIGHT_PATH = '/public/images/DolphinLearningLogo.png';
+
 export const COMMON_TOAST_OPTIONS = {
     autoClose: 3000,
     hideProgressBar: false,

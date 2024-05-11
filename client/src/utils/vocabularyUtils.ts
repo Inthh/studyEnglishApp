@@ -1,11 +1,16 @@
 import { BASE_URL } from "./constants"
 
 export async function vocabularyListLoader({ params }: any) {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+        return null;
+    }
+
     const { topicId } = params
     const reponse = await fetch(BASE_URL + `/vocabularies?topicId=${topicId}`, {
         method: 'GET',
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
+            'Authorization': `Bearer ${accessToken}`
         }
     })
 

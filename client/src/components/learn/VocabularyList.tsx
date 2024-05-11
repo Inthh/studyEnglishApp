@@ -32,7 +32,7 @@ function VocabularyList() {
 
     useEffect(() => {
         setAudio(new Audio(vocabularies[vocabularyIndex].audioUrl));
-    }, [vocabularyIndex]);
+    }, [vocabularyIndex, vocabularies]);
 
     function getFirstUnmemoriedVoca() {
         if (actionData) {

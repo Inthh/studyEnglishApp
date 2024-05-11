@@ -5,6 +5,7 @@ import { ArrowUturnLeftIcon, ArrowUturnRightIcon, Bars3Icon, InformationCircleIc
 import { AuthContext } from "../../contexts/AuthProvider";
 import { OAuthUser, User } from "../../types/api";
 import { ResoucesContext, Resources } from "../../contexts/ResourcesProvider";
+import { LOGO_LIGHT_PATH } from "../../utils/constants";
 
 type ActivePage = "about-me";
 type ActivePageNameMap = {
@@ -79,7 +80,7 @@ function Header() {
                     <nav className="grid sm:grid-cols-3 grid-cols-2 sm:mx-[50px] mx-[40px] items-center justify-between" aria-label="Global">
                         <div className="">
                             <Link to="/" className="-m-1.5 p-1.5">
-                                <img className="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="" />
+                                <img className="h-[70px] w-auto" src={LOGO_LIGHT_PATH} alt="" />
                             </Link>
                         </div>
                         <div className="sm:hidden grid justify-end">
