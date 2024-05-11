@@ -119,15 +119,15 @@ function Profile() {
             />
             <Header />
             <div className="flex flex-col justify-between min-h-screen">
-                <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 grid justify-center items-center">
-                    <div className="h-[450px] w-[1000px] grid grid-cols-[70%_30%] bg-white rounded-2xl border-[1px] border-slate-300">
-                        <div className="grid grid-rows-[50px_1fr_50px] p-10">
+                <div className="flex-grow bg-gradient-to-r from-slate-100/40 to-gray-100 grid justify-items-center items-center">
+                    <div className="md:h-[450px] h-[900px] lg:w-[1000px] md:w-[750px] w-[90%] grid lg:grid-cols-[70%_30%] md:grid-cols-[60%_40%] grid-cols-1 bg-white rounded-2xl border-[1px] border-slate-300 my-6">
+                        <div className="grid grid-rows-[50px_1fr_50px] p-10 md:order-1 order-last">
                             <div className="inline-flex items-center border-l-4 mb-4 border-slate-700 text-slate-700">
                                 <p className="pl-2 font-bold text-2xl">Information</p>
                                 <UserCircleIcon className="pl-2 h-10 w-10"/>
                             </div>
-                            <div className="grid grid-rows-2">
-                                <div className="grid grid-cols-2 gap-x-10">
+                            <div className="grid sm:grid-rows-2">
+                                <div className="grid sm:grid-cols-2 grid-cols-1 gap-x-10">
                                     <div>
                                         <label htmlFor="email" className="text-sm font-semibold text-slate-700">
                                             Email
@@ -159,7 +159,7 @@ function Profile() {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-10">
+                                <div className="grid sm:grid-cols-2 grid-cols-1 gap-x-10">
                                     { user?.type === 'default' ?
                                         <>
                                             <div>
@@ -229,7 +229,7 @@ function Profile() {
                                 </div>
                             }
                         </div>
-                        <div className="grid justify-center items-center">
+                        <div className="grid justify-center items-center md:order-last order-1">
                             <div className="p-4 rounded-xl shadow-xl hover:-translate-y-3 duration-500">
                                 <div className="relative">
                                     {
