@@ -20,7 +20,7 @@ function Topics() {
 
     return (
         <div className="grid lg:grid-cols-3 sm:grid-cols-1 grid-cols-1 justify-items-center">
-            <div className="lg:col-span-1 w-[80%] lg:order-1 sm:order-last order-last">
+            <div className="lg:col-span-1 md:w-[80%] w-[100%] lg:order-1 sm:order-last order-last">
                 <div className="grid grid-rows-[90px_1fr] justify-items-center items-center">
                     <p className="row-span-1 text-2xl font-bold text-slate-700 dark:text-gray-300">Topics</p>
                     <div className="w-[330px] rounded-2xl px-2 py-4 bg-slate-300 dark:bg-gray-400">
@@ -40,7 +40,7 @@ function Topics() {
                     </div>
                 </div>
             </div>
-            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 w-[80%]">
+            <div className="lg:col-span-2 lg:order-last sm:order-1 order-1 md:w-[80%] w-[90%]">
                 <Outlet />
             </div>
         </div>

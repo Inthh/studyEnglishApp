@@ -8,14 +8,14 @@ import { VocabularySet } from "../../types/api";
 function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
     return (
         <div className="mt-20 grid-rows-[40px_1fr]">
-            <div className="ml-[80px] inline-flex text-slate-700 dark:text-gray-300">
+            <div className="md:ml-[80px] ml-[20px] inline-flex text-slate-700 dark:text-gray-300">
                 <BookOpenIcon className="h-8 w-8"></BookOpenIcon>
-                <p className="ml-2 text-2xl font-bold">Vocabulary</p>
+                <p className="md:ml-2 ml-0 text-2xl font-bold">Vocabulary</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 m-[70px] gap-x-3 text-slate-700">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:justify-items-start justify-items-center md:m-[70px] m-[10px] gap-x-3 text-slate-700">
                 {
                     vocabularySets.map((set: VocabularySet) => (
-                        <div key={set.id} className="rounded-2xl bg-white dark:bg-gray-400 drop-shadow-xl min-w-[200px] w-[350px]">
+                        <div key={set.id} className="rounded-2xl bg-white dark:bg-gray-400 drop-shadow-xl min-w-[150px] w-[350px]">
                             <div className="grid grid-rows-[1fr_20px_50px_20px] p-5 gap-y-3">
                                 <LazyLoadImage 
                                     className="h-[180px] w-[100%] object-cover rounded-xl border-2"
