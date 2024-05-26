@@ -15,7 +15,7 @@ function Catalog({ vocabularySets }: { vocabularySets: VocabularySet[] }) {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:justify-items-start justify-items-center md:m-[70px] m-[10px] gap-x-3 text-slate-700">
                 {
                     vocabularySets.map((set: VocabularySet) => (
-                        <div key={set.id} className="rounded-2xl bg-white dark:bg-gray-400 drop-shadow-xl min-w-[150px] w-[350px]">
+                        <div key={set.id} className="rounded-2xl bg-white dark:bg-gray-400 drop-shadow-xl min-w-[150px] md:w-[350px] w-[300px]">
                             <div className="grid grid-rows-[1fr_20px_50px_20px] p-5 gap-y-3">
                                 <LazyLoadImage 
                                     className="h-[180px] w-[100%] object-cover rounded-xl border-2"

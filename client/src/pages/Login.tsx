@@ -118,12 +118,12 @@ function Login() {
                     </div>
                     <div className="grid grid-cols-2">
                         <div className="text-sm font-semibold text-slate-700 inline-flex items-center">
-                            <input
+                            {/* <input
                                 type="checkbox"
                                 defaultChecked
                                 className="h-4 w-4"
                             />
-                            <p className="pl-1">Remember me</p>
+                            <p className="pl-1">Remember me</p> */}
                         </div>
                         <div
                             onClick={() => navigate('/forgot-password')} 
