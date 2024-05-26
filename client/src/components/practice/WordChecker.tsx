@@ -38,11 +38,20 @@ function WordChecker() {
         }
         window.addEventListener('keydown', handleKeyDown);
 
+        setIsCorrect(false)
+        setIsWrong(false)
+
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [answer, vocabularies])
+    }, [answer, vocabularies]);
+
+    useEffect(() => {
+        passedVocIdxList.current = []
+        skipVocIdxList.current = []
+        vocabularyIdxList.current = vocabularies.map((_, index) => index)
+    }, [vocabularies]);
 
     useEffect(() => {
         setAnswer(initAnswer(wordSplit));
