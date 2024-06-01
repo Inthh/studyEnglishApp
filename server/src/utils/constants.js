@@ -13,5 +13,6 @@ export const DB_USERNAME = process.env.DB_USERNAME || '';
 export const DB_PASSWORD = process.env.DB_PASSWORD || '';
 export const DB_HOSTNAME = process.env.DB_HOSTNAME || '';
 export const DB_DBMS = process.env.DB_DBMS || '';
+export const DB_PORT = process.env.DB_PORT || 3306;
 
 export const SALT_ROUNDS = 10;

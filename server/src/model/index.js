@@ -5,7 +5,7 @@ import Topics from './Topics.js';
 import Vocabularies from './Vocabularies.js';
 import UserVocabulary from './UserVocabulary.js';
 import VocabularySets from './VocabularySets.js';
-import { DB_DBMS, DB_HOSTNAME, DB_NAME, DB_PASSWORD, DB_USERNAME } from '../utils/constants.js';
+import { DB_DBMS, DB_HOSTNAME, DB_NAME, DB_PASSWORD, DB_USERNAME, DB_PORT } from '../utils/constants.js';
 
 
 const sequelize = new Sequelize(
@@ -14,7 +14,8 @@ const sequelize = new Sequelize(
     DB_PASSWORD,
     {
         host: DB_HOSTNAME,
-        dialect: DB_DBMS
+        dialect: DB_DBMS,
+        port: DB_PORT
     }
 );
 
