@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { useContext, useEffect, useState } from "react";
 import { toast, ToastContainer, Zoom } from "react-toastify";
 import { ArrowUpTrayIcon, UserCircleIcon } from "@heroicons/react/16/solid";
@@ -33,7 +32,7 @@ function Profile() {
 
     async function uploadPhotoToFirebaseStorage(photo: File) {
         try {
-            const storageRef = ref(storage, `/photos/${(user?.id || user?.uid) + "-" + uuidv4()}`);
+            const storageRef = ref(storage, `/photos/${(user?.id || user?.uid) + "-user-avatar"}`);
             const uploadTask = await uploadBytes(storageRef, photo);
 
             return await getDownloadURL(uploadTask.ref);
