@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast, ToastContainer, Zoom } from "react-toastify";
-import { COMMON_TOAST_OPTIONS } from "../utils/constants";
+import { COMMON_TOAST_OPTIONS, SERVER_BASE_URL } from "../utils/constants";
 
 function ResetPassword() {
     const { token } = useParams();
@@ -23,7 +23,7 @@ function ResetPassword() {
             position: "top-center"
         });
 
-        const response = await fetch('http://localhost:3001/auth/password/reset', {
+        const response = await fetch(`${SERVER_BASE_URL}/auth/password/reset`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"

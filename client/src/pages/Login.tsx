@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../contexts/AuthProvider';
 import { OAuthUser, User } from '../types/api';
 import { HashLoader } from 'react-spinners';
-import { LOGO_PATH } from '../utils/constants';
+import { LOGO_PATH, SERVER_BASE_URL } from '../utils/constants';
 
 type Tokens = {
     accessToken: string;
@@ -22,7 +22,7 @@ function Login() {
 
     async function handleSubmitLogin() {
         setLoading(true);
-        const response = await fetch('http://localhost:3001/auth/login', {
+        const response = await fetch(`${SERVER_BASE_URL}/auth/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -53,7 +53,7 @@ function Login() {
             email: res.user.email
         }
 
-        await fetch('http://localhost:3001/auth/register', {
+        await fetch(`${SERVER_BASE_URL}/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

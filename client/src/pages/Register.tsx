@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import { EMAIL_VALIDATION_REGEX, LOGO_PATH, REGISTER_FIELD_ERROR_MESSAGES } from "../utils/constants";
+import { EMAIL_VALIDATION_REGEX, LOGO_PATH, REGISTER_FIELD_ERROR_MESSAGES, SERVER_BASE_URL } from "../utils/constants";
 import { HashLoader } from "react-spinners";
 
 type ErrorField = keyof typeof REGISTER_FIELD_ERROR_MESSAGES
@@ -41,7 +41,7 @@ function Register() {
 
         const defaultInfo = { firstname, lastname, username, email, password }
         setLoading(true);
-        const response = await fetch('http://localhost:3001/auth/register', {
+        const response = await fetch(`${SERVER_BASE_URL}/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

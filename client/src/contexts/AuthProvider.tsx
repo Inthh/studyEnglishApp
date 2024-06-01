@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Loading from "../components/common/Loading";
 import { OAuthUser, User } from "../types/api";
 import { getAuth } from "firebase/auth";
+import { SERVER_BASE_URL } from "../utils/constants";
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }: { children: ReactNode }) {
@@ -20,10 +21,10 @@ function AuthProvider({ children }: { children: ReactNode }) {
                     displayName: user.displayName ?? "",
                     email: user.email ?? "",
                     photoURL: user.photoURL ?? "",
-                    auth: user.auth,
+                    auth: (user as any).auth,
                     type: "google"
-                });
-                localStorage.setItem('accessToken', user.accessToken);
+                } as any);
+                localStorage.setItem('accessToken', (user as unknown as OAuthUser).accessToken);
                 setIsLoading(false);
                 return;
             }
@@ -41,7 +42,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
         const payload = extractPayloadFromToken(accessToken);
         if (payload && payload.userId && !user) {
-            fetch(`http://localhost:3001/user/${payload.userId}`, {
+            fetch(`${SERVER_BASE_URL}/user/${payload.userId}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
@@ -52,7 +53,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
                 if (data.message === "jwt expired") {
                     // Access token expired, reset pair token from refresh token
                     const refreshToken = localStorage.getItem('refreshToken');
-                    fetch(`http://localhost:3001/auth/refresh-token`, {
+                    fetch(`${SERVER_BASE_URL}/auth/refresh-token`, {
                         method: "PATCH",
                         headers: {
                             "Content-Type": "application/json"                        

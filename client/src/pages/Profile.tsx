@@ -10,7 +10,7 @@ import Footer from "../components/common/Footer";
 import { AuthContext } from "../contexts/AuthProvider";
 import { OAuthUser, User } from "../types/api";
 import { useNavigate } from "react-router-dom";
-import { COMMON_TOAST_OPTIONS } from "../utils/constants";
+import { COMMON_TOAST_OPTIONS, SERVER_BASE_URL } from "../utils/constants";
 import { storage } from "../firebase/config";
 import { ResoucesContext, Resources } from '../contexts/ResourcesProvider';
 
@@ -66,7 +66,7 @@ function Profile() {
             photoFirebaseURL = await uploadPhotoToFirebaseStorage(photo);
         }
 
-        const response = await fetch('http://localhost:3001/user', {
+        const response = await fetch(`${SERVER_BASE_URL}/user`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

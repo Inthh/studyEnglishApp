@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ToastContainer, Zoom, toast } from "react-toastify";
-import { COMMON_TOAST_OPTIONS, EMAIL_VALIDATION_REGEX } from "../utils/constants";
+import { COMMON_TOAST_OPTIONS, EMAIL_VALIDATION_REGEX, SERVER_BASE_URL } from "../utils/constants";
 
 function ForgotPassword() {
     const [email, setEmail] = useState<string>("");
@@ -19,7 +19,7 @@ function ForgotPassword() {
             });
         }
 
-        const response = await fetch('http://localhost:3001/auth/password/forgot', {
+        const response = await fetch(`${SERVER_BASE_URL}/auth/password/forgot`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

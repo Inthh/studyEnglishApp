@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Header from "../components/common/Header";
 import Footer from "../components/common/Footer";
 import { useRef, useState } from "react";
-import { COMMON_TOAST_OPTIONS } from '../utils/constants';
+import { COMMON_TOAST_OPTIONS, SERVER_BASE_URL } from '../utils/constants';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -31,7 +31,7 @@ function ChangePassword() {
         const id = toast.loading("Please wait, request is pending...", {
             position: "top-center"
         });
-        const response = await fetch('http://localhost:3001/auth/password/change', {
+        const response = await fetch(`${SERVER_BASE_URL}/auth/password/change`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",

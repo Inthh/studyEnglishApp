@@ -1,6 +1,6 @@
 import { Zoom } from "react-toastify";
 
-export const BASE_URL = 'http://localhost:3001';
+export const SERVER_BASE_URL = import.meta.env.VITE_SERVER_BASE_URL;
 
 export const EMAIL_VALIDATION_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 

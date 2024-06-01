@@ -1,6 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 import { Link, useNavigate, useRouteError } from "react-router-dom";
 import Loading from "../components/common/Loading";
+import { SERVER_BASE_URL } from "../utils/constants";
 
 function ErrorPage() {
     const error = useRouteError() as Error;
@@ -12,7 +13,7 @@ function ErrorPage() {
         if (error.message === "401") {
             setLoading(true);
             const refreshToken = localStorage.getItem('refreshToken');
-            fetch(`http://localhost:3001/auth/refresh-token`, {
+            fetch(`${SERVER_BASE_URL}/auth/refresh-token`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"                        

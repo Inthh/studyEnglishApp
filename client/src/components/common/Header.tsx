@@ -5,7 +5,7 @@ import { ArrowUturnLeftIcon, ArrowUturnRightIcon, Bars3Icon, InformationCircleIc
 import { AuthContext } from "../../contexts/AuthProvider";
 import { OAuthUser, User } from "../../types/api";
 import { ResoucesContext, Resources } from "../../contexts/ResourcesProvider";
-import { LOGO_DARK_PATH, LOGO_PATH } from "../../utils/constants";
+import { LOGO_PATH, SERVER_BASE_URL } from "../../utils/constants";
 
 type ActivePage = "about-me";
 type ActivePageNameMap = {
@@ -35,7 +35,7 @@ function Header() {
 
         switch (user.type) {
             case "google": {
-                user.auth.signOut();
+                (user as any).auth.signOut();
                 localStorage.removeItem('accessToken');
                 setUser(null);
                 navigate('/login');
@@ -46,7 +46,7 @@ function Header() {
                 const accessToken = localStorage.getItem('accessToken');
                 if (!accessToken) return;
 
-                await fetch('http://localhost:3001/auth/logout', {
+                await fetch(`${SERVER_BASE_URL}/auth/logout`, {
                     method: "PUT",
                     headers: {
                         "Authorization": `Bearer ${accessToken}`,

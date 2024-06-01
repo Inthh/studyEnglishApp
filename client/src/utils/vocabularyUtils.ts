@@ -1,4 +1,4 @@
-import { BASE_URL } from "./constants"
+import { SERVER_BASE_URL } from "./constants"
 
 export async function vocabularyListLoader({ params }: any) {
     const accessToken = localStorage.getItem('accessToken');
@@ -7,7 +7,7 @@ export async function vocabularyListLoader({ params }: any) {
     }
 
     const { topicId } = params
-    const reponse = await fetch(BASE_URL + `/vocabularies?topicId=${topicId}`, {
+    const reponse = await fetch(SERVER_BASE_URL + `/vocabularies?topicId=${topicId}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${accessToken}`
@@ -24,7 +24,7 @@ export async function vocabularyListLoader({ params }: any) {
 }
 
 export async function vocabularySetsLoader() {
-    const reponse = await fetch(BASE_URL + `/vocabulary-sets`, {
+    const reponse = await fetch(SERVER_BASE_URL + `/vocabulary-sets`, {
         method: 'GET'
     });
 
@@ -45,7 +45,7 @@ type UpdateMemoriedData = {
     userId: number,
     isMemoried: boolean
 } | { allUnmemoried: boolean, topicId: number }
-export async function updateMemoried({ params, request }) {
+export async function updateMemoried({ request }: { request: any }) {
     let result = null;
     const userVoca = await request.formData();
     const allUnmemoried = userVoca.get("allUnmemoried")
@@ -64,15 +64,15 @@ export async function updateMemoried({ params, request }) {
         userVoca.forEach((value: FormDataEntryValue, key: keyof UpdateMemoriedData) => {
             if (key in dataSubmit) {
                 if (key === 'isMemoried') {
-                    dataSubmit[key] = value === 'true';
+                    (dataSubmit[key] as boolean) = value === 'true';
                 } else {
-                    dataSubmit[key] = parseInt(value as string, 10);
+                    (dataSubmit[key] as number) = parseInt(value as string, 10);
                 }
             }
         })
     }
 
-    const reponse = await fetch(BASE_URL + `/vocabularies`, {
+    const reponse = await fetch(SERVER_BASE_URL + `/vocabularies`, {
         method: 'PATCH',
         body: JSON.stringify(dataSubmit),
         headers: {

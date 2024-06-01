@@ -1,4 +1,4 @@
-import { BASE_URL, TOPICS_PAGE_SIZE } from "./constants"
+import { SERVER_BASE_URL, TOPICS_PAGE_SIZE } from "./constants"
 
 export async function getTopicsOfSetByPageNum(setId: number, pageNum: number) {
     const accessToken = localStorage.getItem('accessToken');
@@ -6,7 +6,7 @@ export async function getTopicsOfSetByPageNum(setId: number, pageNum: number) {
         return null;
     }
 
-    const reponse = await fetch(BASE_URL + `/topics?setId=${setId}&pageNumber=${pageNum}`, {
+    const reponse = await fetch(SERVER_BASE_URL + `/topics?setId=${setId}&pageNumber=${pageNum}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${accessToken}`
@@ -36,7 +36,7 @@ export async function learnLoader({ params }: any) {
     }
 
     const { setId } = params
-    const reponse = await fetch(BASE_URL + `/topics/total?setId=${setId}`, {
+    const reponse = await fetch(SERVER_BASE_URL + `/topics/total?setId=${setId}`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${accessToken}`
