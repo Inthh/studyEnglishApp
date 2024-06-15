@@ -15,4 +15,6 @@ export const DB_HOSTNAME = process.env.DB_HOSTNAME || '';
 export const DB_DBMS = process.env.DB_DBMS || '';
 export const DB_PORT = process.env.DB_PORT || 3306;
 
+export const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
+
 export const SALT_ROUNDS = 10;

@@ -21,6 +21,7 @@ import AboutMe from "../pages/AboutMe";
 import ErrorPage from "../pages/ErrorPage";
 import NotFound from "../pages/NotFound";
 import ThemeModeLayout from "../components/Layout/ThemeModeLayout";
+import CheckGrammar from "../pages/CheckGrammar";
 
 // eslint-disable-next-line react-refresh/only-export-components
 const AuthLayout = () =>
@@ -79,6 +80,10 @@ export default createBrowserRouter([
                     {
                         element: <ProtectedRoute />,
                         children: [
+                            {
+                                element: <CheckGrammar />,
+                                path: '/check-grammar'
+                            },
                             {
                                 path: 'profile',
                                 element: <Profile />
