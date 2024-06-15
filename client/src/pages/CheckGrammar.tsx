@@ -28,16 +28,21 @@ function CheckGrammar() {
             (buttonCheck.current as HTMLButtonElement).disabled = true;
             (buttonCheck.current as HTMLButtonElement).classList.add("bg-blue-400");
             (buttonCheck.current as HTMLButtonElement).classList.remove("hover:bg-blue-500");
-            const { result } = await checkGrammar(paragraph);
+            try {
+                const { result } = await checkGrammar(paragraph);
+                const { errors, suggestions, message } = result;
+
+                setSuggestions(suggestions);
+                setErrors(errors);
+                setMessage(message);
+            } catch (e) {
+                toast.error("Internal server error!");
+            }
             (buttonCheck.current as HTMLButtonElement).classList.remove("bg-blue-400");
             (buttonCheck.current as HTMLButtonElement).classList.add("hover:bg-blue-500");
             (buttonCheck.current as HTMLButtonElement).disabled = false;
             setIsLoading(false);
-            const { errors, suggestions, message } = result;
 
-            setSuggestions(suggestions);
-            setErrors(errors);
-            setMessage(message);
         } else {
             toast.error("Please provide your paragraph!");
         }
