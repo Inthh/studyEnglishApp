@@ -1,9 +1,10 @@
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import { useContext, useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { HashLoader } from 'react-spinners';
+
 import { AuthContext } from '../contexts/AuthProvider';
 import { OAuthUser, User } from '../types/api';
-import { HashLoader } from 'react-spinners';
 import { LOGO_PATH, SERVER_BASE_URL } from '../utils/constants';
 
 type Tokens = {
